@@ -3,9 +3,7 @@ Yet another voxel game client
 
 Features:
 - compiles to JavaScript
-- fast rendering
-- even faster rendering
-- faster than the original game
+- slows down at 32 chunks render distance
 - 1% of the original game features
 
 # Running
