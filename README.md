@@ -1,4 +1,6 @@
 # klocki-typescript
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fklockimc%2Fklocki-typescript.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fklockimc%2Fklocki-typescript?ref=badge_shield)
+
 Yet another voxel game client
 
 Features:
@@ -24,3 +26,7 @@ chrome.exe --disable-gpu-vsync --disable-frame-rate-limit
 `
 
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fklockimc%2Fklocki-typescript.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fklockimc%2Fklocki-typescript?ref=badge_large)
