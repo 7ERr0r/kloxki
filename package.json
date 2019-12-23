@@ -9,8 +9,8 @@
     "webpack": "webpack --config ./webpack.config.js",
     "build": "tsc && webpack --config ./webpack.config.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Szperak",
+  "license": "MIT",
   "devDependencies": {
     "@types/pngjs": "^3.3.2",
     "source-map-loader": "^0.2.4",
