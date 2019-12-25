@@ -34,10 +34,10 @@ export class _NetworkManager {
     }
     public static _getRegistryByProtocol(protocol: number): _PacketRegistry {
         let reg: _PacketRegistry | null = null;
-        if (protocol === 47) {
+        if (protocol === 47) { // 1.8
             reg = new _v47();
         }
-        if (protocol >= 480) {
+        if (protocol >= 480) { // 1.14
             reg = new _v480();
         }
         if (reg) {

@@ -23,6 +23,12 @@
 
         var imported = document.createElement('script');
         imported.src = 'main.js?v='+((new Date).getTime());
+        imported.addEventListener("load", ()=>{
+            console.log("loaded main klocki")
+            setTimeout(()=>{
+                klocki.connectSocket(498, `wss://`+window.location.hostname+`:55565/ws`)
+            }, 1);
+        });
         document.head.appendChild(imported);
     </script>
 </head>

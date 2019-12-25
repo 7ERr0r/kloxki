@@ -187,11 +187,7 @@ export class _Klocki {
 
         return result;
     }
-    private static _generateURL(host: string, port: number): string {
-        host = btoa(host).replace(/\+/g, '-').replace(/\//g, '_');
 
-        return `wss://localhost:55565/ws`;
-    }
     public _getPartialTicks() {
         return this._timer._renderPartialTicks;
     }
@@ -314,8 +310,9 @@ export class _Klocki {
         (<any>window).requestIdleCallback((deadline: any) => {
             this._runheavyTasks(deadline)
         }, {timeout: 1000});
-
-        this._networkManager!._idleCallback();
+        if(this._networkManager != null){
+            this._networkManager._idleCallback();
+        }
         let baked = 0;
         const maxBakes = deadline.didTimeout ? 1 : 5;
         
@@ -787,13 +784,7 @@ export class _Klocki {
         this._guiChat = new _GuiChat(this);
         this._guiOverlayEquipment = new _GuiOverlayEquipment(this);
 
-        if (!this._networkManager) {
-            this._networkManager = new _NetworkManager(this, _Klocki._generateURL("127.0.0.1", 20000));
-            this._networkManager._packetListener = new _NetHandlerLoginClient(this);
-            this._networkManager._sendPacket(new _CHandshake(this._protocol, "klocki.pl", 25565, _EnumConnectionState._Login));
-            this._networkManager._sendPacket(new _CPacketLoginStart("Klocek_" + (this._controls._isMobile ? "m_" : "") + _Klocki._randomString(6)));
-
-        }
+        
         const gl = this._display._gl;
         this._mainVao = gl.createVertexArray()!;
         this._glBuffersEntities = new Array(this._glBuffersEntitiesCount);
@@ -842,6 +833,18 @@ export class _Klocki {
         (<any>window).requestIdleCallback((deadline: any) => { this._runheavyTasks(deadline); }, {timeout: 500});
         // this.myNetworkManager._sendPacket();
         this._nextFrame();
+    }
+
+
+    public connectSocket(protoVersion: number, wsUrl: string){
+        this._protocol = protoVersion
+        if (!this._networkManager) {
+            this._networkManager = new _NetworkManager(this, wsUrl);
+            this._networkManager._packetListener = new _NetHandlerLoginClient(this);
+            this._networkManager._sendPacket(new _CHandshake(this._protocol, "klocki.pl", 25565, _EnumConnectionState._Login));
+            this._networkManager._sendPacket(new _CPacketLoginStart("Klocek_" + (this._controls._isMobile ? "m_" : "") + _Klocki._randomString(6)));
+
+        }
     }
 
 }

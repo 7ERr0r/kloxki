@@ -12,6 +12,7 @@ export class _RenderPlayer extends _RenderEntity {
     public static _legLeftMatrix: mat4 = mat4.create();
     public static _armLeftMatrix: mat4 = mat4.create();
     public static _armRightMatrix: mat4 = mat4.create();
+    public static _wingLeftMatrix: mat4 = mat4.create();
 
     public _render(entity: _KlockiEntityPlayer){
         super._render(entity);
@@ -72,5 +73,12 @@ export class _RenderPlayer extends _RenderEntity {
 
         entity._armLeftBox!._renderAt(wr, _RenderPlayer._armLeftMatrix);
         entity._armLeftOBox!._renderAt(wr, _RenderPlayer._armLeftMatrix);
+
+
+        mat4.translate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._chestMatrix, [-1, 12 / 16 + 12 / 16, -1]);
+        
+        
+
+        entity._wingLeft!._renderAt(wr, _RenderPlayer._wingLeftMatrix);
     }
 }

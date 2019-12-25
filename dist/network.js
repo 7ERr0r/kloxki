@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 196);
+/******/ 	return __webpack_require__(__webpack_require__.s = 197);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -323,13 +323,13 @@ _PacketBuffer._utf8encoder = new TextEncoder();
 
 /***/ }),
 
-/***/ 196:
+/***/ 197:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const NetworkWorker_1 = __webpack_require__(197);
+const NetworkWorker_1 = __webpack_require__(198);
 let _networkSystem;
 const _self = self;
 onmessage = (e) => {
@@ -347,7 +347,7 @@ onmessage = (e) => {
 
 /***/ }),
 
-/***/ 197:
+/***/ 198:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -356,7 +356,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const PacketBuffer_1 = __webpack_require__(10);
 class _NetworkWorker {
     constructor(_self, url) {
-        this._pako = __webpack_require__(198);
+        this._pako = __webpack_require__(199);
         this._outboundPacketsQueue = [];
         this._playing = false;
         this._threshold = -1;
@@ -519,14 +519,14 @@ _NetworkWorker._MAX_SIZE = 2097152;
 
 /***/ }),
 
-/***/ 198:
+/***/ 199:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var assign = __webpack_require__(8).assign;
-var deflate = __webpack_require__(199);
-var inflate = __webpack_require__(202);
+var deflate = __webpack_require__(200);
+var inflate = __webpack_require__(203);
 var pako = {};
 assign(pako, deflate, inflate);
 module.exports = pako;
@@ -534,12 +534,12 @@ module.exports = pako;
 
 /***/ }),
 
-/***/ 199:
+/***/ 200:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var zlib_deflate = __webpack_require__(200);
+var zlib_deflate = __webpack_require__(201);
 var utils = __webpack_require__(8);
 var ZStream = __webpack_require__(65);
 var toString = Object.prototype.toString;
@@ -647,13 +647,13 @@ exports.deflate = deflate;
 
 /***/ }),
 
-/***/ 200:
+/***/ 201:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var utils = __webpack_require__(8);
-var trees = __webpack_require__(201);
+var trees = __webpack_require__(202);
 var adler32 = __webpack_require__(64);
 var _Z_NO_FLUSH = 0;
 var _Z_PARTIAL_FLUSH = 1;
@@ -1496,7 +1496,7 @@ exports._deflateInfo = 'pako deflate (from Nodeca project)';
 
 /***/ }),
 
-/***/ 201:
+/***/ 202:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2122,14 +2122,14 @@ exports._tr_align = _tr_align;
 
 /***/ }),
 
-/***/ 202:
+/***/ 203:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var zlib_inflate = __webpack_require__(203);
+var zlib_inflate = __webpack_require__(204);
 var utils = __webpack_require__(8);
-var c = __webpack_require__(206);
+var c = __webpack_require__(207);
 var ZStream = __webpack_require__(65);
 var toString = Object.prototype.toString;
 function Inflate(options) {
@@ -2250,15 +2250,15 @@ exports.inflate = inflate;
 
 /***/ }),
 
-/***/ 203:
+/***/ 204:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var utils = __webpack_require__(8);
 var adler32 = __webpack_require__(64);
-var inflate_fast = __webpack_require__(204);
-var inflate_table = __webpack_require__(205);
+var inflate_fast = __webpack_require__(205);
+var inflate_table = __webpack_require__(206);
 var CODES = 0;
 var LENS = 1;
 var DISTS = 2;
@@ -3193,7 +3193,7 @@ exports._inflateInfo = 'pako inflate (from Nodeca project)';
 
 /***/ }),
 
-/***/ 204:
+/***/ 205:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3430,7 +3430,7 @@ module.exports = function inflate_fast(_strm, start) {
 
 /***/ }),
 
-/***/ 205:
+/***/ 206:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3635,7 +3635,7 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
 
 /***/ }),
 
-/***/ 206:
+/***/ 207:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

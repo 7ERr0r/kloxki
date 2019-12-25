@@ -120,9 +120,9 @@ exports._Packet = _Packet;
 
 
 
-var base64 = __webpack_require__(131)
-var ieee754 = __webpack_require__(132)
-var isArray = __webpack_require__(133)
+var base64 = __webpack_require__(132)
+var ieee754 = __webpack_require__(133)
+var isArray = __webpack_require__(134)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -1922,24 +1922,24 @@ const AudioManager_1 = __webpack_require__(84);
 const ModelRegistry_1 = __webpack_require__(85);
 const RenderList_1 = __webpack_require__(87);
 const NetHandlerLoginClient_1 = __webpack_require__(90);
-const TextureManager_1 = __webpack_require__(130);
-const FontRenderer_1 = __webpack_require__(174);
-const ShaderUI_1 = __webpack_require__(175);
-const Display_1 = __webpack_require__(176);
-const GameSettings_1 = __webpack_require__(177);
-const ShaderWorld_1 = __webpack_require__(178);
-const GuiChat_1 = __webpack_require__(179);
-const WorldRenderer_1 = __webpack_require__(181);
-const Controls_1 = __webpack_require__(182);
-const Frustum_1 = __webpack_require__(183);
+const TextureManager_1 = __webpack_require__(131);
+const FontRenderer_1 = __webpack_require__(175);
+const ShaderUI_1 = __webpack_require__(176);
+const Display_1 = __webpack_require__(177);
+const GameSettings_1 = __webpack_require__(178);
+const ShaderWorld_1 = __webpack_require__(179);
+const GuiChat_1 = __webpack_require__(180);
+const WorldRenderer_1 = __webpack_require__(182);
+const Controls_1 = __webpack_require__(183);
+const Frustum_1 = __webpack_require__(184);
 const ShaderMobs_1 = __webpack_require__(63);
-const LineRenderer_1 = __webpack_require__(184);
-const ShaderLines_1 = __webpack_require__(185);
+const LineRenderer_1 = __webpack_require__(185);
+const ShaderLines_1 = __webpack_require__(186);
 const OriginRenderOcTree_1 = __webpack_require__(21);
-const UIRenderer_1 = __webpack_require__(186);
-const EntityRenders_1 = __webpack_require__(187);
-const GuiOverlayEquipment_1 = __webpack_require__(191);
-const ItemRegistry_1 = __webpack_require__(192);
+const UIRenderer_1 = __webpack_require__(187);
+const EntityRenders_1 = __webpack_require__(188);
+const GuiOverlayEquipment_1 = __webpack_require__(192);
+const ItemRegistry_1 = __webpack_require__(193);
 const util_1 = __webpack_require__(4);
 class _Klocki {
     constructor() {
@@ -2005,10 +2005,6 @@ class _Klocki {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         return result;
-    }
-    static _generateURL(host, port) {
-        host = btoa(host).replace(/\+/g, '-').replace(/\//g, '_');
-        return `wss://localhost:55565/ws`;
     }
     _getPartialTicks() {
         return this._timer._renderPartialTicks;
@@ -2113,7 +2109,9 @@ class _Klocki {
         window.requestIdleCallback((deadline) => {
             this._runheavyTasks(deadline);
         }, { timeout: 1000 });
-        this._networkManager._idleCallback();
+        if (this._networkManager != null) {
+            this._networkManager._idleCallback();
+        }
         let baked = 0;
         const maxBakes = deadline.didTimeout ? 1 : 5;
         let secs = this._bakeSectionsByDistanceSquared;
@@ -2451,12 +2449,6 @@ class _Klocki {
         panner._setPosition(-150, 75, 150);
         this._guiChat = new GuiChat_1._GuiChat(this);
         this._guiOverlayEquipment = new GuiOverlayEquipment_1._GuiOverlayEquipment(this);
-        if (!this._networkManager) {
-            this._networkManager = new NetworkManager_1._NetworkManager(this, _Klocki._generateURL("127.0.0.1", 20000));
-            this._networkManager._packetListener = new NetHandlerLoginClient_1._NetHandlerLoginClient(this);
-            this._networkManager._sendPacket(new CHandshake_1._CHandshake(this._protocol, "klocki.pl", 25565, EnumConnectionState_1._EnumConnectionState._Login));
-            this._networkManager._sendPacket(new CPacketLoginStart_1._CPacketLoginStart("Klocek_" + (this._controls._isMobile ? "m_" : "") + _Klocki._randomString(6)));
-        }
         const gl = this._display._gl;
         this._mainVao = gl.createVertexArray();
         this._glBuffersEntities = new Array(this._glBuffersEntitiesCount);
@@ -2472,6 +2464,15 @@ class _Klocki {
         }
         window.requestIdleCallback((deadline) => { this._runheavyTasks(deadline); }, { timeout: 500 });
         this._nextFrame();
+    }
+    connectSocket(protoVersion, wsUrl) {
+        this._protocol = protoVersion;
+        if (!this._networkManager) {
+            this._networkManager = new NetworkManager_1._NetworkManager(this, wsUrl);
+            this._networkManager._packetListener = new NetHandlerLoginClient_1._NetHandlerLoginClient(this);
+            this._networkManager._sendPacket(new CHandshake_1._CHandshake(this._protocol, "klocki.pl", 25565, EnumConnectionState_1._EnumConnectionState._Login));
+            this._networkManager._sendPacket(new CPacketLoginStart_1._CPacketLoginStart("Klocek_" + (this._controls._isMobile ? "m_" : "") + _Klocki._randomString(6)));
+        }
     }
 }
 exports._Klocki = _Klocki;
@@ -3209,7 +3210,7 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-exports.isBuffer = __webpack_require__(135);
+exports.isBuffer = __webpack_require__(136);
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
@@ -3253,7 +3254,7 @@ exports.log = function() {
  *     prototype.
  * @param {function} superCtor Constructor function to inherit prototype from.
  */
-exports.inherits = __webpack_require__(136);
+exports.inherits = __webpack_require__(137);
 
 exports._extend = function(origin, add) {
   // Don't do anything if add isn't an object
@@ -11545,7 +11546,7 @@ function objectToString(o) {
 
 var Buffer = __webpack_require__(1).Buffer;
 var Transform = __webpack_require__(14).Transform;
-var binding = __webpack_require__(150);
+var binding = __webpack_require__(151);
 var util = __webpack_require__(4);
 var assert = __webpack_require__(26).ok;
 var kMaxLength = __webpack_require__(1).kMaxLength;
@@ -12225,10 +12226,10 @@ var inherits = __webpack_require__(9);
 
 inherits(Stream, EE);
 Stream.Readable = __webpack_require__(24);
-Stream.Writable = __webpack_require__(145);
-Stream.Duplex = __webpack_require__(146);
-Stream.Transform = __webpack_require__(147);
-Stream.PassThrough = __webpack_require__(148);
+Stream.Writable = __webpack_require__(146);
+Stream.Duplex = __webpack_require__(147);
+Stream.Transform = __webpack_require__(148);
+Stream.PassThrough = __webpack_require__(149);
 
 // Backwards-compat with node 0.4.x
 Stream.Stream = Stream;
@@ -12566,7 +12567,7 @@ exports.setTyped(TYPED_OK);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const GoPoint_1 = __webpack_require__(169);
+const GoPoint_1 = __webpack_require__(170);
 class _GoRect {
     constructor(x0, y0, x1, y1) {
         if (x0 > x1) {
@@ -13811,7 +13812,7 @@ exports.Readable = exports;
 exports.Writable = __webpack_require__(25);
 exports.Duplex = __webpack_require__(7);
 exports.Transform = __webpack_require__(49);
-exports.PassThrough = __webpack_require__(144);
+exports.PassThrough = __webpack_require__(145);
 
 
 /***/ }),
@@ -13891,7 +13892,7 @@ util.inherits = __webpack_require__(9);
 
 /*<replacement>*/
 var internalUtil = {
-  deprecate: __webpack_require__(143)
+  deprecate: __webpack_require__(144)
 };
 /*</replacement>*/
 
@@ -14506,7 +14507,7 @@ Writable.prototype._destroy = function (err, cb) {
   this.end();
   cb(err);
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(3), __webpack_require__(141).setImmediate, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(3), __webpack_require__(142).setImmediate, __webpack_require__(6)))
 
 /***/ }),
 /* 26 */
@@ -14515,7 +14516,7 @@ Writable.prototype._destroy = function (err, cb) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var objectAssign = __webpack_require__(151);
+var objectAssign = __webpack_require__(152);
 
 // compare and isBuffer taken from https://github.com/feross/buffer/blob/680e9e5e488f22aac27599a57dc844a6315928dd/index.js
 // original notice:
@@ -17016,6 +17017,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Klocki_1 = __webpack_require__(2);
 const KlockiEntityLiving_1 = __webpack_require__(41);
 const RenderBox_1 = __webpack_require__(22);
+const RenderLayerVoxels_1 = __webpack_require__(110);
 class _KlockiEntityPlayer extends KlockiEntityLiving_1._KlockiEntityLiving {
     constructor(klocki) {
         super(klocki);
@@ -17023,6 +17025,7 @@ class _KlockiEntityPlayer extends KlockiEntityLiving_1._KlockiEntityLiving {
         this._width = 0.6;
         this._height = 1.8;
         this._skinLoaded = false;
+        this._wingLoaded = false;
         this._idleTime = 0;
         const skinInfo = klocki._textureManager._loadTextureFromURL("assets/" + Klocki_1._Klocki._forbiddenWord + "/textures/entity/steve.png", null, (tex) => {
             const limbOffsets = [
@@ -17053,7 +17056,12 @@ class _KlockiEntityPlayer extends KlockiEntityLiving_1._KlockiEntityLiving {
             this._armLeftOBox = limbBoxes[7];
             this._skinLoaded = true;
         }, false);
+        const wingInfo = klocki._textureManager._loadTextureFromURL("assets/" + Klocki_1._Klocki._forbiddenWord + "/textures/item/stone_pickaxe.png", null, (tex) => {
+            this._wingLeft = new RenderLayerVoxels_1._RenderLayerVoxels(klocki, 0, 1, 0, 1, 1 / 16, 1, tex);
+            this._wingLoaded = true;
+        }, false);
         this._skinInfo = skinInfo;
+        this._wingInfo = wingInfo;
     }
     _tick() {
         super._tick();
@@ -17821,7 +17829,7 @@ var pna = __webpack_require__(15);
 module.exports = Readable;
 
 /*<replacement>*/
-var isArray = __webpack_require__(137);
+var isArray = __webpack_require__(138);
 /*</replacement>*/
 
 /*<replacement>*/
@@ -17861,7 +17869,7 @@ util.inherits = __webpack_require__(9);
 /*</replacement>*/
 
 /*<replacement>*/
-var debugUtil = __webpack_require__(138);
+var debugUtil = __webpack_require__(139);
 var debug = void 0;
 if (debugUtil && debugUtil.debuglog) {
   debug = debugUtil.debuglog('stream');
@@ -17870,7 +17878,7 @@ if (debugUtil && debugUtil.debuglog) {
 }
 /*</replacement>*/
 
-var BufferList = __webpack_require__(139);
+var BufferList = __webpack_require__(140);
 var destroyImpl = __webpack_require__(47);
 var StringDecoder;
 
@@ -20782,8 +20790,8 @@ module.exports = function(indata, imageData) {
 
 var constants = __webpack_require__(13);
 var CrcStream = __webpack_require__(57);
-var bitPacker = __webpack_require__(162);
-var filter = __webpack_require__(163);
+var bitPacker = __webpack_require__(163);
+var filter = __webpack_require__(164);
 var zlib = __webpack_require__(12);
 
 var Packer = module.exports = function(options) {
@@ -21060,17 +21068,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Klocki_1 = __webpack_require__(2);
 window.klocki = window.klocki || {};
 window.addEventListener("load", (ev) => (window.klocki = new Klocki_1._Klocki()));
-document.addEventListener("mouseup", (e) => {
-    e.preventDefault();
-});
-document.addEventListener("keydown", (e) => {
-    if (e.ctrlKey || e.key === "F3" || e.key === "F5" || e.key === "F8" || e.key == "Tab" || e.key == "Control" || e.key == "Shift") {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-    }
-    return undefined;
-});
 
 
 /***/ }),
@@ -24340,28 +24337,28 @@ const WorldClient_1 = __webpack_require__(101);
 const ChunkSection_1 = __webpack_require__(34);
 const CPacketClientStatus_1 = __webpack_require__(105);
 const KlockiEntityPlayerSP_1 = __webpack_require__(106);
-const SPacketSpawnPlayer_1 = __webpack_require__(110);
-const KlockiEntityPlayerMP_1 = __webpack_require__(111);
-const SPacketEntityRelativeMove_1 = __webpack_require__(112);
-const SPacketEntityLookRelativeMove_1 = __webpack_require__(113);
-const SPacketEntityLook_1 = __webpack_require__(114);
-const SPacketEntityTeleport_1 = __webpack_require__(115);
-const CPacketPositionAndLook_1 = __webpack_require__(116);
-const SPacketChunkData107_1 = __webpack_require__(117);
+const SPacketSpawnPlayer_1 = __webpack_require__(111);
+const KlockiEntityPlayerMP_1 = __webpack_require__(112);
+const SPacketEntityRelativeMove_1 = __webpack_require__(113);
+const SPacketEntityLookRelativeMove_1 = __webpack_require__(114);
+const SPacketEntityLook_1 = __webpack_require__(115);
+const SPacketEntityTeleport_1 = __webpack_require__(116);
+const CPacketPositionAndLook_1 = __webpack_require__(117);
+const SPacketChunkData107_1 = __webpack_require__(118);
 const PacketBuffer_1 = __webpack_require__(10);
-const BitMap_1 = __webpack_require__(118);
+const BitMap_1 = __webpack_require__(119);
 const Uint32BlockStorage_1 = __webpack_require__(35);
-const SPacketEntityDestroy_1 = __webpack_require__(119);
-const SPacketOpenWindow_1 = __webpack_require__(120);
-const SPacketWindowItems_1 = __webpack_require__(121);
-const SPacketSetSlot_1 = __webpack_require__(122);
-const SPacketSpawnMob_1 = __webpack_require__(123);
-const KlockiEntityCreeper_1 = __webpack_require__(124);
-const CPacketTeleportConfirm_1 = __webpack_require__(125);
-const SPacketBlockChange_1 = __webpack_require__(126);
-const SPacketMultiBlockChange_1 = __webpack_require__(127);
-const SPacketChunkUnload_1 = __webpack_require__(128);
-const KlockiEntityItemFrame_1 = __webpack_require__(129);
+const SPacketEntityDestroy_1 = __webpack_require__(120);
+const SPacketOpenWindow_1 = __webpack_require__(121);
+const SPacketWindowItems_1 = __webpack_require__(122);
+const SPacketSetSlot_1 = __webpack_require__(123);
+const SPacketSpawnMob_1 = __webpack_require__(124);
+const KlockiEntityCreeper_1 = __webpack_require__(125);
+const CPacketTeleportConfirm_1 = __webpack_require__(126);
+const SPacketBlockChange_1 = __webpack_require__(127);
+const SPacketMultiBlockChange_1 = __webpack_require__(128);
+const SPacketChunkUnload_1 = __webpack_require__(129);
+const KlockiEntityItemFrame_1 = __webpack_require__(130);
 class _NetHandlerPlayClient {
     constructor(klocki) {
         this._world = null;
@@ -25600,6 +25597,155 @@ exports._Window = _Window;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const gl_matrix_1 = __webpack_require__(5);
+class _RenderPoint {
+    constructor(pos) {
+        this._pos = pos;
+    }
+}
+class _RenderLayerVoxels {
+    constructor(klocki, x, y, z, dx, dy, dz, texture) {
+        this._x = x;
+        this._y = y;
+        this._z = z;
+        this._dx = dx;
+        this._dy = dy;
+        this._dz = dz;
+        this._texture = texture;
+        this._positions = [];
+        const as = klocki._textureManager._atlasSize;
+        const wr = klocki._worldRendererMobsHelper;
+        wr._reset();
+        wr._atlas = this._texture._atlasId;
+        const tex = this._texture;
+        const texOffsetX = tex._subRect._min._x / as;
+        const texOffsetY = tex._subRect._min._y / as;
+        const texScaleX = tex._subRect._dx() / as;
+        const texScaleY = tex._subRect._dy() / as;
+        let color = 0xFFFFFFFF;
+        let vx = 0.0;
+        let vy = 1.0;
+        let vz = 0.0;
+        let fixtexx = 0.0;
+        let fixtexz = 0.0;
+        function poormacro() {
+            wr._pos(x + dx * vx, y + dy * vy, z + dz * vz)._tex(texOffsetX + (vx + fixtexx) * texScaleX, texOffsetY + (vz + fixtexz) * texScaleY)._color(color)._endVertex();
+        }
+        vx = 0.0;
+        vz = 0.0;
+        poormacro();
+        vx = 1.0;
+        poormacro();
+        vx = 0.0;
+        vz = 1.0;
+        poormacro();
+        vx = 1.0;
+        poormacro();
+        vy = 0;
+        vx = 1.0;
+        vz = 0.0;
+        poormacro();
+        vx = 0.0;
+        poormacro();
+        vx = 1.0;
+        vz = 1.0;
+        poormacro();
+        vx = 0.0;
+        poormacro();
+        let divisions = 16;
+        let delta = 1.0 / divisions;
+        vz = 0.0;
+        fixtexx = 0;
+        fixtexz = delta / 2;
+        for (let i = 0; i < divisions; i++) {
+            vy = 0.0;
+            vx = 0.0;
+            poormacro();
+            vy = 0.0;
+            vx = 1.0;
+            poormacro();
+            vy = 1.0;
+            vx = 0.0;
+            poormacro();
+            vy = 1.0;
+            vx = 1.0;
+            poormacro();
+            vz += delta;
+        }
+        vz = delta;
+        fixtexx = 0;
+        fixtexz = -delta / 2;
+        for (let i = 0; i < divisions; i++) {
+            vy = 1.0;
+            vx = 0.0;
+            poormacro();
+            vy = 1.0;
+            vx = 1.0;
+            poormacro();
+            vy = 0.0;
+            vx = 0.0;
+            poormacro();
+            vy = 0.0;
+            vx = 1.0;
+            poormacro();
+            vz += delta;
+        }
+        vx = delta;
+        fixtexx = -delta / 2;
+        fixtexz = 0;
+        for (let i = 0; i < divisions; i++) {
+            vy = 0.0;
+            vz = 0.0;
+            poormacro();
+            vy = 0.0;
+            vz = 1.0;
+            poormacro();
+            vy = 1.0;
+            vz = 0.0;
+            poormacro();
+            vy = 1.0;
+            vz = 1.0;
+            poormacro();
+            vx += delta;
+        }
+        vx = 0.0;
+        fixtexx = delta / 2;
+        fixtexz = 0;
+        for (let i = 0; i < divisions; i++) {
+            vy = 1.0;
+            vz = 0.0;
+            poormacro();
+            vy = 1.0;
+            vz = 1.0;
+            poormacro();
+            vy = 0.0;
+            vz = 0.0;
+            poormacro();
+            vy = 0.0;
+            vz = 1.0;
+            poormacro();
+            vx += delta;
+        }
+        this._cachedBuf = new Uint8Array(wr._copyBuf());
+    }
+    _renderAt(wr, m) {
+        wr._putPrepared(this._cachedBuf);
+        const matID = wr._klocki._textureManager._pushGroupMatrix(m);
+        wr._matMany(matID, (2 + 16 * 4) * 4);
+    }
+}
+exports._RenderLayerVoxels = _RenderLayerVoxels;
+_RenderLayerVoxels._tempPoints = [gl_matrix_1.vec3.create(), gl_matrix_1.vec3.create(), gl_matrix_1.vec3.create(), gl_matrix_1.vec3.create(), gl_matrix_1.vec3.create(), gl_matrix_1.vec3.create(), gl_matrix_1.vec3.create(), gl_matrix_1.vec3.create()];
+_RenderLayerVoxels._identity = gl_matrix_1.mat4.create();
+
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 const Packet_1 = __webpack_require__(0);
 class _SPacketSpawnPlayer extends Packet_1._Packet {
     _readPacketData(buf, reg) {
@@ -25633,7 +25779,7 @@ exports._SPacketSpawnPlayer = _SPacketSpawnPlayer;
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25652,7 +25798,7 @@ exports._KlockiEntityPlayerMP = _KlockiEntityPlayerMP;
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25683,7 +25829,7 @@ exports._SPacketEntityRelativeMove = _SPacketEntityRelativeMove;
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25715,7 +25861,7 @@ exports._SPacketEntityLookRelativeMove = _SPacketEntityLookRelativeMove;
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25737,7 +25883,7 @@ exports._SPacketEntityLook = _SPacketEntityLook;
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25769,7 +25915,7 @@ exports._SPacketEntityTeleport = _SPacketEntityTeleport;
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25800,7 +25946,7 @@ exports._CPacketPositionAndLook = _CPacketPositionAndLook;
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25830,7 +25976,7 @@ exports._SPacketChunkData107 = _SPacketChunkData107;
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25869,7 +26015,7 @@ exports._BitMap = _BitMap;
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25895,7 +26041,7 @@ exports._SPacketEntityDestroy = _SPacketEntityDestroy;
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25918,7 +26064,7 @@ exports._SPacketOpenWindow = _SPacketOpenWindow;
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25944,7 +26090,7 @@ exports._SPacketWindowItems = _SPacketWindowItems;
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25966,7 +26112,7 @@ exports._SPacketSetSlot = _SPacketSetSlot;
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26011,7 +26157,7 @@ exports._SPacketSpawnMob = _SPacketSpawnMob;
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26042,7 +26188,7 @@ exports._KlockiEntityCreeper = _KlockiEntityCreeper;
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26063,7 +26209,7 @@ exports._CPacketTeleportConfirm = _CPacketTeleportConfirm;
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26083,7 +26229,7 @@ exports._SPacketBlockChange = _SPacketBlockChange;
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26117,7 +26263,7 @@ exports._SPacketMultiBlockChange = _SPacketMultiBlockChange;
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26137,7 +26283,7 @@ exports._SPacketChunkUnload = _SPacketChunkUnload;
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26159,18 +26305,18 @@ exports._KlockiEntityItemFrame = _KlockiEntityItemFrame;
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 Object.defineProperty(exports, "__esModule", { value: true });
-const pngjs_1 = __webpack_require__(134);
+const pngjs_1 = __webpack_require__(135);
 const GoRect_1 = __webpack_require__(18);
-const GoImage_1 = __webpack_require__(170);
-const TextureAllocator_1 = __webpack_require__(171);
-const TextureInfo_1 = __webpack_require__(172);
-const KlockiTexture_1 = __webpack_require__(173);
+const GoImage_1 = __webpack_require__(171);
+const TextureAllocator_1 = __webpack_require__(172);
+const TextureInfo_1 = __webpack_require__(173);
+const KlockiTexture_1 = __webpack_require__(174);
 class _TextureManager {
     constructor(klocki) {
         this._klocki = klocki;
@@ -26383,7 +26529,7 @@ exports._TextureManager = _TextureManager;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26542,7 +26688,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -26632,7 +26778,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -26643,7 +26789,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26651,9 +26797,9 @@ module.exports = Array.isArray || function (arr) {
 
 var util = __webpack_require__(4);
 var Stream = __webpack_require__(14);
-var Parser = __webpack_require__(149);
-var Packer = __webpack_require__(161);
-var PNGSync = __webpack_require__(164);
+var Parser = __webpack_require__(150);
+var Packer = __webpack_require__(162);
+var PNGSync = __webpack_require__(165);
 
 
 var PNG = exports.PNG = function(options) {
@@ -26824,7 +26970,7 @@ PNG.prototype.adjustGamma = function() {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer, __webpack_require__(3)))
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, exports) {
 
 module.exports = function isBuffer(arg) {
@@ -26835,7 +26981,7 @@ module.exports = function isBuffer(arg) {
 }
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, exports) {
 
 if (typeof Object.create === 'function') {
@@ -26864,7 +27010,7 @@ if (typeof Object.create === 'function') {
 
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -26875,13 +27021,13 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26890,7 +27036,7 @@ module.exports = Array.isArray || function (arr) {
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Buffer = __webpack_require__(16).Buffer;
-var util = __webpack_require__(140);
+var util = __webpack_require__(141);
 
 function copyBuffer(src, target, offset) {
   src.copy(target, offset);
@@ -26966,13 +27112,13 @@ if (util && util.inspect && util.inspect.custom) {
 }
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -27028,7 +27174,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(142);
+__webpack_require__(143);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -27042,7 +27188,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(6)))
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -27235,7 +27381,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(6), __webpack_require__(3)))
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -27309,7 +27455,7 @@ function config (name) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(6)))
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27362,35 +27508,35 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 };
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(25);
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(7);
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(24).Transform
 
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(24).PassThrough
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27399,7 +27545,7 @@ module.exports = __webpack_require__(24).PassThrough
 var util = __webpack_require__(4);
 var zlib = __webpack_require__(12);
 var ChunkStream = __webpack_require__(52);
-var FilterAsync = __webpack_require__(160);
+var FilterAsync = __webpack_require__(161);
 var Parser = __webpack_require__(56);
 var bitmapper = __webpack_require__(58);
 var formatNormaliser = __webpack_require__(59);
@@ -27561,7 +27707,7 @@ ParserAsync.prototype._complete = function(filteredData) {
 
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27570,10 +27716,10 @@ ParserAsync.prototype._complete = function(filteredData) {
 
 var assert = __webpack_require__(26);
 
-var Zstream = __webpack_require__(152);
-var zlib_deflate = __webpack_require__(153);
-var zlib_inflate = __webpack_require__(156);
-var constants = __webpack_require__(159);
+var Zstream = __webpack_require__(153);
+var zlib_deflate = __webpack_require__(154);
+var zlib_inflate = __webpack_require__(157);
+var constants = __webpack_require__(160);
 
 for (var key in constants) {
   exports[key] = constants[key];
@@ -27977,7 +28123,7 @@ exports.Zlib = Zlib;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer, __webpack_require__(3)))
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28074,7 +28220,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28128,7 +28274,7 @@ module.exports = ZStream;
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28154,10 +28300,10 @@ module.exports = ZStream;
 // 3. This notice may not be removed or altered from any source distribution.
 
 var utils   = __webpack_require__(17);
-var trees   = __webpack_require__(154);
+var trees   = __webpack_require__(155);
 var adler32 = __webpack_require__(50);
 var crc32   = __webpack_require__(51);
-var msg     = __webpack_require__(155);
+var msg     = __webpack_require__(156);
 
 /* Public constants ==========================================================*/
 /* ===========================================================================*/
@@ -30009,7 +30155,7 @@ exports.deflateTune = deflateTune;
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31238,7 +31384,7 @@ exports._tr_align = _tr_align;
 
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31277,7 +31423,7 @@ module.exports = {
 
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31305,8 +31451,8 @@ module.exports = {
 var utils         = __webpack_require__(17);
 var adler32       = __webpack_require__(50);
 var crc32         = __webpack_require__(51);
-var inflate_fast  = __webpack_require__(157);
-var inflate_table = __webpack_require__(158);
+var inflate_fast  = __webpack_require__(158);
+var inflate_table = __webpack_require__(159);
 
 var CODES = 0;
 var LENS = 1;
@@ -32840,7 +32986,7 @@ exports.inflateUndermine = inflateUndermine;
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33192,7 +33338,7 @@ module.exports = function inflate_fast(strm, start) {
 
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33542,7 +33688,7 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
 
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33617,7 +33763,7 @@ module.exports = {
 
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33650,7 +33796,7 @@ util.inherits(FilterAsync, ChunkStream);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33703,7 +33849,7 @@ PackerAsync.prototype.pack = function(data, width, height, gamma) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33854,7 +34000,7 @@ module.exports = function(dataIn, width, height, options) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34052,15 +34198,15 @@ module.exports = function(pxData, width, height, options, bpp) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 
-var parse = __webpack_require__(165);
-var pack = __webpack_require__(168);
+var parse = __webpack_require__(166);
+var pack = __webpack_require__(169);
 
 
 exports.read = function(buffer, options) {
@@ -34075,7 +34221,7 @@ exports.write = function(png, options) {
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34083,12 +34229,12 @@ exports.write = function(png, options) {
 
 var hasSyncZlib = true;
 var zlib = __webpack_require__(12);
-var inflateSync = __webpack_require__(166);
+var inflateSync = __webpack_require__(167);
 if (!zlib.deflateSync) {
   hasSyncZlib = false;
 }
 var SyncReader = __webpack_require__(61);
-var FilterSync = __webpack_require__(167);
+var FilterSync = __webpack_require__(168);
 var Parser = __webpack_require__(56);
 var bitmapper = __webpack_require__(58);
 var formatNormaliser = __webpack_require__(59);
@@ -34188,7 +34334,7 @@ module.exports = function(buffer, options) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34357,7 +34503,7 @@ exports.inflateSync = inflateSync;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(3), __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34388,7 +34534,7 @@ exports.process = function(inBuffer, bitmapInfo) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34444,7 +34590,7 @@ module.exports = function(metaData, opt) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34460,7 +34606,7 @@ exports._GoPoint = _GoPoint;
 
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34495,7 +34641,7 @@ exports._GoImage = _GoImage;
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34556,7 +34702,7 @@ exports._TextureAllocator = _TextureAllocator;
 
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34588,7 +34734,7 @@ exports._TextureInfo = _TextureInfo;
 
 
 /***/ }),
-/* 173 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34649,7 +34795,7 @@ exports._KlockiTexture = _KlockiTexture;
 
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34975,7 +35121,7 @@ exports._FontRenderer = _FontRenderer;
 
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35037,7 +35183,7 @@ exports._ShaderUI = _ShaderUI;
 
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35105,7 +35251,7 @@ exports._Display = _Display;
 
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35137,7 +35283,7 @@ exports._GameSettings = _GameSettings;
 
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35236,7 +35382,7 @@ exports._ShaderWorld = _ShaderWorld;
 
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35244,7 +35390,7 @@ exports._ShaderWorld = _ShaderWorld;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Deque_1 = __webpack_require__(20);
 const Gui_1 = __webpack_require__(62);
-const ChatLine_1 = __webpack_require__(180);
+const ChatLine_1 = __webpack_require__(181);
 class _GuiChat extends Gui_1._Gui {
     constructor(klocki) {
         super(klocki);
@@ -35289,7 +35435,7 @@ exports._GuiChat = _GuiChat;
 
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35306,7 +35452,7 @@ exports._ChatLine = _ChatLine;
 
 
 /***/ }),
-/* 181 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35571,7 +35717,7 @@ exports._WorldRenderer = _WorldRenderer;
 
 
 /***/ }),
-/* 182 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35602,6 +35748,11 @@ class _Controls {
             check = true;
         } })(navigator.userAgent || navigator.vendor || window.opera);
         this._isMobile = check;
+        document.addEventListener("mouseup", (e) => {
+            if (this._mouseLocked) {
+                e.preventDefault();
+            }
+        });
         document.addEventListener("keydown", (e) => this._keydown(e));
         document.addEventListener("keyup", (e) => this._keyup(e));
         document.addEventListener('pointerlockchange', (e) => this._onLockChange(e), false);
@@ -35681,6 +35832,12 @@ class _Controls {
         }
     }
     _keydown(e) {
+        if (this._mouseLocked) {
+            if (e.ctrlKey || e.key === "F3" || e.key === "F5" || e.key === "F8" || e.key == "Tab" || e.key == "Control" || e.key == "Shift") {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
         const key = e.key.toLowerCase();
         if (e.ctrlKey && (key == 'w' || key == 's')) {
             e.preventDefault();
@@ -35709,6 +35866,7 @@ class _Controls {
                 });
             }
         }
+        return true;
     }
     _keyup(e) {
         const key = e.key.toLowerCase();
@@ -35866,7 +36024,7 @@ exports._Controls = _Controls;
 
 
 /***/ }),
-/* 183 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35949,7 +36107,7 @@ exports._Frustum = _Frustum;
 
 
 /***/ }),
-/* 184 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36084,7 +36242,7 @@ exports._LineRenderer = _LineRenderer;
 
 
 /***/ }),
-/* 185 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36134,7 +36292,7 @@ exports._ShaderLines = _ShaderLines;
 
 
 /***/ }),
-/* 186 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36247,15 +36405,15 @@ exports._UIRenderer = _UIRenderer;
 
 
 /***/ }),
-/* 187 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const RenderPlayer_1 = __webpack_require__(188);
-const RenderCreeper_1 = __webpack_require__(189);
-const RenderItemFrame_1 = __webpack_require__(190);
+const RenderPlayer_1 = __webpack_require__(189);
+const RenderCreeper_1 = __webpack_require__(190);
+const RenderItemFrame_1 = __webpack_require__(191);
 class _EntityRenders {
     constructor(klocki) {
         this._renderPlayer = new RenderPlayer_1._RenderPlayer(klocki);
@@ -36267,7 +36425,7 @@ exports._EntityRenders = _EntityRenders;
 
 
 /***/ }),
-/* 188 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36320,6 +36478,8 @@ class _RenderPlayer extends RenderEntityLiving_1._RenderEntity {
         gl_matrix_1.mat4.rotateX(_RenderPlayer._armLeftMatrix, _RenderPlayer._armLeftMatrix, leftRotX);
         entity._armLeftBox._renderAt(wr, _RenderPlayer._armLeftMatrix);
         entity._armLeftOBox._renderAt(wr, _RenderPlayer._armLeftMatrix);
+        gl_matrix_1.mat4.translate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._chestMatrix, [-1, 12 / 16 + 12 / 16, -1]);
+        entity._wingLeft._renderAt(wr, _RenderPlayer._wingLeftMatrix);
     }
 }
 exports._RenderPlayer = _RenderPlayer;
@@ -36329,10 +36489,11 @@ _RenderPlayer._legRightMatrix = gl_matrix_1.mat4.create();
 _RenderPlayer._legLeftMatrix = gl_matrix_1.mat4.create();
 _RenderPlayer._armLeftMatrix = gl_matrix_1.mat4.create();
 _RenderPlayer._armRightMatrix = gl_matrix_1.mat4.create();
+_RenderPlayer._wingLeftMatrix = gl_matrix_1.mat4.create();
 
 
 /***/ }),
-/* 189 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36426,7 +36587,7 @@ _RenderCreeper._armRightMatrix = gl_matrix_1.mat4.create();
 
 
 /***/ }),
-/* 190 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36488,7 +36649,7 @@ _RenderItemFrame._armRightMatrix = gl_matrix_1.mat4.create();
 
 
 /***/ }),
-/* 191 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36562,16 +36723,16 @@ exports._GuiOverlayEquipment = _GuiOverlayEquipment;
 
 
 /***/ }),
-/* 192 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Item_1 = __webpack_require__(28);
-const ItemBlock_1 = __webpack_require__(193);
-const Items_1 = __webpack_require__(194);
-const CreativeTabs_1 = __webpack_require__(195);
+const ItemBlock_1 = __webpack_require__(194);
+const Items_1 = __webpack_require__(195);
+const CreativeTabs_1 = __webpack_require__(196);
 class _ItemRegistry {
     constructor(klocki) {
         this._klocki = klocki;
@@ -36622,7 +36783,7 @@ exports._ItemRegistry = _ItemRegistry;
 
 
 /***/ }),
-/* 193 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36647,7 +36808,7 @@ exports._ItemColored = _ItemColored;
 
 
 /***/ }),
-/* 194 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36696,7 +36857,7 @@ exports._ItemCoal = _ItemCoal;
 
 
 /***/ }),
-/* 195 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

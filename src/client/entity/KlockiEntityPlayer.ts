@@ -6,6 +6,7 @@ import { _KlockiTexture } from "../txt/KlockiTexture";
 import { _KlockiEntityLiving } from "./KlockiEntityLiving";
 import { _RenderBox } from "./RenderBox";
 import { _RenderPlayer } from "../render/RenderPlayer";
+import { _RenderLayerVoxels } from "./RenderLayerVoxels";
 
 export class _KlockiEntityPlayer extends _KlockiEntityLiving {
 
@@ -14,6 +15,8 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
     public _skinInfo: _TextureInfo;
     public _skinLoaded: boolean;
 
+    public _wingInfo: _TextureInfo;
+    public _wingLoaded: boolean;
 
     public _headBox: _RenderBox | undefined;
     public _headOBox: _RenderBox | undefined;
@@ -28,6 +31,7 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
     public _armRightOBox: _RenderBox | undefined;
     public _armLeftBox: _RenderBox | undefined;
     public _armLeftOBox: _RenderBox | undefined;
+    public _wingLeft: _RenderLayerVoxels | undefined;
     public _idleTime: number;
 
     constructor(klocki: _Klocki) {
@@ -36,6 +40,7 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
         this._height = 1.8;
 
         this._skinLoaded = false;
+        this._wingLoaded = false;
 
         this._idleTime = 0;
 
@@ -94,7 +99,13 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
 
             this._skinLoaded = true;
         }, false);
+
+        const wingInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/"+_Klocki._forbiddenWord+"/textures/item/stone_pickaxe.png", null, (tex: _KlockiTexture) => {
+            this._wingLeft = new _RenderLayerVoxels(klocki, 0, 1, 0, 1, 1/16, 1, tex);
+            this._wingLoaded = true;
+        }, false);  
         this._skinInfo = skinInfo;
+        this._wingInfo = wingInfo;
     }
 
     public _tick() {

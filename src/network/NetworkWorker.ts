@@ -141,6 +141,7 @@ export class _NetworkWorker {
         }
     }
     public _onWsOpen(event: Event): void {
+        // TODO don't hardcode destination
         this._writeConnectPacket("127.0.0.1:27779");
 
 
