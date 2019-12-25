@@ -7,7 +7,6 @@ import { _KlockiEntityPlayer } from "./KlockiEntityPlayer";
 
 export class _KlockiEntityPlayerSP extends _KlockiEntityPlayer {
  
-
     public _touchMoveForward: number;
     public _touchMoveStrafe: number;
     public _inventory: _PlayerInventory;

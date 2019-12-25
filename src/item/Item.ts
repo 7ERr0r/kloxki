@@ -10,16 +10,18 @@ export class _Item {
     public _name: string;
     public _unlocalizedName: string;
 
-    constructor(){
+    constructor() {
         this._name = "";
         this._unlocalizedName = "";
     }
     public _setName(name: string) {
         this._name = name;
+
         return this;
     }
     public _setUnlocalizedName(name: string) {
         this._unlocalizedName = name;
+
         return this;
     }
     public _setCreativeTab(tab: number) {

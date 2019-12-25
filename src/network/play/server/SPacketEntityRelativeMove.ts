@@ -13,16 +13,16 @@ export class _SPacketEntityRelativeMove extends _Packet<_NetHandlerPlayClient> {
     public _eid: number | undefined;
     public _currentItem: number | undefined;
     public _uuid: Uint8Array | undefined;
-    _onGround: boolean | undefined;
+    public _onGround: boolean | undefined;
 
     public _readPacketData(buf: _PacketBuffer, reg: _PacketRegistry): void {
         this._eid = buf._readVarInt();
-        if(reg._protocol >= 107){
+        if (reg._protocol >= 107) {
             this._serverx = buf._readInt16() / (128 * 32);
             this._servery = buf._readInt16() / (128 * 32);
             this._serverz = buf._readInt16() / (128 * 32);
             this._onGround = buf._readBoolean();
-        }else{
+        } else {
             this._serverx = buf._readInt8() / 32;
             this._servery = buf._readInt8() / 32;
             this._serverz = buf._readInt8() / 32;

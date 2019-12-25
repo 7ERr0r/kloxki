@@ -5,4 +5,3 @@ declare global {
 
 window.klocki = window.klocki || {};
 window.addEventListener("load", (ev: Event) => (window.klocki = new _Klocki()));
-

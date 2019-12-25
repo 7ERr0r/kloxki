@@ -133,10 +133,10 @@ export class _Heap<T> {
             if (leftChildIndex >= this.items.length) {
                 return rightChildIndex;
             } else if (this.compare(this.items[leftChildIndex], this.items[rightChildIndex]) <= 0) {
-            return leftChildIndex;
-        } else {
-            return rightChildIndex;
-        }
+                return leftChildIndex;
+            } else {
+                return rightChildIndex;
+            }
         }
     }
 

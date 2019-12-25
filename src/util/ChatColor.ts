@@ -20,7 +20,6 @@ export class _ChatColor {
         white: 'f',
     };
 
-
     public static _stripColor(input: string): string {
         return input.replace(_ChatColor._STRIP_COLOR_PATTERN, "");
     }
@@ -32,5 +31,4 @@ export class _ChatColor {
         return 'r';
     }
     
-
 }

@@ -1,12 +1,12 @@
 import { _TextureManager } from "../client/txt/TextureManager";
 
+import { _SoundType } from "./SoundType";
 import { _MaterialColor } from "./MaterialColor";
-import { _Block } from "./Block";
-import { _AcaciaTree, _BirchTree,  _BlockAnvil, _AttachedStemBlock, _BarrierBlock, _BeaconBlock, _BrewingStandBlock as _BrewingStandBlock, _WoodButtonBlock, _BlockCarpet, _CarrotBlock, _CauldronBlock as _CauldronBlock, _CocoaBlock as _CocoaBlock, _CommandBlockBlock,  _BlockDaylightDetector, _DeadBushBlock, _DispenserBlock,  _DragonEggBlock as _DragonEggBlock, _BlockDropper, _EmptyDropsBlock, _EnchantmentTableBlock as _EnchantmentTableBlock, _EnderChestBlock as _EnderChestBlock, _EndPortalBlock as _EndPortalBlock, _EndPortalFrameBlock as _EndPortalFrameBlock,  _FenceGateBlock, _FlowerPotBlock, _FlowingFluidBlock, _GlassBlock, _GlassPaneBlock, _GravelBlock, _HayBlock, _BlockHopper, _HugeMushroomBlock,  _LeavesBlock,  _LilyPadBlock as _LilyPadBlock, _LogBlock, _MelonBlock, _MyceliumBlock, _NetherWartBlock as _NetherWartBlock, _NoteBlock, _OreBlock, _BlockPackedIce, _PaneBlock, _PistonBlock, _BlockPistonExtension, _PotatoBlock,  _WeightedPressurePlateBlock, _DetectorRailBlock, _PoweredRailBlock, _BlockRedstone, _BlockRedstoneComparator, _RedstoneLampBlock as _RedstoneLampBlock, _RotatedPillarBlock, _SandBlock, _SeaLanternBlock, _BlockShearableDoublePlant, _SilverfishBlock, _SkullBlock, _PlayerSkullBlock, _PlayerWallSkullBlock, _WallSkullBlock, _WitherSkullBlock, _WitherWallSkullBlock, _SlabBlock, _SlimeBlock, _SpongeBlock, _StainedGlassPaneBlock,  _StemBlock, _BlockTallFlower, _TrapDoorBlock,  _TripWireBlock as _TripWireBlock, _TripWireHookBlock as _TripWireHookBlock, _VineBlock, _WallBlock, _BlockWeb, _WetSpongeBlock,  _DarkOakTree, _Fluids, _JungleTree, _OakTree, _PressureSensitivity, _SpruceTree, _SaplingBlock, _AirBlock, _StoneBlock, _GrassBlock, _SnowyDirtBlock, _BedBlock, _SeaGrassBlock, _TallSeaGrassBlock, _GrassBushBlock, _FernBushBlock, _MovingPistonBlock, _FlowerBlock, _WitherRoseBlock, _TNTBlock, _BookshelfBlock, _TorchBlock, _WallTorchBlock, _MushroomBlock, _FireBlock, _MobSpawnerBlock, _StairsBlock, _ChestBlock, _RedstoneWireBlock, _TrappedChestBlock, _WorkbenchBlock, _CropsBlock, _FarmlandBlock, _FurnaceBlock, _StandingSignBlock, _DoorBlock, _LadderBlock, _RailBlock, _WallSignBlock, _LeverBlock, _PressurePlateBlock, _RedstoneOreBlock, _RedstoneTorchBlock, _WallRedstoneTorchBlock, _SnowLayerBlock, _IceBlock, _SnowBlock, _CactusBlock, _ClayBlock, _JukeboxBlock, _StoneButtonBlock, _SugarCaneBlock, _FenceBlock, _PumpkinBlock, _SoulSandBlock, _GlowstoneBlock, _PortalBlock as _NetherPortalBlock, _CarvedPumpkinBlock, _CakeBlock, _RedstoneDiodeBlock, _RepeaterBlock, _StainedGlassBlock, _BannerBlock, _WallBannerBlock, _EndRodBlock, _ChorusPlantBlock, _ChorusFlowerBlock, _BeetrootBlock, _GrassPathBlock, _EndGatewayBlock, _FrostedIceBlock, _MagmaBlock, _StructureVoidBlock, _ObserverBlock, _ShulkerBoxBlock, _GlazedTerracottaBlock, _ConcretePowderBlock, _KelpTopBlock, _KelpBlock, _TurtleEggBlock, _CoralBlock, _DeadCoralPlantBlock, _DeadCoralFanBlock, _CoralFanBlock, _DeadCoralWallFanBlock, _CoralWallFanBlock, _SeaPickleBlock, _BreakableBlock, _ConduitBlock, _BambooSaplingBlock, _BambooBlock, _BubbleColumnBlock, _ScaffoldingBlock, _LoomBlock, _BarrelBlock, _SmokerBlock, _BlastFurnaceBlock, _CartographyTableBlock, _FletchingTableBlock, _GrindstoneBlock, _LecternBlock, _SmithingTableBlock, _StonecutterBlock, _BellBlock, _LanternBlock, _CampfireBlock, _SweetBerryBushBlock, _StructureBlock, _JigsawBlock, _ComposterBlock, _CoralPlantBlock } from "./Blocks";
+import { _AcaciaTree, _AirBlock,  _AttachedStemBlock, _BambooBlock, _BambooSaplingBlock, _BannerBlock, _BarrelBlock, _BarrierBlock, _BeaconBlock, _BedBlock, _BeetrootBlock, _BellBlock, _BirchTree,  _BlastFurnaceBlock, _BlockAnvil, _BlockCarpet,  _BlockDaylightDetector, _BlockDropper, _BlockHopper, _BlockPackedIce, _BlockPistonExtension, _BlockRedstone, _BlockRedstoneComparator,  _BlockShearableDoublePlant, _BlockTallFlower, _BlockWeb, _BookshelfBlock, _BreakableBlock, _BrewingStandBlock as _BrewingStandBlock, _BubbleColumnBlock, _CactusBlock, _CakeBlock,  _CampfireBlock,  _CarrotBlock, _CartographyTableBlock, _CarvedPumpkinBlock, _CauldronBlock as _CauldronBlock, _ChestBlock, _ChorusFlowerBlock, _ChorusPlantBlock, _ClayBlock, _CocoaBlock as _CocoaBlock, _CommandBlockBlock, _ComposterBlock, _ConcretePowderBlock,  _ConduitBlock, _CoralBlock, _CoralFanBlock, _CoralPlantBlock, _CoralWallFanBlock, _CropsBlock, _DarkOakTree, _DeadBushBlock, _DeadCoralFanBlock, _DeadCoralPlantBlock, _DeadCoralWallFanBlock, _DetectorRailBlock, _DispenserBlock, _DoorBlock, _DragonEggBlock as _DragonEggBlock, _EmptyDropsBlock, _EnchantmentTableBlock as _EnchantmentTableBlock, _EnderChestBlock as _EnderChestBlock, _EndGatewayBlock, _EndPortalBlock as _EndPortalBlock, _EndPortalFrameBlock as _EndPortalFrameBlock,  _EndRodBlock, _FarmlandBlock, _FenceBlock,  _FenceGateBlock, _FernBushBlock, _FireBlock, _FletchingTableBlock, _FlowerBlock, _FlowerPotBlock,  _FlowingFluidBlock, _Fluids, _FrostedIceBlock, _FurnaceBlock, _GlassBlock, _GlassPaneBlock, _GlazedTerracottaBlock, _GlowstoneBlock, _GrassBlock, _GrassBushBlock, _GrassPathBlock, _GravelBlock, _GrindstoneBlock, _HayBlock, _HugeMushroomBlock, _IceBlock, _JigsawBlock, _JukeboxBlock, _JungleTree, _KelpBlock, _KelpTopBlock, _LadderBlock, _LanternBlock, _LeavesBlock, _LecternBlock, _LeverBlock, _LilyPadBlock as _LilyPadBlock, _LogBlock, _LoomBlock, _MagmaBlock, _MelonBlock, _MobSpawnerBlock, _MovingPistonBlock, _MushroomBlock, _MyceliumBlock, _NetherWartBlock as _NetherWartBlock, _NoteBlock, _OakTree, _ObserverBlock, _OreBlock, _PaneBlock, _PistonBlock, _PlayerSkullBlock, _PlayerWallSkullBlock, _PortalBlock as _NetherPortalBlock, _PotatoBlock, _PoweredRailBlock, _PressurePlateBlock, _PressureSensitivity, _PumpkinBlock, _RailBlock, _RedstoneDiodeBlock, _RedstoneLampBlock as _RedstoneLampBlock, _RedstoneOreBlock, _RedstoneTorchBlock, _RedstoneWireBlock, _RepeaterBlock, _RotatedPillarBlock, _SandBlock, _SaplingBlock, _ScaffoldingBlock, _SeaGrassBlock, _SeaLanternBlock, _SeaPickleBlock, _ShulkerBoxBlock, _SilverfishBlock, _SkullBlock, _SlabBlock, _SlimeBlock, _SmithingTableBlock, _SmokerBlock, _SnowBlock, _SnowLayerBlock, _SnowyDirtBlock, _SoulSandBlock, _SpongeBlock, _SpruceTree, _StainedGlassBlock, _StainedGlassPaneBlock, _StairsBlock, _StandingSignBlock, _StemBlock, _StoneBlock, _StoneButtonBlock, _StonecutterBlock, _StructureBlock, _StructureVoidBlock, _SugarCaneBlock, _SweetBerryBushBlock, _TallSeaGrassBlock, _TNTBlock, _TorchBlock, _TrapDoorBlock, _TrappedChestBlock, _TripWireBlock as _TripWireBlock, _TripWireHookBlock as _TripWireHookBlock, _TurtleEggBlock, _VineBlock, _WallBannerBlock, _WallBlock, _WallRedstoneTorchBlock, _WallSignBlock, _WallSkullBlock, _WallTorchBlock, _WeightedPressurePlateBlock, _WetSpongeBlock, _WitherRoseBlock, _WitherSkullBlock, _WitherWallSkullBlock, _WoodButtonBlock, _WorkbenchBlock } from "./Blocks";
 import { _Material } from "./Material";
 import { _BlockProperties } from "./BlockProperties";
 import { _LegacyBlockDataMap } from "./LegacyBlockDataMap";
-import { _SoundType } from "./SoundType";
+import { _Block } from "./Block";
 import { _BlockModel } from "./model/Model";
 import { _ModelRegistry } from "./model/ModelRegistry";
 import { _BlocksHelper } from "./BlocksHelper";
@@ -29,11 +29,11 @@ export class _BlockRegistry {
     constructor(textureManager: _TextureManager | null, models: _ModelRegistry) {
         this._textureManager = textureManager;
         this._blocksByLegacyId = Array(256);
-        this._blocksByNameOrder = Array(1024*16);
+        this._blocksByNameOrder = Array(1024 * 16);
         this._blocksByName = new Map<string, _Block>();
         this._currentNameOrderIndex = 0;
         this._modelRegistry = models;
-        this._globalPaletteSize = 1024*16;
+        this._globalPaletteSize = 1024 * 16;
         this._globalPalette = new Array(this._globalPaletteSize);
         this._globalPaletteOpaque = new Uint8Array(this._globalPaletteSize);
         this._currentGlobalPaletteIndex = 0;
@@ -44,7 +44,7 @@ export class _BlockRegistry {
         this._blocksByName.set(name, blockTypeInstance);
         this._blocksByNameOrder[this._currentNameOrderIndex++] = blockTypeInstance;
 
-        if(legacyId >= 0){
+        if (legacyId >= 0) {
             let legacyBDM: _LegacyBlockDataMap = this._blocksByLegacyId[legacyId];
             if (legacyBDM === undefined) {
                 legacyBDM = new _LegacyBlockDataMap();
@@ -68,16 +68,16 @@ export class _BlockRegistry {
                 b._model = model;
             });
         }
-        //this._makeGlobalPalette();
+        // this._makeGlobalPalette();
 
-        //this._helper = new _BlocksHelper(this);
+        // this._helper = new _BlocksHelper(this);
     }
-    public _makeGlobalPalette(stated: boolean){
-        if(stated){
+    public _makeGlobalPalette(stated: boolean) {
+        if (stated) {
             for (let i = 0; i < this._currentNameOrderIndex; i++) {
                 const block = this._blocksByNameOrder[i];
                 block._baseStateId = this._currentGlobalPaletteIndex;
-                for(let state = 0; state < block._states; state++){
+                for (let state = 0; state < block._states; state++) {
                     const gi = this._currentGlobalPaletteIndex;
                     this._globalPalette[gi] = block;
                     this._globalPaletteOpaque[gi] = block._opaque ? 1 : 0;
@@ -85,7 +85,7 @@ export class _BlockRegistry {
                     this._currentGlobalPaletteIndex++;
                 }
             }
-        }else{
+        } else {
 
         }
     }
@@ -110,6 +110,7 @@ export class _BlockRegistry {
         this._helper = h;
         const register = function (legacyId: number, legacyData: number, name: string, blockTypeInstance: _Block) {
             registry._registerBlock(legacyId, legacyData, name, blockTypeInstance);
+
             return blockTypeInstance;
         };
         const blockAir = new _AirBlock(_BlockProperties._create(_Material._AIR, _MaterialColor._AIR)._setTranslucent());
@@ -169,27 +170,26 @@ export class _BlockRegistry {
         register(162, 0, "acacia_log", new _LogBlock(_MaterialColor._ADOBE, _BlockProperties._create(_Material._WOOD, _MaterialColor._STONE)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
         register(162, 1, "dark_oak_log", new _LogBlock(_MaterialColor._BROWN, _BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
 
+        register(-1, -1, "stripped_spruce_log", new _LogBlock(_MaterialColor._OBSIDIAN, _BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_birch_log", new _LogBlock(_MaterialColor._SAND, _BlockProperties._create(_Material._WOOD, _MaterialColor._SAND)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_jungle_log", new _LogBlock(_MaterialColor._DIRT, _BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_acacia_log", new _LogBlock(_MaterialColor._ADOBE, _BlockProperties._create(_Material._WOOD, _MaterialColor._ADOBE)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_dark_oak_log", new _LogBlock(_MaterialColor._BROWN, _BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_oak_log", new _LogBlock(_MaterialColor._WOOD, _BlockProperties._create(_Material._WOOD, _MaterialColor._WOOD)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
         
-        register(-1, -1, "stripped_spruce_log", new _LogBlock(_MaterialColor._OBSIDIAN, _BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_birch_log", new _LogBlock(_MaterialColor._SAND, _BlockProperties._create(_Material._WOOD, _MaterialColor._SAND)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_jungle_log", new _LogBlock(_MaterialColor._DIRT, _BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_acacia_log", new _LogBlock(_MaterialColor._ADOBE, _BlockProperties._create(_Material._WOOD, _MaterialColor._ADOBE)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_dark_oak_log", new _LogBlock(_MaterialColor._BROWN, _BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_oak_log", new _LogBlock(_MaterialColor._WOOD, _BlockProperties._create(_Material._WOOD, _MaterialColor._WOOD)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
+        register(-1, -1, "oak_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._WOOD)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "spruce_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "birch_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._SAND)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "jungle_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "acacia_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._ADOBE)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "dark_oak_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
         
-        register(-1, -1, "oak_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._WOOD)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "spruce_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "birch_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._SAND)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "jungle_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "acacia_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._ADOBE)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "dark_oak_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        
-        register(-1, -1, "stripped_oak_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._WOOD)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_spruce_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_birch_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._SAND)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_jungle_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_acacia_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._ADOBE)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
-        register(-1, -1, "stripped_dark_oak_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_oak_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._WOOD)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_spruce_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_birch_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._SAND)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_jungle_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_acacia_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._ADOBE)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
+        register(-1, -1, "stripped_dark_oak_wood", new _RotatedPillarBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._hardnessAndResistance(2)._sound(_SoundType._WOOD)));
         
         register(18, 0, "oak_leaves", new _LeavesBlock(proto, _BlockProperties._create(_Material._LEAVES)._hardnessAndResistance(0.2)._needsRandomTick()._sound(_SoundType._PLANT)));
         register(18, 1, "spruce_leaves", new _LeavesBlock(proto, _BlockProperties._create(_Material._LEAVES)._hardnessAndResistance(0.2)._needsRandomTick()._sound(_SoundType._PLANT)));
@@ -237,8 +237,8 @@ export class _BlockRegistry {
         register(31, 1, "grass", blockGrass);
         register(31, 2, "fern", blockFern);
         register(31, 0, "dead_bush", blockDeadBush);
-        if(proto >= 340){
-            let block19 = new _SeaGrassBlock(_BlockProperties._create(_Material._SEA_GRASS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._WET_GRASS));
+        if (proto >= 340) {
+            const block19 = new _SeaGrassBlock(_BlockProperties._create(_Material._SEA_GRASS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._WET_GRASS));
             register(-1, -1, "seagrass", block19);
             register(-1, -1, "tall_seagrass", new _TallSeaGrassBlock(_BlockProperties._create(_Material._SEA_GRASS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._WET_GRASS)));
         }
@@ -260,17 +260,17 @@ export class _BlockRegistry {
         register(35, 13, "green_wool", new _Block(_BlockProperties._create(_Material._CLOTH, _MaterialColor._GREEN)._hardnessAndResistance(0.8)._sound(_SoundType._CLOTH)));
         register(35, 14, "red_wool", new _Block(_BlockProperties._create(_Material._CLOTH, _MaterialColor._RED)._hardnessAndResistance(0.8)._sound(_SoundType._CLOTH)));
         register(35, 15, "black_wool", new _Block(_BlockProperties._create(_Material._CLOTH, _MaterialColor._BLACK)._hardnessAndResistance(0.8)._sound(_SoundType._CLOTH)));
-        register(36, 0, "moving_piston", new _MovingPistonBlock(_BlockProperties._create(_Material._PISTON)._hardnessAndResistance(-1.0)._variableOpacity()));
+        register(36, 0, "moving_piston", new _MovingPistonBlock(_BlockProperties._create(_Material._PISTON)._hardnessAndResistance(-1)._variableOpacity()));
 
-        const dandelion = new _FlowerBlock(_Effects._SATURATION, 7,_BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
-        const poppy = new _FlowerBlock(_Effects._SPEED, 6,_BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
+        const dandelion = new _FlowerBlock(_Effects._SATURATION, 7, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
+        const poppy = new _FlowerBlock(_Effects._SPEED, 6, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
         const blue_orchid = new _FlowerBlock(_Effects._SATURATION, 7, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
-        const allium = new _FlowerBlock(_Effects._FIRE_RESISTANCE, 4,_BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
-        const azure_bluet = new _FlowerBlock(_Effects._BLINDNESS, 8,_BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
-        const red_tulip = new _FlowerBlock(_Effects._WEAKNESS, 9,_BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
-        const orange_tulip = new _FlowerBlock(_Effects._WEAKNESS, 9,_BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
+        const allium = new _FlowerBlock(_Effects._FIRE_RESISTANCE, 4, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
+        const azure_bluet = new _FlowerBlock(_Effects._BLINDNESS, 8, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
+        const red_tulip = new _FlowerBlock(_Effects._WEAKNESS, 9, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
+        const orange_tulip = new _FlowerBlock(_Effects._WEAKNESS, 9, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
         const white_tulip = new _FlowerBlock(_Effects._WEAKNESS, 9, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
-        const pink_tulip = new _FlowerBlock(_Effects._WEAKNESS, 9,_BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
+        const pink_tulip = new _FlowerBlock(_Effects._WEAKNESS, 9, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
         const oxeye_daisy = new _FlowerBlock(_Effects._REGENERATION, 8, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT));
         register(37, 0, "dandelion", dandelion);
         register(38, 0, "poppy", poppy);
@@ -282,7 +282,7 @@ export class _BlockRegistry {
         register(38, 6, "white_tulip", white_tulip);
         register(38, 7, "pink_tulip", pink_tulip);
         register(38, 8, "oxeye_daisy", oxeye_daisy);
-        if(proto >= 480){
+        if (proto >= 480) {
             h._CORNFLOWER = register(-1, -1, "cornflower", new _FlowerBlock(_Effects._JUMP_BOOST, 6, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT)));
             h._WITHER_ROSE = register(-1, -1, "wither_rose", new _WitherRoseBlock(_Effects._WITHER, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT)));
             h._LILY_OF_THE_VALLEY = register(-1, -1, "lily_of_the_valley", new _FlowerBlock(_Effects._POISON, 12, _BlockProperties._create(_Material._PLANTS)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT)));
@@ -303,7 +303,7 @@ export class _BlockRegistry {
         register(50, 1, "wall_torch", new _WallTorchBlock(_BlockProperties._create(_Material._CIRCUITS)._setTranslucent()._zeroHardnessAndResistance()._lightValue(14)._sound(_SoundType._WOOD)));
         register(51, 0, "fire", new _FireBlock(_BlockProperties._create(_Material._FIRE, _MaterialColor._TNT)._setTranslucent()._needsRandomTick()._zeroHardnessAndResistance()._lightValue(15)._sound(_SoundType._CLOTH)));
         register(52, 0, "spawner", new _MobSpawnerBlock(_BlockProperties._create(_Material._ROCK)._hardnessAndResistance(5)._sound(_SoundType._METAL)));
-        //register(53, 0, "oak_stairs", new _BlockStairs(block3._getDefaultState(), BlockProperties.from(block3)));
+        // register(53, 0, "oak_stairs", new _BlockStairs(block3._getDefaultState(), BlockProperties.from(block3)));
         register(53, 0, "oak_stairs", new _StairsBlock(block3, _BlockProperties._from(block3._prop)));
         register(54, 0, "chest", new _ChestBlock(_BlockProperties._create(_Material._WOOD)._hardnessAndResistance(2.5)._sound(_SoundType._WOOD)));
         register(55, 0, "redstone_wire", new _RedstoneWireBlock(_BlockProperties._create(_Material._CIRCUITS)._setTranslucent()._zeroHardnessAndResistance()));
@@ -316,12 +316,12 @@ export class _BlockRegistry {
         register(61, 0, "furnace", new _FurnaceBlock(_BlockProperties._create(_Material._ROCK)._hardnessAndResistance(3.5)._lightValue(13)));
         // no burning furnace
         h._OAK_SIGN = register(63, 0, "oak_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
-        if(proto >= 480){
-            h._SPRUCE_SIGN = register(-1, -1, "spruce_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-            h._BIRCH_SIGN = register(-1, -1, "birch_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._SAND)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-            h._ACACIA_SIGN = register(-1, -1, "acacia_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._ADOBE)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-            h._JUNGLE_SIGN = register(-1, -1, "jungle_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-            h._DARK_OAK_SIGN = register(-1, -1, "dark_oak_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
+        if (proto >= 480) {
+            h._SPRUCE_SIGN = register(-1, -1, "spruce_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+            h._BIRCH_SIGN = register(-1, -1, "birch_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._SAND)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+            h._ACACIA_SIGN = register(-1, -1, "acacia_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._ADOBE)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+            h._JUNGLE_SIGN = register(-1, -1, "jungle_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+            h._DARK_OAK_SIGN = register(-1, -1, "dark_oak_sign", new _StandingSignBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
         }
         
         h._OAK_DOOR = register(64, 0, "oak_door", new _DoorBlock(_BlockProperties._create(_Material._WOOD, block3._prop._materialColor)._hardnessAndResistance(3)._sound(_SoundType._WOOD)));
@@ -330,12 +330,12 @@ export class _BlockRegistry {
         // register(67, 0, "cobblestone_stairs", new _BlockStairs(block2.getDefaultState(), BlockProperties.from(block2)));
         h._COBBLESTONE_STAIRS = register(67, 0, "cobblestone_stairs", new _StairsBlock(block2, _BlockProperties._from(block2._prop)));
         h._OAK_WALL_SIGN = register(68, 0, "oak_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
-        if(proto >= 480){
-            h._SPRUCE_WALL_SIGN = register(-1, -1, "spruce_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)._lootFrom(h._SPRUCE_SIGN!)));
-            h._BIRCH_WALL_SIGN = register(-1, -1, "birch_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)._lootFrom(h._BIRCH_SIGN!)));
-            h._ACACIA_WALL_SIGN = register(-1, -1, "acacia_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)._lootFrom(h._ACACIA_SIGN!)));
-            h._JUNGLE_WALL_SIGN = register(-1, -1, "jungle_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)._lootFrom(h._JUNGLE_SIGN!)));
-            h._DARK_OAK_WALL_SIGN = register(-1, -1, "dark_oak_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)._lootFrom(h._DARK_OAK_SIGN!)));
+        if (proto >= 480) {
+            h._SPRUCE_WALL_SIGN = register(-1, -1, "spruce_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)._lootFrom(h._SPRUCE_SIGN!)));
+            h._BIRCH_WALL_SIGN = register(-1, -1, "birch_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)._lootFrom(h._BIRCH_SIGN!)));
+            h._ACACIA_WALL_SIGN = register(-1, -1, "acacia_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)._lootFrom(h._ACACIA_SIGN!)));
+            h._JUNGLE_WALL_SIGN = register(-1, -1, "jungle_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)._lootFrom(h._JUNGLE_SIGN!)));
+            h._DARK_OAK_WALL_SIGN = register(-1, -1, "dark_oak_wall_sign", new _WallSignBlock(_BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)._lootFrom(h._DARK_OAK_SIGN!)));
         }
         
         h._LEVER = register(69, 0, "lever", new _LeverBlock(_BlockProperties._create(_Material._CIRCUITS)._setTranslucent()._hardnessAndResistance(0.5)._sound(_SoundType._WOOD)));
@@ -390,7 +390,6 @@ export class _BlockRegistry {
         register(95, 14, "red_stained_glass", new _StainedGlassBlock(_DyeColor._RED, _BlockProperties._create(_Material._GLASS, _DyeColor._RED)._hardnessAndResistance(0.3)._sound(_SoundType._GLASS)));
         register(95, 15, "black_stained_glass", new _StainedGlassBlock(_DyeColor._BLACK, _BlockProperties._create(_Material._GLASS, _DyeColor._BLACK)._hardnessAndResistance(0.3)._sound(_SoundType._GLASS)));
         
-
         register(96, 0, "oak_trapdoor", new _TrapDoorBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._WOOD)._hardnessAndResistance(3)._sound(_SoundType._WOOD)));
         register(96, 1, "spruce_trapdoor", new _TrapDoorBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._hardnessAndResistance(3)._sound(_SoundType._WOOD)));
         register(96, 2, "birch_trapdoor", new _TrapDoorBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._SAND)._hardnessAndResistance(3)._sound(_SoundType._WOOD)));
@@ -405,8 +404,8 @@ export class _BlockRegistry {
 
         register(97, 0, "infested_stone", new _SilverfishBlock(blockStone, _BlockProperties._create(_Material._CLAY)._hardnessAndResistance(0, 0.75)));
         register(97, 1, "infested_cobblestone", new _SilverfishBlock(block2, _BlockProperties._create(_Material._CLAY)._hardnessAndResistance(0, 0.75)));
-        register(97, 2, "infested_stone_bricks", new _SilverfishBlock(h._STONE_BRICKS!, _BlockProperties._create(_Material._CLAY)._hardnessAndResistance(0, 0.75)));
-        register(97, 3, "infested_mossy_stone_bricks", new _SilverfishBlock(h._MOSSY_STONE_BRICKS!, _BlockProperties._create(_Material._CLAY)._hardnessAndResistance(0, 0.75)));
+        register(97, 2, "infested_stone_bricks", new _SilverfishBlock(h._STONE_BRICKS, _BlockProperties._create(_Material._CLAY)._hardnessAndResistance(0, 0.75)));
+        register(97, 3, "infested_mossy_stone_bricks", new _SilverfishBlock(h._MOSSY_STONE_BRICKS, _BlockProperties._create(_Material._CLAY)._hardnessAndResistance(0, 0.75)));
         register(97, 4, "infested_cracked_stone_bricks", new _SilverfishBlock(h._CRACKED_STONE_BRICKS, _BlockProperties._create(_Material._CLAY)._hardnessAndResistance(0, 0.75)));
         register(97, 5, "infested_chiseled_stone_bricks", new _SilverfishBlock(h._CHISELED_STONE_BRICKS, _BlockProperties._create(_Material._CLAY)._hardnessAndResistance(0, 0.75)));
         
@@ -428,7 +427,7 @@ export class _BlockRegistry {
         register(106, 0, "vine", new _VineBlock(_BlockProperties._create(_Material._VINE)._setTranslucent()._needsRandomTick()._hardnessAndResistance(0.2)._sound(_SoundType._PLANT)));
         register(107, 0, "oak_fence_gate", new _FenceGateBlock(_BlockProperties._create(_Material._WOOD, block3._prop._materialColor)._hardnessAndResistance(2, 3)._sound(_SoundType._WOOD)));
         register(108, 0, "brick_stairs", new _StairsBlock(block32._getDefaultState(), _BlockProperties._from(block32._prop)));
-        register(109, 0, "stone_brick_stairs", new _StairsBlock(h._STONE_BRICKS!._getDefaultState(), _BlockProperties._from(h._STONE_BRICKS!._prop)));
+        register(109, 0, "stone_brick_stairs", new _StairsBlock(h._STONE_BRICKS._getDefaultState(), _BlockProperties._from(h._STONE_BRICKS._prop)));
         register(110, 0, "mycelium", new _MyceliumBlock(proto, _BlockProperties._create(_Material._GRASS, _MaterialColor._PURPLE)._needsRandomTick()._hardnessAndResistance(0.6)._sound(_SoundType._PLANT)));
         register(111, 0, "lily_pad", new _LilyPadBlock(_BlockProperties._create(_Material._PLANTS)._zeroHardnessAndResistance()._sound(_SoundType._PLANT)));
         const block41 = new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._NETHERRACK)._hardnessAndResistance(2, 6));
@@ -477,7 +476,7 @@ export class _BlockRegistry {
         register(140, 14, "potted_orange_tulip", new _FlowerPotBlock(orange_tulip, _BlockProperties._create(_Material._CIRCUITS)._zeroHardnessAndResistance()));
         register(140, 15, "potted_white_tulip", new _FlowerPotBlock(white_tulip, _BlockProperties._create(_Material._CIRCUITS)._zeroHardnessAndResistance()));
         
-        if(proto >= 340){
+        if (proto >= 340) {
             h._PINK_TULIP = register(-1, -1, "potted_pink_tulip", new _FlowerPotBlock(pink_tulip, _BlockProperties._create(_Material._CIRCUITS)._zeroHardnessAndResistance()));
             h._OXEYE_DAISY = register(-1, -1, "potted_oxeye_daisy", new _FlowerPotBlock(oxeye_daisy, _BlockProperties._create(_Material._CIRCUITS)._zeroHardnessAndResistance()));
             h._POTTED_CORNFLOWER = register(-1, -1, "potted_cornflower", new _FlowerPotBlock(h._CORNFLOWER!, _BlockProperties._create(_Material._MISCELLANEOUS)._zeroHardnessAndResistance()));
@@ -570,14 +569,14 @@ export class _BlockRegistry {
         h._PRISMARINE_BRICKS = register(168, 1, "prismarine_bricks", block44);
         const block45 = new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._DIAMOND)._hardnessAndResistance(1.5, 6));
         h._DARK_PRISMARINE = register(168, 2, "dark_prismarine", block45);
-        if(proto >= 340){
+        if (proto >= 340) {
             register(-1, -1, "prismarine_stairs", new _StairsBlock(block43._getDefaultState(), _BlockProperties._from(block43._prop)));
             register(-1, -1, "prismarine_brick_stairs", new _StairsBlock(block44._getDefaultState(), _BlockProperties._from(block44._prop)));
             register(-1, -1, "dark_prismarine_stairs", new _StairsBlock(block45._getDefaultState(), _BlockProperties._from(block45._prop)));
             
-            register(-1, -1, "prismarine_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._CYAN)._hardnessAndResistance(1.5, 6.0)));
-            register(-1, -1, "prismarine_brick_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._DIAMOND)._hardnessAndResistance(1.5, 6.0)));
-            register(-1, -1, "dark_prismarine_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._DIAMOND)._hardnessAndResistance(1.5, 6.0)));
+            register(-1, -1, "prismarine_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._CYAN)._hardnessAndResistance(1.5, 6)));
+            register(-1, -1, "prismarine_brick_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._DIAMOND)._hardnessAndResistance(1.5, 6)));
+            register(-1, -1, "dark_prismarine_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._DIAMOND)._hardnessAndResistance(1.5, 6)));
         }
         register(169, 0, "sea_lantern", new _SeaLanternBlock(_BlockProperties._create(_Material._GLASS, _MaterialColor._QUARTZ)._hardnessAndResistance(0.3)._sound(_SoundType._GLASS)._lightValue(15)));
         register(170, 0, "hay_block", new _HayBlock(_BlockProperties._create(_Material._GRASS, _MaterialColor._YELLOW)._hardnessAndResistance(0.5)._sound(_SoundType._PLANT)));
@@ -607,38 +606,38 @@ export class _BlockRegistry {
         register(175, 2, "tall_grass", new _BlockShearableDoublePlant(blockGrass, _BlockProperties._create(_Material._VINE)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT)));
         register(175, 3, "large_fern", new _BlockShearableDoublePlant(blockFern, _BlockProperties._create(_Material._VINE)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._PLANT)));
         
-        register(176, 0, "white_banner", new _BannerBlock(_DyeColor._WHITE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 1, "orange_banner", new _BannerBlock(_DyeColor._ORANGE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 2, "magenta_banner", new _BannerBlock(_DyeColor._MAGENTA, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 3, "light_blue_banner", new _BannerBlock(_DyeColor._LIGHT_BLUE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 4, "yellow_banner", new _BannerBlock(_DyeColor._YELLOW, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 5, "lime_banner", new _BannerBlock(_DyeColor._LIME, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 6, "pink_banner", new _BannerBlock(_DyeColor._PINK, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 7, "gray_banner", new _BannerBlock(_DyeColor._GRAY, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 8, "light_gray_banner", new _BannerBlock(_DyeColor._LIGHT_GRAY, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 9, "cyan_banner", new _BannerBlock(_DyeColor._CYAN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 10, "purple_banner", new _BannerBlock(_DyeColor._PURPLE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 11, "blue_banner", new _BannerBlock(_DyeColor._BLUE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 12, "brown_banner", new _BannerBlock(_DyeColor._BROWN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 13, "green_banner", new _BannerBlock(_DyeColor._GREEN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 14, "red_banner", new _BannerBlock(_DyeColor._RED, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(176, 15, "black_banner", new _BannerBlock(_DyeColor._BLACK, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 0, "white_wall_banner", new _WallBannerBlock(_DyeColor._WHITE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 1, "orange_wall_banner", new _WallBannerBlock(_DyeColor._ORANGE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 2, "magenta_wall_banner", new _WallBannerBlock(_DyeColor._MAGENTA, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 3, "light_blue_wall_banner", new _WallBannerBlock(_DyeColor._LIGHT_BLUE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 4, "yellow_wall_banner", new _WallBannerBlock(_DyeColor._YELLOW, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 5, "lime_wall_banner", new _WallBannerBlock(_DyeColor._LIME, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 6, "pink_wall_banner", new _WallBannerBlock(_DyeColor._PINK, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 7, "gray_wall_banner", new _WallBannerBlock(_DyeColor._GRAY, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 8, "light_gray_wall_banner", new _WallBannerBlock(_DyeColor._LIGHT_GRAY, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 9, "cyan_wall_banner", new _WallBannerBlock(_DyeColor._CYAN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 10, "purple_wall_banner", new _WallBannerBlock(_DyeColor._PURPLE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 11, "blue_wall_banner", new _WallBannerBlock(_DyeColor._BLUE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 12, "brown_wall_banner", new _WallBannerBlock(_DyeColor._BROWN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 13, "green_wall_banner", new _WallBannerBlock(_DyeColor._GREEN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 14, "red_wall_banner", new _WallBannerBlock(_DyeColor._RED, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-        register(177, 15, "black_wall_banner", new _WallBannerBlock(_DyeColor._BLACK, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
+        register(176, 0, "white_banner", new _BannerBlock(_DyeColor._WHITE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 1, "orange_banner", new _BannerBlock(_DyeColor._ORANGE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 2, "magenta_banner", new _BannerBlock(_DyeColor._MAGENTA, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 3, "light_blue_banner", new _BannerBlock(_DyeColor._LIGHT_BLUE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 4, "yellow_banner", new _BannerBlock(_DyeColor._YELLOW, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 5, "lime_banner", new _BannerBlock(_DyeColor._LIME, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 6, "pink_banner", new _BannerBlock(_DyeColor._PINK, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 7, "gray_banner", new _BannerBlock(_DyeColor._GRAY, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 8, "light_gray_banner", new _BannerBlock(_DyeColor._LIGHT_GRAY, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 9, "cyan_banner", new _BannerBlock(_DyeColor._CYAN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 10, "purple_banner", new _BannerBlock(_DyeColor._PURPLE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 11, "blue_banner", new _BannerBlock(_DyeColor._BLUE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 12, "brown_banner", new _BannerBlock(_DyeColor._BROWN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 13, "green_banner", new _BannerBlock(_DyeColor._GREEN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 14, "red_banner", new _BannerBlock(_DyeColor._RED, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(176, 15, "black_banner", new _BannerBlock(_DyeColor._BLACK, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 0, "white_wall_banner", new _WallBannerBlock(_DyeColor._WHITE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 1, "orange_wall_banner", new _WallBannerBlock(_DyeColor._ORANGE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 2, "magenta_wall_banner", new _WallBannerBlock(_DyeColor._MAGENTA, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 3, "light_blue_wall_banner", new _WallBannerBlock(_DyeColor._LIGHT_BLUE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 4, "yellow_wall_banner", new _WallBannerBlock(_DyeColor._YELLOW, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 5, "lime_wall_banner", new _WallBannerBlock(_DyeColor._LIME, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 6, "pink_wall_banner", new _WallBannerBlock(_DyeColor._PINK, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 7, "gray_wall_banner", new _WallBannerBlock(_DyeColor._GRAY, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 8, "light_gray_wall_banner", new _WallBannerBlock(_DyeColor._LIGHT_GRAY, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 9, "cyan_wall_banner", new _WallBannerBlock(_DyeColor._CYAN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 10, "purple_wall_banner", new _WallBannerBlock(_DyeColor._PURPLE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 11, "blue_wall_banner", new _WallBannerBlock(_DyeColor._BLUE, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 12, "brown_wall_banner", new _WallBannerBlock(_DyeColor._BROWN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 13, "green_wall_banner", new _WallBannerBlock(_DyeColor._GREEN, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 14, "red_wall_banner", new _WallBannerBlock(_DyeColor._RED, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+        register(177, 15, "black_wall_banner", new _WallBannerBlock(_DyeColor._BLACK, _BlockProperties._create(_Material._WOOD)._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
         
         const block46 = new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._ADOBE)._hardnessAndResistance(0.8));
         h._RED_SANDSTONE = register(179, 0, "red_sandstone", block46);
@@ -652,11 +651,11 @@ export class _BlockRegistry {
         register(126, 4, "acacia_slab", new _SlabBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._ADOBE)._hardnessAndResistance(2, 3)._sound(_SoundType._WOOD)));
         register(126, 5, "dark_oak_slab", new _SlabBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._BROWN)._hardnessAndResistance(2, 3)._sound(_SoundType._WOOD)));
         register(44, 0, "stone_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._STONE)._hardnessAndResistance(2, 6)));
-        if(proto >= 480){
+        if (proto >= 480) {
             register(-1, -1, "smooth_stone_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._STONE)._hardnessAndResistance(2, 6)));
         }
         register(44, 1, "sandstone_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._SAND)._hardnessAndResistance(2, 6)));
-        if(proto >= 480){
+        if (proto >= 480) {
             register(-1, -1, "cut_sandstone_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._SAND)._hardnessAndResistance(2, 6)));
         }
         register(44, 2, "petrified_oak_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._WOOD)._hardnessAndResistance(2, 6)));
@@ -666,15 +665,15 @@ export class _BlockRegistry {
         register(44, 6, "nether_brick_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._NETHERRACK)._hardnessAndResistance(2, 6)));
         register(44, 7, "quartz_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._QUARTZ)._hardnessAndResistance(2, 6)));
         register(44, 8, "red_sandstone_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._ADOBE)._hardnessAndResistance(2, 6)));
-        if(proto >= 480){
+        if (proto >= 480) {
             register(-1, -1, "cut_red_sandstone_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._ADOBE)._hardnessAndResistance(2, 6)));
         }
-        register(-1, -1, "purpur_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._MAGENTA)._hardnessAndResistance(2.0, 6.0)));
+        register(-1, -1, "purpur_slab", new _SlabBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._MAGENTA)._hardnessAndResistance(2, 6)));
         
-        h._SMOOTH_STONE = register(-1, -1, "smooth_stone", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._STONE)._hardnessAndResistance(2.0, 6.0)));
-        h._SMOOTH_SANDSTONE = register(-1, -1, "smooth_sandstone", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._SAND)._hardnessAndResistance(2.0, 6.0)));
-        h._SMOOTH_QUARTZ = register(-1, -1, "smooth_quartz", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._QUARTZ)._hardnessAndResistance(2.0, 6.0)));
-        h._SMOOTH_RED_SANDSTONE = register(-1, -1, "smooth_red_sandstone", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._ADOBE)._hardnessAndResistance(2.0, 6.0)));
+        h._SMOOTH_STONE = register(-1, -1, "smooth_stone", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._STONE)._hardnessAndResistance(2, 6)));
+        h._SMOOTH_SANDSTONE = register(-1, -1, "smooth_sandstone", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._SAND)._hardnessAndResistance(2, 6)));
+        h._SMOOTH_QUARTZ = register(-1, -1, "smooth_quartz", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._QUARTZ)._hardnessAndResistance(2, 6)));
+        h._SMOOTH_RED_SANDSTONE = register(-1, -1, "smooth_red_sandstone", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._ADOBE)._hardnessAndResistance(2, 6)));
         
         register(107, 1, "spruce_fence_gate", new _FenceGateBlock(_BlockProperties._create(_Material._WOOD, block4._prop._materialColor)._hardnessAndResistance(2, 3)._sound(_SoundType._WOOD)));
         register(107, 2, "birch_fence_gate", new _FenceGateBlock(_BlockProperties._create(_Material._WOOD, block5._prop._materialColor)._hardnessAndResistance(2, 3)._sound(_SoundType._WOOD)));
@@ -694,49 +693,49 @@ export class _BlockRegistry {
         register(64, 4, "acacia_door", new _DoorBlock(_BlockProperties._create(_Material._WOOD, block7._prop._materialColor)._hardnessAndResistance(3)._sound(_SoundType._WOOD)));
         register(64, 5, "dark_oak_door", new _DoorBlock(_BlockProperties._create(_Material._WOOD, block8._prop._materialColor)._hardnessAndResistance(3)._sound(_SoundType._WOOD)));
         
-        if(proto >= 107){
+        if (proto >= 107) {
             h._END_ROD = register(-1, -1, "end_rod", new _EndRodBlock(_BlockProperties._create(_Material._CIRCUITS)._zeroHardnessAndResistance()._lightValue(14)._sound(_SoundType._WOOD)));
             
             h._CHORUS_PLANT = register(-1, -1, "chorus_plant", new _ChorusPlantBlock(_BlockProperties._create(_Material._PLANTS, _MaterialColor._PURPLE)._hardnessAndResistance(0.4)._sound(_SoundType._WOOD)));
             h._CHORUS_FLOWER = register(-1, -1, "chorus_flower", new _ChorusFlowerBlock(h._CHORUS_PLANT, _BlockProperties._create(_Material._PLANTS, _MaterialColor._PURPLE)._tickRandomly()._hardnessAndResistance(0.4)._sound(_SoundType._WOOD)));
-            h._PURPUR_BLOCK = register(-1, -1, "purpur_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._MAGENTA)._hardnessAndResistance(1.5, 6.0)));
-            h._PURPUR_PILLAR = register(-1, -1, "purpur_pillar", new _RotatedPillarBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._MAGENTA)._hardnessAndResistance(1.5, 6.0)));
+            h._PURPUR_BLOCK = register(-1, -1, "purpur_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._MAGENTA)._hardnessAndResistance(1.5, 6)));
+            h._PURPUR_PILLAR = register(-1, -1, "purpur_pillar", new _RotatedPillarBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._MAGENTA)._hardnessAndResistance(1.5, 6)));
             h._PURPUR_STAIRS = register(-1, -1, "purpur_stairs", new _StairsBlock(h._PURPUR_BLOCK._getDefaultState(), _BlockProperties._from(h._PURPUR_BLOCK._prop)));
             h._END_STONE_BRICKS = register(-1, -1, "end_stone_bricks", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._SAND)._hardnessAndResistance(0.8)));
             
             h._BEETROOTS = register(-1, -1, "beetroots", new _BeetrootBlock(_BlockProperties._create(_Material._PLANTS)._setTranslucent()._tickRandomly()._zeroHardnessAndResistance()._sound(_SoundType._CROP)));
             h._GRASS_PATH = register(-1, -1, "grass_path", new _GrassPathBlock(_BlockProperties._create(_Material._EARTH)._hardnessAndResistance(0.65)._sound(_SoundType._PLANT)));
-            h._END_GATEWAY = register(-1, -1, "end_gateway", new _EndGatewayBlock(_BlockProperties._create(_Material._PORTAL, _MaterialColor._BLACK)._setTranslucent()._lightValue(15)._hardnessAndResistance(-1.0, 3600000.0)._noDrops()));
+            h._END_GATEWAY = register(-1, -1, "end_gateway", new _EndGatewayBlock(_BlockProperties._create(_Material._PORTAL, _MaterialColor._BLACK)._setTranslucent()._lightValue(15)._hardnessAndResistance(-1, 3600000)._noDrops()));
             
-            h._REPEATING_COMMAND_BLOCK = register(-1, -1, "repeating_command_block", new _CommandBlockBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._PURPLE)._hardnessAndResistance(-1.0, 3600000.0)._noDrops()));
-            h._CHAIN_COMMAND_BLOCK = register(-1, -1, "chain_command_block", new _CommandBlockBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._GREEN)._hardnessAndResistance(-1.0, 3600000.0)._noDrops()));
+            h._REPEATING_COMMAND_BLOCK = register(-1, -1, "repeating_command_block", new _CommandBlockBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._PURPLE)._hardnessAndResistance(-1, 3600000)._noDrops()));
+            h._CHAIN_COMMAND_BLOCK = register(-1, -1, "chain_command_block", new _CommandBlockBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._GREEN)._hardnessAndResistance(-1, 3600000)._noDrops()));
            
             h._FROSTED_ICE = register(-1, -1, "frosted_ice", new _FrostedIceBlock(_BlockProperties._create(_Material._ICE)._slipperiness(0.98)._tickRandomly()._hardnessAndResistance(0.5)._sound(_SoundType._GLASS)));
             h._MAGMA_BLOCK = register(-1, -1, "magma_block", new _MagmaBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._NETHERRACK)._lightValue(3)._tickRandomly()._hardnessAndResistance(0.5)));
-            h._NETHER_WART_BLOCK = register(-1, -1, "nether_wart_block", new _Block(_BlockProperties._create(_Material._ORGANIC, _MaterialColor._RED)._hardnessAndResistance(1.0)._sound(_SoundType._WOOD)));
-            h._RED_NETHER_BRICKS = register(-1, -1, "red_nether_bricks", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._NETHERRACK)._hardnessAndResistance(2.0, 6.0)));
-            h._BONE_BLOCK = register(-1, -1, "bone_block", new _RotatedPillarBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._SAND)._hardnessAndResistance(2.0)));
+            h._NETHER_WART_BLOCK = register(-1, -1, "nether_wart_block", new _Block(_BlockProperties._create(_Material._ORGANIC, _MaterialColor._RED)._hardnessAndResistance(1)._sound(_SoundType._WOOD)));
+            h._RED_NETHER_BRICKS = register(-1, -1, "red_nether_bricks", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._NETHERRACK)._hardnessAndResistance(2, 6)));
+            h._BONE_BLOCK = register(-1, -1, "bone_block", new _RotatedPillarBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._SAND)._hardnessAndResistance(2)));
             h._STRUCTURE_VOID = register(-1, -1, "structure_void", new _StructureVoidBlock(_BlockProperties._create(_Material._STRUCTURE_VOID)._setTranslucent()._noDrops()));
-            h._OBSERVER = register(-1, -1, "observer", new _ObserverBlock(_BlockProperties._create(_Material._ROCK)._hardnessAndResistance(3.0)));
+            h._OBSERVER = register(-1, -1, "observer", new _ObserverBlock(_BlockProperties._create(_Material._ROCK)._hardnessAndResistance(3)));
             
-            h._SHULKER_BOX = register(-1, -1, "shulker_box", new _ShulkerBoxBlock(-1, _BlockProperties._create(_Material._SHULKER)._hardnessAndResistance(2.0)._variableOpacity()));
+            h._SHULKER_BOX = register(-1, -1, "shulker_box", new _ShulkerBoxBlock(-1, _BlockProperties._create(_Material._SHULKER)._hardnessAndResistance(2)._variableOpacity()));
            
-            h._WHITE_SHULKER_BOX = register(-1, -1, "white_shulker_box", new _ShulkerBoxBlock(_DyeColor._WHITE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._SNOW)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._ORANGE_SHULKER_BOX = register(-1, -1, "orange_shulker_box", new _ShulkerBoxBlock(_DyeColor._ORANGE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._ADOBE)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._MAGENTA_SHULKER_BOX = register(-1, -1, "magenta_shulker_box", new _ShulkerBoxBlock(_DyeColor._MAGENTA, _BlockProperties._create(_Material._SHULKER, _MaterialColor._MAGENTA)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._LIGHT_BLUE_SHULKER_BOX = register(-1, -1, "light_blue_shulker_box", new _ShulkerBoxBlock(_DyeColor._LIGHT_BLUE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._LIGHT_BLUE)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._YELLOW_SHULKER_BOX = register(-1, -1, "yellow_shulker_box", new _ShulkerBoxBlock(_DyeColor._YELLOW, _BlockProperties._create(_Material._SHULKER, _MaterialColor._YELLOW)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._LIME_SHULKER_BOX = register(-1, -1, "lime_shulker_box", new _ShulkerBoxBlock(_DyeColor._LIME, _BlockProperties._create(_Material._SHULKER, _MaterialColor._LIME)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._PINK_SHULKER_BOX = register(-1, -1, "pink_shulker_box", new _ShulkerBoxBlock(_DyeColor._PINK, _BlockProperties._create(_Material._SHULKER, _MaterialColor._PINK)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._GRAY_SHULKER_BOX = register(-1, -1, "gray_shulker_box", new _ShulkerBoxBlock(_DyeColor._GRAY, _BlockProperties._create(_Material._SHULKER, _MaterialColor._GRAY)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._LIGHT_GRAY_SHULKER_BOX = register(-1, -1, "light_gray_shulker_box", new _ShulkerBoxBlock(_DyeColor._LIGHT_GRAY, _BlockProperties._create(_Material._SHULKER, _MaterialColor._LIGHT_GRAY)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._CYAN_SHULKER_BOX = register(-1, -1, "cyan_shulker_box", new _ShulkerBoxBlock(_DyeColor._CYAN, _BlockProperties._create(_Material._SHULKER, _MaterialColor._CYAN)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._PURPLE_SHULKER_BOX = register(-1, -1, "purple_shulker_box", new _ShulkerBoxBlock(_DyeColor._PURPLE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._PURPLE_TERRACOTTA)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._BLUE_SHULKER_BOX = register(-1, -1, "blue_shulker_box", new _ShulkerBoxBlock(_DyeColor._BLUE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._BLUE)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._BROWN_SHULKER_BOX = register(-1, -1, "brown_shulker_box", new _ShulkerBoxBlock(_DyeColor._BROWN, _BlockProperties._create(_Material._SHULKER, _MaterialColor._BROWN)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._GREEN_SHULKER_BOX = register(-1, -1, "green_shulker_box", new _ShulkerBoxBlock(_DyeColor._GREEN, _BlockProperties._create(_Material._SHULKER, _MaterialColor._GREEN)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._RED_SHULKER_BOX = register(-1, -1, "red_shulker_box", new _ShulkerBoxBlock(_DyeColor._RED, _BlockProperties._create(_Material._SHULKER, _MaterialColor._RED)._hardnessAndResistance(2.0)._variableOpacity()));
-            h._BLACK_SHULKER_BOX = register(-1, -1, "black_shulker_box", new _ShulkerBoxBlock(_DyeColor._BLACK, _BlockProperties._create(_Material._SHULKER, _MaterialColor._BLACK)._hardnessAndResistance(2.0)._variableOpacity()));
+            h._WHITE_SHULKER_BOX = register(-1, -1, "white_shulker_box", new _ShulkerBoxBlock(_DyeColor._WHITE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._SNOW)._hardnessAndResistance(2)._variableOpacity()));
+            h._ORANGE_SHULKER_BOX = register(-1, -1, "orange_shulker_box", new _ShulkerBoxBlock(_DyeColor._ORANGE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._ADOBE)._hardnessAndResistance(2)._variableOpacity()));
+            h._MAGENTA_SHULKER_BOX = register(-1, -1, "magenta_shulker_box", new _ShulkerBoxBlock(_DyeColor._MAGENTA, _BlockProperties._create(_Material._SHULKER, _MaterialColor._MAGENTA)._hardnessAndResistance(2)._variableOpacity()));
+            h._LIGHT_BLUE_SHULKER_BOX = register(-1, -1, "light_blue_shulker_box", new _ShulkerBoxBlock(_DyeColor._LIGHT_BLUE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._LIGHT_BLUE)._hardnessAndResistance(2)._variableOpacity()));
+            h._YELLOW_SHULKER_BOX = register(-1, -1, "yellow_shulker_box", new _ShulkerBoxBlock(_DyeColor._YELLOW, _BlockProperties._create(_Material._SHULKER, _MaterialColor._YELLOW)._hardnessAndResistance(2)._variableOpacity()));
+            h._LIME_SHULKER_BOX = register(-1, -1, "lime_shulker_box", new _ShulkerBoxBlock(_DyeColor._LIME, _BlockProperties._create(_Material._SHULKER, _MaterialColor._LIME)._hardnessAndResistance(2)._variableOpacity()));
+            h._PINK_SHULKER_BOX = register(-1, -1, "pink_shulker_box", new _ShulkerBoxBlock(_DyeColor._PINK, _BlockProperties._create(_Material._SHULKER, _MaterialColor._PINK)._hardnessAndResistance(2)._variableOpacity()));
+            h._GRAY_SHULKER_BOX = register(-1, -1, "gray_shulker_box", new _ShulkerBoxBlock(_DyeColor._GRAY, _BlockProperties._create(_Material._SHULKER, _MaterialColor._GRAY)._hardnessAndResistance(2)._variableOpacity()));
+            h._LIGHT_GRAY_SHULKER_BOX = register(-1, -1, "light_gray_shulker_box", new _ShulkerBoxBlock(_DyeColor._LIGHT_GRAY, _BlockProperties._create(_Material._SHULKER, _MaterialColor._LIGHT_GRAY)._hardnessAndResistance(2)._variableOpacity()));
+            h._CYAN_SHULKER_BOX = register(-1, -1, "cyan_shulker_box", new _ShulkerBoxBlock(_DyeColor._CYAN, _BlockProperties._create(_Material._SHULKER, _MaterialColor._CYAN)._hardnessAndResistance(2)._variableOpacity()));
+            h._PURPLE_SHULKER_BOX = register(-1, -1, "purple_shulker_box", new _ShulkerBoxBlock(_DyeColor._PURPLE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._PURPLE_TERRACOTTA)._hardnessAndResistance(2)._variableOpacity()));
+            h._BLUE_SHULKER_BOX = register(-1, -1, "blue_shulker_box", new _ShulkerBoxBlock(_DyeColor._BLUE, _BlockProperties._create(_Material._SHULKER, _MaterialColor._BLUE)._hardnessAndResistance(2)._variableOpacity()));
+            h._BROWN_SHULKER_BOX = register(-1, -1, "brown_shulker_box", new _ShulkerBoxBlock(_DyeColor._BROWN, _BlockProperties._create(_Material._SHULKER, _MaterialColor._BROWN)._hardnessAndResistance(2)._variableOpacity()));
+            h._GREEN_SHULKER_BOX = register(-1, -1, "green_shulker_box", new _ShulkerBoxBlock(_DyeColor._GREEN, _BlockProperties._create(_Material._SHULKER, _MaterialColor._GREEN)._hardnessAndResistance(2)._variableOpacity()));
+            h._RED_SHULKER_BOX = register(-1, -1, "red_shulker_box", new _ShulkerBoxBlock(_DyeColor._RED, _BlockProperties._create(_Material._SHULKER, _MaterialColor._RED)._hardnessAndResistance(2)._variableOpacity()));
+            h._BLACK_SHULKER_BOX = register(-1, -1, "black_shulker_box", new _ShulkerBoxBlock(_DyeColor._BLACK, _BlockProperties._create(_Material._SHULKER, _MaterialColor._BLACK)._hardnessAndResistance(2)._variableOpacity()));
             
             h._WHITE_GLAZED_TERRACOTTA = register(-1, -1, "white_glazed_terracotta", new _GlazedTerracottaBlock(_BlockProperties._create(_Material._ROCK, _DyeColor._WHITE)._hardnessAndResistance(1.4)));
             h._ORANGE_GLAZED_TERRACOTTA = register(-1, -1, "orange_glazed_terracotta", new _GlazedTerracottaBlock(_BlockProperties._create(_Material._ROCK, _DyeColor._ORANGE)._hardnessAndResistance(1.4)));
@@ -792,20 +791,19 @@ export class _BlockRegistry {
             h._KELP_PLANT = register(-1, -1, "kelp_plant", new _KelpBlock(h._KELP, _BlockProperties._create(_Material._OCEAN_PLANT)._setTranslucent()._zeroHardnessAndResistance()._sound(_SoundType._WET_GRASS)));
             h._DRIED_KELP_BLOCK = register(-1, -1, "dried_kelp_block", new _Block(_BlockProperties._create(_Material._ORGANIC, _MaterialColor._GREEN)._hardnessAndResistance(0.5, 2.5)._sound(_SoundType._PLANT)));
             
-            
             h._TURTLE_EGG = register(-1, -1, "turtle_egg", new _TurtleEggBlock(_BlockProperties._create(_Material._DRAGON_EGG, _MaterialColor._SAND)._hardnessAndResistance(0.5)._sound(_SoundType._METAL)._tickRandomly()));
             
-            h._DEAD_TUBE_CORAL_BLOCK = register(-1, -1, "dead_tube_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6.0)));
-            h._DEAD_BRAIN_CORAL_BLOCK = register(-1, -1, "dead_brain_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6.0)));
-            h._DEAD_BUBBLE_CORAL_BLOCK = register(-1, -1, "dead_bubble_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6.0)));
-            h._DEAD_FIRE_CORAL_BLOCK = register(-1, -1, "dead_fire_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6.0)));
-            h._DEAD_HORN_CORAL_BLOCK = register(-1, -1, "dead_horn_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6.0)));
+            h._DEAD_TUBE_CORAL_BLOCK = register(-1, -1, "dead_tube_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6)));
+            h._DEAD_BRAIN_CORAL_BLOCK = register(-1, -1, "dead_brain_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6)));
+            h._DEAD_BUBBLE_CORAL_BLOCK = register(-1, -1, "dead_bubble_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6)));
+            h._DEAD_FIRE_CORAL_BLOCK = register(-1, -1, "dead_fire_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6)));
+            h._DEAD_HORN_CORAL_BLOCK = register(-1, -1, "dead_horn_coral_block", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._hardnessAndResistance(1.5, 6)));
             
-            h._TUBE_CORAL_BLOCK = register(-1, -1, "tube_coral_block", new _CoralBlock(h._DEAD_TUBE_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._BLUE)._hardnessAndResistance(1.5, 6.0)._sound(_SoundType._CORAL)));
-            h._BRAIN_CORAL_BLOCK = register(-1, -1, "brain_coral_block", new _CoralBlock(h._DEAD_BRAIN_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._PINK)._hardnessAndResistance(1.5, 6.0)._sound(_SoundType._CORAL)));
-            h._BUBBLE_CORAL_BLOCK = register(-1, -1, "bubble_coral_block", new _CoralBlock(h._DEAD_BUBBLE_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._PURPLE)._hardnessAndResistance(1.5, 6.0)._sound(_SoundType._CORAL)));
-            h._FIRE_CORAL_BLOCK = register(-1, -1, "fire_coral_block", new _CoralBlock(h._DEAD_FIRE_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._RED)._hardnessAndResistance(1.5, 6.0)._sound(_SoundType._CORAL)));
-            h._HORN_CORAL_BLOCK = register(-1, -1, "horn_coral_block", new _CoralBlock(h._DEAD_HORN_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._YELLOW)._hardnessAndResistance(1.5, 6.0)._sound(_SoundType._CORAL)));
+            h._TUBE_CORAL_BLOCK = register(-1, -1, "tube_coral_block", new _CoralBlock(h._DEAD_TUBE_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._BLUE)._hardnessAndResistance(1.5, 6)._sound(_SoundType._CORAL)));
+            h._BRAIN_CORAL_BLOCK = register(-1, -1, "brain_coral_block", new _CoralBlock(h._DEAD_BRAIN_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._PINK)._hardnessAndResistance(1.5, 6)._sound(_SoundType._CORAL)));
+            h._BUBBLE_CORAL_BLOCK = register(-1, -1, "bubble_coral_block", new _CoralBlock(h._DEAD_BUBBLE_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._PURPLE)._hardnessAndResistance(1.5, 6)._sound(_SoundType._CORAL)));
+            h._FIRE_CORAL_BLOCK = register(-1, -1, "fire_coral_block", new _CoralBlock(h._DEAD_FIRE_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._RED)._hardnessAndResistance(1.5, 6)._sound(_SoundType._CORAL)));
+            h._HORN_CORAL_BLOCK = register(-1, -1, "horn_coral_block", new _CoralBlock(h._DEAD_HORN_CORAL_BLOCK, _BlockProperties._create(_Material._ROCK, _MaterialColor._YELLOW)._hardnessAndResistance(1.5, 6)._sound(_SoundType._CORAL)));
             
             h._DEAD_TUBE_CORAL = register(-1, -1, "dead_tube_coral", new _DeadCoralPlantBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._setTranslucent()._zeroHardnessAndResistance()));
             h._DEAD_BRAIN_CORAL = register(-1, -1, "dead_brain_coral", new _DeadCoralPlantBlock(_BlockProperties._create(_Material._ROCK, _MaterialColor._GRAY)._setTranslucent()._zeroHardnessAndResistance()));
@@ -845,9 +843,9 @@ export class _BlockRegistry {
             
             h._SEA_PICKLE = register(-1, -1, "sea_pickle", new _SeaPickleBlock(_BlockProperties._create(_Material._OCEAN_PLANT, _MaterialColor._GREEN)._lightValue(3)._sound(_SoundType._SLIME)));
             h._BLUE_ICE = register(-1, -1, "blue_ice", new _BreakableBlock(_BlockProperties._create(_Material._PACKED_ICE)._hardnessAndResistance(2.8)._slipperiness(0.989)._sound(_SoundType._GLASS)));
-            h._CONDUIT = register(-1, -1, "conduit", new _ConduitBlock(_BlockProperties._create(_Material._GLASS, _MaterialColor._DIAMOND)._hardnessAndResistance(3.0)._lightValue(15)));
-            h._BAMBOO_SAPLING = register(-1, -1, "bamboo_sapling", new _BambooSaplingBlock(_BlockProperties._create(_Material._BAMBOO_SAPLING)._tickRandomly()._zeroHardnessAndResistance()._setTranslucent()._hardnessAndResistance(1.0)._sound(_SoundType._BAMBOO_SAPLING)));
-            h._BAMBOO = register(-1, -1, "bamboo", new _BambooBlock(_BlockProperties._create(_Material._BAMBOO, _MaterialColor._FOLIAGE)._tickRandomly()._zeroHardnessAndResistance()._hardnessAndResistance(1.0)._sound(_SoundType._BAMBOO)));
+            h._CONDUIT = register(-1, -1, "conduit", new _ConduitBlock(_BlockProperties._create(_Material._GLASS, _MaterialColor._DIAMOND)._hardnessAndResistance(3)._lightValue(15)));
+            h._BAMBOO_SAPLING = register(-1, -1, "bamboo_sapling", new _BambooSaplingBlock(_BlockProperties._create(_Material._BAMBOO_SAPLING)._tickRandomly()._zeroHardnessAndResistance()._setTranslucent()._hardnessAndResistance(1)._sound(_SoundType._BAMBOO_SAPLING)));
+            h._BAMBOO = register(-1, -1, "bamboo", new _BambooBlock(_BlockProperties._create(_Material._BAMBOO, _MaterialColor._FOLIAGE)._tickRandomly()._zeroHardnessAndResistance()._hardnessAndResistance(1)._sound(_SoundType._BAMBOO)));
             h._POTTED_BAMBOO = register(-1, -1, "potted_bamboo", new _FlowerPotBlock(h._BAMBOO, _BlockProperties._create(_Material._MISCELLANEOUS)._zeroHardnessAndResistance()));
             h._VOID_AIR = register(-1, -1, "void_air", new _AirBlock(_BlockProperties._create(_Material._AIR)._setTranslucent()._noDrops()));
             h._CAVE_AIR = register(-1, -1, "cave_air", new _AirBlock(_BlockProperties._create(_Material._AIR)._setTranslucent()._noDrops()));
@@ -898,16 +896,16 @@ export class _BlockRegistry {
             h._BLAST_FURNACE = register(-1, -1, "blast_furnace", new _BlastFurnaceBlock(_BlockProperties._create(_Material._ROCK)._hardnessAndResistance(3.5)._lightValue(13)));
             h._CARTOGRAPHY_TABLE = register(-1, -1, "cartography_table", new _CartographyTableBlock(_BlockProperties._create(_Material._WOOD)._hardnessAndResistance(2.5)._sound(_SoundType._WOOD)));
             h._FLETCHING_TABLE = register(-1, -1, "fletching_table", new _FletchingTableBlock(_BlockProperties._create(_Material._WOOD)._hardnessAndResistance(2.5)._sound(_SoundType._WOOD)));
-            h._GRINDSTONE = register(-1, -1, "grindstone", new _GrindstoneBlock(_BlockProperties._create(_Material._ANVIL, _MaterialColor._IRON)._hardnessAndResistance(2.0, 6.0)._sound(_SoundType._STONE)));
+            h._GRINDSTONE = register(-1, -1, "grindstone", new _GrindstoneBlock(_BlockProperties._create(_Material._ANVIL, _MaterialColor._IRON)._hardnessAndResistance(2, 6)._sound(_SoundType._STONE)));
             h._LECTERN = register(-1, -1, "lectern", new _LecternBlock(_BlockProperties._create(_Material._WOOD)._hardnessAndResistance(2.5)._sound(_SoundType._WOOD)));
             h._SMITHING_TABLE = register(-1, -1, "smithing_table", new _SmithingTableBlock(_BlockProperties._create(_Material._WOOD)._hardnessAndResistance(2.5)._sound(_SoundType._WOOD)));
             h._STONECUTTER = register(-1, -1, "stonecutter", new _StonecutterBlock(_BlockProperties._create(_Material._ROCK)._hardnessAndResistance(3.5)));
-            h._BELL = register(-1, -1, "bell", new _BellBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._GOLD)._hardnessAndResistance(5.0)._sound(_SoundType._ANVIL)));
+            h._BELL = register(-1, -1, "bell", new _BellBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._GOLD)._hardnessAndResistance(5)._sound(_SoundType._ANVIL)));
             h._LANTERN = register(-1, -1, "lantern", new _LanternBlock(_BlockProperties._create(_Material._IRON)._hardnessAndResistance(3.5)._sound(_SoundType._LANTERN)._lightValue(15)));
-            h._CAMPFIRE = register(-1, -1, "campfire", new _CampfireBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._hardnessAndResistance(2.0)._sound(_SoundType._WOOD)._lightValue(15)._tickRandomly()));
+            h._CAMPFIRE = register(-1, -1, "campfire", new _CampfireBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._OBSIDIAN)._hardnessAndResistance(2)._sound(_SoundType._WOOD)._lightValue(15)._tickRandomly()));
             h._SWEET_BERRY_BUSH = register(-1, -1, "sweet_berry_bush", new _SweetBerryBushBlock(_BlockProperties._create(_Material._PLANTS)._tickRandomly()._setTranslucent()._sound(_SoundType._SWEET_BERRY_BUSH)));
-            h._STRUCTURE_BLOCK = register(-1, -1, "structure_block", new _StructureBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._LIGHT_GRAY)._hardnessAndResistance(-1.0, 3600000.0)._noDrops()));
-            h._JIGSAW = register(-1, -1, "jigsaw", new _JigsawBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._LIGHT_GRAY)._hardnessAndResistance(-1.0, 3600000.0)._noDrops()));
+            h._STRUCTURE_BLOCK = register(-1, -1, "structure_block", new _StructureBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._LIGHT_GRAY)._hardnessAndResistance(-1, 3600000)._noDrops()));
+            h._JIGSAW = register(-1, -1, "jigsaw", new _JigsawBlock(_BlockProperties._create(_Material._IRON, _MaterialColor._LIGHT_GRAY)._hardnessAndResistance(-1, 3600000)._noDrops()));
             h._COMPOSTER = register(-1, -1, "composter", new _ComposterBlock(_BlockProperties._create(_Material._WOOD)._hardnessAndResistance(0.6)._sound(_SoundType._WOOD)));
         }
         this._postRegister();

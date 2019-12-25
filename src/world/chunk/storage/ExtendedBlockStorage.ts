@@ -7,8 +7,6 @@ export class _ExtendedBlockStorage {
 
     public readonly _yBase: number;
 
-
-
     constructor(y: number, storeSkylight: boolean, data?: Uint16Array, blocklightArray?: _NibbleArray, skylightArray?: _NibbleArray) {
         this._yBase = y;
         if (data) {
@@ -35,7 +33,6 @@ export class _ExtendedBlockStorage {
         }
     }
 
-
     public _getExtSkylightValue(x: number, y: number, z: number): number {
         if (this._skylightArray) {
             return this._skylightArray._get(x, y, z);
@@ -51,6 +48,5 @@ export class _ExtendedBlockStorage {
     public _getExtBlocklightValue(x: number, y: number, z: number): number {
         return this._blocklightArray._get(x, y, z);
     }
-
 
 }

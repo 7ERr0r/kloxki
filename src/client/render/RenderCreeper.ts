@@ -1,19 +1,25 @@
 import { mat4 } from "gl-matrix";
+
 import { _KlockiEntityPlayer } from "../entity/KlockiEntityPlayer";
-import { _RenderEntity } from "./RenderEntityLiving";
 import { _KlockiEntityCreeper } from "../entity/KlockiEntityCreeper";
 import { _RenderBox } from "../entity/RenderBox";
 import { _Klocki } from "../Klocki";
 import { _TextureInfo } from "../txt/TextureInfo";
 import { _KlockiTexture } from "../txt/KlockiTexture";
 
+import { _RenderEntity } from "./RenderEntityLiving";
 
 export class _RenderCreeper extends _RenderEntity {
 
+    public static _headMatrix: mat4 = mat4.create();
+    public static _chestMatrix: mat4 = mat4.create();
+    public static _legRightMatrix: mat4 = mat4.create();
+    public static _legLeftMatrix: mat4 = mat4.create();
+    public static _armLeftMatrix: mat4 = mat4.create();
+    public static _armRightMatrix: mat4 = mat4.create();
 
     public _skinInfo: _TextureInfo;
     public _skinLoaded: boolean;
-
 
     public _headBox: _RenderBox | undefined;
     public _headOBox: _RenderBox | undefined;
@@ -29,18 +35,11 @@ export class _RenderCreeper extends _RenderEntity {
     public _armLeftBox: _RenderBox | undefined;
     public _armLeftOBox: _RenderBox | undefined;
 
-    public static _headMatrix: mat4 = mat4.create();
-    public static _chestMatrix: mat4 = mat4.create();
-    public static _legRightMatrix: mat4 = mat4.create();
-    public static _legLeftMatrix: mat4 = mat4.create();
-    public static _armLeftMatrix: mat4 = mat4.create();
-    public static _armRightMatrix: mat4 = mat4.create();
-
-    constructor(klocki: _Klocki){
-        super(klocki)
+    constructor(klocki: _Klocki) {
+        super(klocki);
         this._skinLoaded = false;
         
-        const skinInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/"+_Klocki._forbiddenWord+"/textures/entity/creeper/creeper.png", null, (tex: _KlockiTexture) => {
+        const skinInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/entity/creeper/creeper.png", null, (tex: _KlockiTexture) => {
             const limbOffsets = [
                 [0, 16, 0, 32],
                 [16, 48, 0, 48],
@@ -80,19 +79,17 @@ export class _RenderCreeper extends _RenderEntity {
         this._skinInfo = skinInfo;
     }
 
-    public _render(entity: _KlockiEntityCreeper){
-        if(!this._skinLoaded){
+    public _render(entity: _KlockiEntityCreeper) {
+        if (!this._skinLoaded) {
             return;
         }
         super._render(entity);
-        //console.log("render cree");
-        //const playerScale = 0.9375;
+        // console.log("render cree");
+        // const playerScale = 0.9375;
         // console.log("rendering player");
         const partial = this._klocki._getPartialTicks();
-        //const matEntity = _RenderEntityLiving._positionMatrix;
-        //mat4.scale(matEntity, matEntity, [playerScale, playerScale, playerScale]);
-
-
+        // const matEntity = _RenderEntityLiving._positionMatrix;
+        // mat4.scale(matEntity, matEntity, [playerScale, playerScale, playerScale]);
 
         mat4.translate(_RenderCreeper._headMatrix, _RenderEntity._positionMatrix, [0, 12 / 16 + 12 / 16, 0]);
         mat4.translate(_RenderCreeper._chestMatrix, _RenderEntity._positionMatrix, [0, 12 / 16 + 6 / 16, 0]);
@@ -120,10 +117,8 @@ export class _RenderCreeper extends _RenderEntity {
         this._legLeftBox!._renderAt(wr, _RenderCreeper._legLeftMatrix);
         this._legLeftOBox!._renderAt(wr, _RenderCreeper._legLeftMatrix);
 
-
-
         mat4.translate(_RenderCreeper._armRightMatrix, _RenderCreeper._positionMatrix, [-6 / 16, 12 / 16 + 12 / 16, 0]);
-        //mat4.rotateZ(_RenderCreeper._armRightMatrix, _RenderCreeper._armRightMatrix, (Math.cos(iTime) * 0.06) - 0.06);
+        // mat4.rotateZ(_RenderCreeper._armRightMatrix, _RenderCreeper._armRightMatrix, (Math.cos(iTime) * 0.06) - 0.06);
         const rightRotX = (Math.sin(limbSwing * 0.6662 + Math.PI) * limbSwingAmount) - ((7.5 - Math.abs(armTime - 7.5)) / 7.5);
         mat4.rotateX(_RenderCreeper._armRightMatrix, _RenderCreeper._armRightMatrix, rightRotX);
 
@@ -131,7 +126,7 @@ export class _RenderCreeper extends _RenderEntity {
         this._armRightOBox!._renderAt(wr, _RenderCreeper._armRightMatrix);
 
         mat4.translate(_RenderCreeper._armLeftMatrix, _RenderCreeper._positionMatrix, [6 / 16, 12 / 16 + 12 / 16, 0]);
-        //mat4.rotateZ(_RenderCreeper._armLeftMatrix, _RenderCreeper._armLeftMatrix, -(Math.cos(iTime) * 0.06) + 0.06);
+        // mat4.rotateZ(_RenderCreeper._armLeftMatrix, _RenderCreeper._armLeftMatrix, -(Math.cos(iTime) * 0.06) + 0.06);
         const leftRotX = (Math.sin(limbSwing * 0.6662) * limbSwingAmount);
         mat4.rotateX(_RenderCreeper._armLeftMatrix, _RenderCreeper._armLeftMatrix, leftRotX);
 

@@ -26,8 +26,8 @@ export class _NetHandlerLoginClient implements _INetHandler {
         switch (id) {
             case 0x00: return new _SPacketDisconnect();
             case 0x02: return new _SPacketLoginSuccess();
-            default: 
-                //this._klocki._networkManager!._close();
+            default:
+                // this._klocki._networkManager!._close();
                 throw new Error(`Bad packet id ${id}`);
         }
     }

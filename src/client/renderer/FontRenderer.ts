@@ -7,10 +7,10 @@ import { _ShaderUI } from "../shaders/ShaderUI";
 
 import { _UIRenderer } from "./UIRenderer";
 
-// JavaScript is single thread so f this, let's optimize memory GC
+// javaScript is single thread so f this, let's optimize memory GC
 let charSize = 0;
-let chari=0, charj=0;
-let charWidth=0, charHeight=0;
+let chari = 0, charj = 0;
+let charWidth = 0, charHeight = 0;
 let charOffsety = 0;
 let atlasId = 0;
 let charSkew = 0;
@@ -59,7 +59,7 @@ export class _FontRenderer {
         this._texOffsetX = 0;
         this._texOffsetY = 0;
 
-        this._fontTexture = this._klocki._textureManager._loadTextureFromURL("assets/"+_Klocki._forbiddenWord+"/textures/font/ascii.png", (img: _GoImage) => this._readFontTexture(img), null, false);
+        this._fontTexture = this._klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/font/ascii.png", (img: _GoImage) => this._readFontTexture(img), null, false);
 
         this._charWidth = new Uint8Array(1024);
         this._colorCode = new Uint32Array(32);
@@ -152,10 +152,10 @@ export class _FontRenderer {
     }
     public _addDefaultChar(charId: number, italic: boolean) {
         charSize = 0;
-        chari=0;
-        charj=0;
-        charWidth=0;
-        charHeight=0;
+        chari = 0;
+        charj = 0;
+        charWidth = 0;
+        charHeight = 0;
         charOffsety = 0;
 
         atlasId = charId >> 8;
@@ -180,7 +180,6 @@ export class _FontRenderer {
         // let mx = 1.0 / (4 * 128.0)
         // let my = 1.0 / (4 * 128.0)
 
-
         color = this._cachedColor;
         /*
         void(chari)
@@ -199,8 +198,8 @@ export class _FontRenderer {
         this._pos(+ charWidth - 1 + charSkew, charOffsety, 0)._tex((chari + charWidth - 1) * charScaleX, charj * charScaleY)._color(color)._endVertex();
         this._pos(+ charWidth - 1 - charSkew, charHeight + charOffsety, 0)._tex((chari + charWidth - 1) * charScaleX, (charj + charHeight) * charScaleY)._color(color)._endVertex();
 
-        //uir._pos(+ k, offsety, 0)._tex(i * mx, j * my)._color(this._cachedColor)._endVertex();
-        //uir._pos(+ width - 1 - k, height + offsety, 0)._tex((i + width - 1) * mx, (j + height) * my)._color(this._cachedColor)._endVertex();
+        // uir._pos(+ k, offsety, 0)._tex(i * mx, j * my)._color(this._cachedColor)._endVertex();
+        // uir._pos(+ width - 1 - k, height + offsety, 0)._tex((i + width - 1) * mx, (j + height) * my)._color(this._cachedColor)._endVertex();
         
         return charSize;
     }

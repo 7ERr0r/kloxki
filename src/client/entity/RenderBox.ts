@@ -17,9 +17,9 @@ const simpleCube = [
     { X: 1, Y: 1, Z: 1 },
 ];
 
-// From steven-go project
+// from steven-go project
 const faceVertices = [
-    { // Up
+    { // up
         indices: [0, 1, 2, 3, 2, 1],
         cubeIndices: [4, 5, 6, 7, 6, 5],
         verts: [
@@ -30,7 +30,7 @@ const faceVertices = [
         ],
         direction: { X: 0, Y: 1, Z: 0 },
     },
-    { // Down
+    { // down
         indices: [0, 1, 2, 3, 2, 1],
         cubeIndices: [0, 2, 1, 3, 1, 2],
         verts: [
@@ -41,7 +41,7 @@ const faceVertices = [
         ],
         direction: { X: 0, Y: -1, Z: 0 },
     },
-    { // North
+    { // north
         indices: [0, 1, 2, 3, 2, 1],
         cubeIndices: [0, 1, 4, 5, 4, 1],
         verts: [
@@ -52,7 +52,7 @@ const faceVertices = [
         ],
         direction: { X: 0, Y: 0, Z: -1 },
     },
-    { // South
+    { // south
         indices: [0, 1, 2, 3, 2, 1],
         cubeIndices: [2, 6, 3, 7, 3, 6],
         verts: [
@@ -63,7 +63,7 @@ const faceVertices = [
         ],
         direction: { X: 0, Y: 0, Z: 1 },
     },
-    { // West
+    { // west
         indices: [0, 1, 2, 3, 2, 1],
         cubeIndices: [0, 4, 2, 6, 2, 4],
         verts: [
@@ -74,7 +74,7 @@ const faceVertices = [
         ],
         direction: { X: -1, Y: 0, Z: 0 },
     },
-    { // East
+    { // east
         indices: [0, 1, 2, 3, 2, 1],
         cubeIndices: [1, 3, 5, 7, 5, 3],
         verts: [
@@ -164,8 +164,7 @@ export class _RenderBox {
         wr._putPrepared(this._cachedBuf);
         const matID = wr._klocki._textureManager._pushGroupMatrix(m);
 
-        wr._matMany(matID, 6*4);
-
+        wr._matMany(matID, 6 * 4);
 
     }
 }

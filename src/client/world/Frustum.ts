@@ -1,6 +1,5 @@
 import { mat4, vec3, vec4 } from "gl-matrix";
 
-
 let planes = new Array<vec4>(6);
 let plane = vec4.create();
 let distance = 0.001;

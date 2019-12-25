@@ -63,21 +63,20 @@ export class _RenderList {
             this._renderRegions[i]._preRender(shaderWorld);
         }
 
-        let secs = this._klocki._sectionsByDistanceSquared;
+        const secs = this._klocki._sectionsByDistanceSquared;
         const gl = this._klocki._display._gl;
         const indexBuf = this._klocki._display._indexBuffer;
         const baker = this._klocki._worldRendererBaker;
-        for(let secsIndex = 0; secsIndex < secs.length; ++secsIndex){
+        for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
             const sections = secs[secsIndex];
             const count = sections[0];
-            for(let i = 1; i<=count; i++){
+            for (let i = 1; i <= count; i++) {
                 const arr = <any[]>sections[i];
                 const s = (<_OriginRenderOcTree>arr[0]);
                 const drawCount = (<number>arr[1]);
                 const glBuf = (<WebGLBuffer>arr[2]);
-                //s[0]._drawSelf(shaderWorld, s._origin._offsetarr!)
+                // s[0]._drawSelf(shaderWorld, s._origin._offsetarr!)
                 
-
                 gl.bindBuffer(gl.ARRAY_BUFFER, glBuf);
                 baker._setupPointers(shaderWorld);
                 // gl.uniform4fv(shaderWorld._uniformLocations._offset, off);
@@ -88,7 +87,6 @@ export class _RenderList {
                 gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_INT, 0);
             }
         }
-
 
     }
     public _joinAt(level: number) {

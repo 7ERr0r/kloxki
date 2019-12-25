@@ -33,7 +33,7 @@ export class _KlockiEntityBase {
     public _serverPitch: number;
     public _prevYaw: number;
     public _prevPitch: number;
-    private _sprinting: boolean; // TODO
+    private _sprinting: boolean; // tODO
 
     constructor(klocki: _Klocki) {
         this._klocki = klocki;
@@ -251,7 +251,6 @@ export class _KlockiEntityBase {
         }
         cpaabb._offset(0, 0, deltaZ);
 
-
         const x = (cpaabb._minX() + cpaabb._maxX()) * 0.5;
         const y = cpaabb._minY();
         const z = (cpaabb._minZ() + cpaabb._maxZ()) * 0.5;
@@ -276,7 +275,6 @@ export class _KlockiEntityBase {
         }
 
         // ladder here
-
 
         return [x, y, z, predeltaX, predeltaY, predeltaZ, isColidedHorizontally, onGround];
     }

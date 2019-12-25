@@ -65,7 +65,7 @@ export class _Uint32BlockStorage {
         this._blockRefCount = 0;
         this._tickRefCount = 0;
         for (let i = 0; i < 16 * 16 * 16; i++) {
-            // TODO
+            // tODO
         }
     }
 

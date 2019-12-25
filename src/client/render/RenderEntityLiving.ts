@@ -1,19 +1,19 @@
-import { _KlockiEntityLiving } from "../entity/KlockiEntityLiving";
 import { mat4 } from "gl-matrix";
+
+import { _KlockiEntityLiving } from "../entity/KlockiEntityLiving";
 import { _Klocki } from "../Klocki";
 import { _KlockiEntityBase } from "../entity/KlockiEntityBase";
 
 export class _RenderEntity {
-    public _klocki: _Klocki;
 
     public static _positionMatrix: mat4 = mat4.create();
+    public _klocki: _Klocki;
 
-
-    public constructor(klocki: _Klocki){
-        this._klocki = klocki
+    public constructor(klocki: _Klocki) {
+        this._klocki = klocki;
     }
 
-    public _render(entity: _KlockiEntityBase){
+    public _render(entity: _KlockiEntityBase) {
         const matEntity = _RenderEntity._positionMatrix;
         mat4.identity(matEntity);
         const partial = this._klocki._getPartialTicks();

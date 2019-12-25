@@ -2,13 +2,13 @@ import { vec3 } from "gl-matrix";
 
 import { _Klocki } from "../Klocki";
 import { _ShaderWorld } from "../shaders/ShaderWorld";
+import { _KlockiEntityLiving } from "../entity/KlockiEntityLiving";
 
 import { _ChunkSection } from "./ChunkSection";
 import { _BakeTask } from "./BakeTask";
 import { _SectionWatcher } from "./SectionWatcher";
-import { _KlockiEntityLiving } from "../entity/KlockiEntityLiving";
 
-// Don't look here, nothing to see
+// don't look here, nothing to see
 export class _OriginRenderOcTree {
     public static _usedVideoMemory = 0;
     public static _testPosVec3: vec3 = vec3.create();
@@ -178,7 +178,7 @@ export class _OriginRenderOcTree {
         return alive;
     }
     public _markDirty() {
-        //let unload = false;
+        // let unload = false;
         if (this._sizex != 1) {
             this._aliveChunks = this._calcAliveChunks();
             
@@ -207,11 +207,11 @@ export class _OriginRenderOcTree {
                         this._dirty = true;
                     }
                     this._aliveChunks = 1;
-                }else{
-                    //if(this._drawCount > 0){
+                } else {
+                    // if(this._drawCount > 0){
                     //    unload = true;
-                        //this._dirty = true;
-                    //}
+                        // this._dirty = true;
+                    // }
                 }
             }
 
@@ -292,7 +292,7 @@ export class _OriginRenderOcTree {
         if (this._aliveChunks === 0) {
             return;
         }
-        const sizex = this._sizex
+        const sizex = this._sizex;
         if (sizex == 1) {
             /*
             if(this.renderChunk == null){
@@ -300,7 +300,7 @@ export class _OriginRenderOcTree {
             }
             this.renderChunk.renderChunk(mainWr, programInfo)
             */
-            // TODO
+            // tODO
 
             if (this._bakeTask != null || this._drawCount > 0) {
                 const off = this._origin._offsetarr!;
@@ -324,12 +324,12 @@ export class _OriginRenderOcTree {
                     */
                     const toBake = this._bakeTask != null;
                     const toDraw = this._drawCount > 0;
-                    if(toBake || toDraw){
+                    if (toBake || toDraw) {
                         this._addToLastSectionsByDistanceSquared(pos, toBake, toDraw);
                     }
-                    //if(){
-                        //this._drawSelf(shaderWorld, off);
-                    //}
+                    // if(){
+                        // this._drawSelf(shaderWorld, off);
+                    // }
                 }
             }
 
@@ -338,9 +338,9 @@ export class _OriginRenderOcTree {
         
         const off = this._origin._offsetarr!;
         const pos = _OriginRenderOcTree._testPosVec3;
-        pos[0] = off[0] + this._fromoriginx * 16 + 8*sizex;
-        pos[1] = off[1] + this._fromoriginy * 16 + 8*sizex;
-        pos[2] = off[2] + this._fromoriginz * 16 + 8*sizex;
+        pos[0] = off[0] + this._fromoriginx * 16 + 8 * sizex;
+        pos[1] = off[1] + this._fromoriginy * 16 + 8 * sizex;
+        pos[2] = off[2] + this._fromoriginz * 16 + 8 * sizex;
         const sphereDistance = this._klocki._frustum._testSphereFully(pos);
 
         let visibility = 0;
@@ -358,7 +358,7 @@ export class _OriginRenderOcTree {
 
                     this._addToLastSectionsByDistanceSquared(pos, false, true);
                     
-                    //this._drawSelf(shaderWorld, off);
+                    // this._drawSelf(shaderWorld, off);
                 } else if (visibility == 2) { // draw partial
                     this._splitBuffers();
                     const children = this._children;
@@ -388,27 +388,27 @@ export class _OriginRenderOcTree {
         }
     }
 
-    public _addToLastSectionsByDistanceSquared(pos: vec3, bake: boolean, draw: boolean){
-            //"use asm";
-            const klocki = this._klocki;
-            const dx = (klocki._renderX-pos[0])|0;
-            const dy = (klocki._renderY-pos[1])|0;
-            const dz = (klocki._renderZ-pos[2])|0;
-            const distanceSq = (dx*dx+dy*dy+dz*dz)|0;
-            const distanceChunk = (distanceSq >> 8)|0;
-            const bakeSec = this._klocki._bakeSectionsByDistanceSquared;
-            const sec = this._klocki._sectionsByDistanceSquared;
-            if(distanceChunk >= 0 && distanceChunk < bakeSec.length){
+    public _addToLastSectionsByDistanceSquared(pos: vec3, bake: boolean, draw: boolean) {
+            // "use asm";
+        const klocki = this._klocki;
+        const dx = (klocki._renderX - pos[0]) | 0;
+        const dy = (klocki._renderY - pos[1]) | 0;
+        const dz = (klocki._renderZ - pos[2]) | 0;
+        const distanceSq = (dx * dx + dy * dy + dz * dz) | 0;
+        const distanceChunk = (distanceSq >> 8) | 0;
+        const bakeSec = this._klocki._bakeSectionsByDistanceSquared;
+        const sec = this._klocki._sectionsByDistanceSquared;
+        if (distanceChunk >= 0 && distanceChunk < bakeSec.length) {
                 const bakeSectionsArr = bakeSec[distanceChunk];
                 const sectionsArr = sec[distanceChunk];
-                const indexLast = 1+(<number>bakeSectionsArr[0])|0;
-                if(!!bake && indexLast < bakeSectionsArr.length){
+                const indexLast = 1 + (<number>bakeSectionsArr[0]) | 0;
+                if (!!bake && indexLast < bakeSectionsArr.length) {
                     bakeSectionsArr[indexLast] = this;
                     (<number>bakeSectionsArr[0])++;
                 }
                 
-                const index = (++(<number>sectionsArr[0]))|0;
-                if(index < sectionsArr.length){
+                const index = (++(<number>sectionsArr[0])) | 0;
+                if (index < sectionsArr.length) {
                     sectionsArr[index] = [this, this._drawCount, this._glBuffer];
                 }
             }
@@ -450,7 +450,7 @@ export class _OriginRenderOcTree {
         return sumLength;
     }
     public _joinBuffers() {
-        if(this._drawCount > 0){
+        if (this._drawCount > 0) {
             this._clearBuffer();
         }
         this._drawCount = 0;
@@ -479,7 +479,7 @@ export class _OriginRenderOcTree {
                     // gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
                     const buf = child._getBuffer();
 
-                    //gl.bindBuffer(gl.ARRAY_BUFFER, this._glBuffer);
+                    // gl.bindBuffer(gl.ARRAY_BUFFER, this._glBuffer);
                     // gl.bufferData(gl.ARRAY_BUFFER, 0, gl.STATIC_DRAW);
 
                     gl.bindBuffer(gl.COPY_READ_BUFFER, buf);
@@ -525,8 +525,8 @@ export class _OriginRenderOcTree {
                 const dc = this._joinSizes![i];
                 if (dc > 0) {
                     let buf = child._glBuffer;
-                    if(buf != null){
-                        //console.warn("drawcount: "+dc+" but buffer null");
+                    if (buf != null) {
+                        // console.warn("drawcount: "+dc+" but buffer null");
                         this._klocki._scheduleDeleteBuffer(buf);
                         child._glBuffer = null;
                     }
@@ -545,25 +545,25 @@ export class _OriginRenderOcTree {
             this._joined = false;
             _OriginRenderOcTree._usedVideoMemory -= this._drawCount * stride;
             this._drawCount = 0;
-            //gl.bufferData(gl.COPY_READ_BUFFER, 0, gl.STATIC_DRAW);
+            // gl.bufferData(gl.COPY_READ_BUFFER, 0, gl.STATIC_DRAW);
             this._joinSizes = null;
             this._klocki._scheduleDeleteBuffer(this._glBuffer);
             this._glBuffer = null;
-            //this._getBuffer();
+            // this._getBuffer();
         }
         
     }
 
     public _clearBuffer() {
-        //const gl = this._klocki._display._gl;
+        // const gl = this._klocki._display._gl;
         const stride = this._klocki._worldRendererBaker._stride;
-        //gl.bindBuffer(gl.ARRAY_BUFFER, this._glBuffer);
+        // gl.bindBuffer(gl.ARRAY_BUFFER, this._glBuffer);
         _OriginRenderOcTree._usedVideoMemory -= this._drawCount * stride;
         this._drawCount = 0;
-        //gl.bufferData(gl.ARRAY_BUFFER, 0, gl.STATIC_DRAW);
+        // gl.bufferData(gl.ARRAY_BUFFER, 0, gl.STATIC_DRAW);
         this._klocki._scheduleDeleteBuffer(this._glBuffer);
         this._glBuffer = null;
-        //this._getBuffer();
+        // this._getBuffer();
         
     }
 

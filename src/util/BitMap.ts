@@ -8,7 +8,6 @@ export class _BitMap {
         this._bits = bits;
         this._mask = (1 << this._bitSize) - 1;
 
-
     }
 
     public _get(i: number) {

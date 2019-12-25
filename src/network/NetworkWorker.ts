@@ -104,12 +104,12 @@ export class _NetworkWorker {
         
         const p: _PacketBuffer = new _PacketBuffer(event.data, 1);
         
-        for(let i = 0; i<10000; i++){
+        for (let i = 0; i < 10000; i++) {
             const packetLen: number = p._readVarInt();
             const onePacket = p._readUint8Array(packetLen);
             this._onMcCompressedOrNotPacket(onePacket.buffer);
 
-            if(p._getReaderIndex()>=event.data.byteLength-1){
+            if (p._getReaderIndex() >= event.data.byteLength - 1) {
                 return;
             }
         }
@@ -141,9 +141,8 @@ export class _NetworkWorker {
         }
     }
     public _onWsOpen(event: Event): void {
-        // TODO don't hardcode destination
+        // tODO don't hardcode destination
         this._writeConnectPacket("127.0.0.1:27779");
-
 
         while (this._outboundPacketsQueue.length) {
             const p: ArrayBuffer | undefined = this._outboundPacketsQueue.shift();

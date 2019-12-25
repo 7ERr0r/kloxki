@@ -12,9 +12,9 @@ export class _Panner {
 export class _AudioManager {
     public _audioCtx: AudioContext;
     public _listener: AudioListener;
-    _klocki: _Klocki;
+    public _klocki: _Klocki;
     constructor(klocki: _Klocki) {
-        this._klocki = klocki
+        this._klocki = klocki;
         const AudioContext = (<any>window).AudioContext || (<any>window).webkitAudioContext;
         const audioCtx = new AudioContext();
         const listener = audioCtx.listener;
@@ -57,25 +57,24 @@ export class _AudioManager {
         return new _Panner(panner);
     }
 
-    public _playSoundKeyAt(soundKey: string, vol: number, pitch: number, x: number, y: number, z: number){
+    public _playSoundKeyAt(soundKey: string, vol: number, pitch: number, x: number, y: number, z: number) {
         const soundDesc = this._klocki._soundsJson[soundKey];
         const soundPaths = <string[]>soundDesc.sounds;
-        const r = Math.floor(Math.random()*soundPaths.length);
+        const r = Math.floor(Math.random() * soundPaths.length);
         const soundPath = soundPaths[r];
-        const resourceId = _Klocki._forbiddenWord+"/sounds/"+soundPath+".ogg";
-        console.log("playing "+resourceId);
+        const resourceId = _Klocki._forbiddenWord + "/sounds/" + soundPath + ".ogg";
+        console.log("playing " + resourceId);
         const resourceInfo = this._klocki._assetsJson.objects[resourceId];
 
-        if(resourceInfo){
+        if (resourceInfo) {
             const resourceHash = resourceInfo.hash;
             const resourcePath = _Klocki._hashToPath(resourceHash);
 
             const request = new Request(resourcePath);
 
-
             fetch(request).then(function (response) {
                 return response.arrayBuffer();
-            }).then((buffer)=> {
+            }).then((buffer) => {
 
                 const audioCtx = this._klocki._audioManager._audioCtx;
                 const source = audioCtx.createBufferSource();
@@ -87,18 +86,18 @@ export class _AudioManager {
                     source.buffer = decodedData;
                     source.playbackRate.value = pitch;
                     const gainer = audioCtx.createGain();
-                    gainer.gain.value = vol*0.2;
+                    gainer.gain.value = vol * 0.2;
                     source.connect(panner._panner).connect(gainer).connect(audioCtx.destination);
                     
                     const startTime = audioCtx.currentTime;
                     source.start(startTime, 0);
                     
-                    source.onended = ()=>{
-                        source.disconnect(panner._panner);//.disconnect(gainer);
+                    source.onended = () => {
+                        source.disconnect(panner._panner); // .disconnect(gainer);
                         panner._panner.disconnect(gainer);
                         gainer.disconnect(audioCtx.destination);
                         
-                    }
+                    };
                     
                 });
             });

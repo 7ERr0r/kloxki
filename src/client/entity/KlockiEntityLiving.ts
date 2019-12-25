@@ -1,9 +1,8 @@
 import { _Klocki } from "../Klocki";
 import { _Placeholders } from "../Placeholders";
+import { _AirBlock, _FlowingFluidBlock } from "../../block/Blocks";
 
 import { _KlockiEntityBase } from "./KlockiEntityBase";
-import { _FlowingFluidBlock, _AirBlock } from "../../block/Blocks";
-
 
 function wrapAngle(x: number): number {
     // x -= Math.PI;
@@ -36,9 +35,9 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
     public _prevLimbSwingAmount: number;
     public _limbSwing: number;
     public _doGravity: boolean;
-    _distanceWalkedXZ: number;
-    _distanceWalkedOnStepXYZ: number;
-    _nextStepDistance: number;
+    public _distanceWalkedXZ: number;
+    public _distanceWalkedOnStepXYZ: number;
+    public _nextStepDistance: number;
 
     constructor(klocki: _Klocki) {
         super(klocki);
@@ -78,7 +77,7 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
             this._setYaw(nextYaw);
             this._setPitch(nextPitch);
         }
-        if(this._doGravity){
+        if (this._doGravity) {
             this._moveEntityWithHeading();
         }
     }
@@ -123,10 +122,10 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
     }
     public _jump() {
         this._motionY = 0.42;
-        if(this._getSprinting()){
-            let radYaw = this._yaw
-            this._motionX -= Math.sin(radYaw) * 0.2
-            this._motionZ += Math.cos(radYaw) * 0.2
+        if (this._getSprinting()) {
+            const radYaw = this._yaw;
+            this._motionX -= Math.sin(radYaw) * 0.2;
+            this._motionZ += Math.cos(radYaw) * 0.2;
         }
     }
     public _moveEntityWithHeading() {
@@ -171,9 +170,9 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
             //Client.CameraHeight = playerCameraHeight
         }*/
 
-        let lastX = this._posX
-        let lastY = this._posY
-        let lastZ = this._posZ
+        const lastX = this._posX;
+        const lastY = this._posY;
+        const lastZ = this._posZ;
 
         if (true || blocktypein != 0) {
             // if this.ticksLived > 10 { //&& this.ticksLived & 1 == 1 {
@@ -248,24 +247,24 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
 
         }
         
-        let deltaX = this._posX - lastX
-        let deltaY = this._posY - lastY
-        let deltaZ = this._posZ - lastZ
-        this._distanceWalkedXZ += Math.sqrt(deltaX*deltaX+deltaZ*deltaZ) * 0.6
-        this._distanceWalkedOnStepXYZ += Math.sqrt(deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ) * 0.6
+        const deltaX = this._posX - lastX;
+        const deltaY = this._posY - lastY;
+        const deltaZ = this._posZ - lastZ;
+        this._distanceWalkedXZ += Math.sqrt(deltaX * deltaX + deltaZ * deltaZ) * 0.6;
+        this._distanceWalkedOnStepXYZ += Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * 0.6;
     
-        //blocktypeground := chunkMap.Block(int(math.Floor(this.PosX)), int(math.Floor(this.PosY-0.2)), int(math.Floor(this.PosZ)))
-        const blockTypeGround = this._world._getBlockType(Math.floor(this._posX), Math.floor(this._posY-0.2), Math.floor(this._posZ));
+        // blocktypeground := chunkMap.Block(int(math.Floor(this.PosX)), int(math.Floor(this.PosY-0.2)), int(math.Floor(this.PosZ)))
+        const blockTypeGround = this._world._getBlockType(Math.floor(this._posX), Math.floor(this._posY - 0.2), Math.floor(this._posZ));
         const blockGround = globalPallette[blockTypeGround];
 
-        if(this._distanceWalkedOnStepXYZ > this._nextStepDistance && !(blockGround instanceof _AirBlock)){
-            this._nextStepDistance = Math.floor(this._distanceWalkedOnStepXYZ) + 1
+        if (this._distanceWalkedOnStepXYZ > this._nextStepDistance && !(blockGround instanceof _AirBlock)) {
+            this._nextStepDistance = Math.floor(this._distanceWalkedOnStepXYZ) + 1;
     
-            if(blockGround instanceof _FlowingFluidBlock) {
-                let vol = Math.sqrt(this._motionX*this._motionX*0.2+this._motionY*this._motionY+this._motionZ*this._motionZ*0.2) * 0.35
+            if (blockGround instanceof _FlowingFluidBlock) {
+                let vol = Math.sqrt(this._motionX * this._motionX * 0.2 + this._motionY * this._motionY + this._motionZ * this._motionZ * 0.2) * 0.35;
     
-                if(vol > 1.0){
-                    vol = 1.0
+                if (vol > 1) {
+                    vol = 1;
                 }
                 /*
                 PlaySoundAt("game.player.swim", vol, 1.0+(rand.Float64()-rand.Float64())*0.4, mgl32.Vec3{
@@ -276,7 +275,7 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
                 */
                 
                 const soundKey = "entity.player.swim";
-                const pitch = 1.0+(Math.random()-Math.random())*0.4;
+                const pitch = 1 + (Math.random() - Math.random()) * 0.4;
                 this._klocki._audioManager._playSoundKeyAt(soundKey, vol, pitch, lastX, lastY, lastZ);
             } else {
                 /*name, vol, pitch := blocktypeground.StepSound()

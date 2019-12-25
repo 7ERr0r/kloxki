@@ -18,25 +18,25 @@ export class _SPacketSpawnMob extends _Packet<_NetHandlerPlayClient> {
     public _headPitch: number | undefined;
     public _velocityx: number | undefined;
     public _velocityy: number | undefined;
-    public _velocityz: number | undefined;  
+    public _velocityz: number | undefined;
     public _data: number | undefined;
 
     public _readPacketData(buf: _PacketBuffer, reg: _PacketRegistry): void {
         this._eid = buf._readVarInt();
-        if(reg._protocol >= 340){
+        if (reg._protocol >= 340) {
             this._uuid = buf._readUint8Array(16);
         }
-        if(reg._protocol >= 107){
+        if (reg._protocol >= 107) {
             this._mobType = buf._readVarInt();
-        }else{
+        } else {
             this._mobType = buf._readUint8();
         }
-        if(reg._protocol >= 107){
+        if (reg._protocol >= 107) {
             this._serverx = buf._readFloat64();
             this._servery = buf._readFloat64();
             this._serverz = buf._readFloat64();
             
-        }else{
+        } else {
             this._serverx = buf._readInt32() / 32;
             this._servery = buf._readInt32() / 32;
             this._serverz = buf._readInt32() / 32;

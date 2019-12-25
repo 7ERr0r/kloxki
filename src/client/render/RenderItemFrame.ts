@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
+
 import { _KlockiEntityPlayer } from "../entity/KlockiEntityPlayer";
-import { _RenderEntity } from "./RenderEntityLiving";
 import { _KlockiEntityCreeper } from "../entity/KlockiEntityCreeper";
 import { _RenderBox } from "../entity/RenderBox";
 import { _Klocki } from "../Klocki";
@@ -8,13 +8,19 @@ import { _TextureInfo } from "../txt/TextureInfo";
 import { _KlockiTexture } from "../txt/KlockiTexture";
 import { _KlockiEntityItemFrame } from "../entity/KlockiEntityItemFrame";
 
+import { _RenderEntity } from "./RenderEntityLiving";
 
 export class _RenderItemFrame extends _RenderEntity {
 
+    public static _headMatrix: mat4 = mat4.create();
+    public static _chestMatrix: mat4 = mat4.create();
+    public static _legRightMatrix: mat4 = mat4.create();
+    public static _legLeftMatrix: mat4 = mat4.create();
+    public static _armLeftMatrix: mat4 = mat4.create();
+    public static _armRightMatrix: mat4 = mat4.create();
 
     public _skinInfo: _TextureInfo;
     public _skinLoaded: boolean;
-
 
     public _headBox: _RenderBox | undefined;
     public _headOBox: _RenderBox | undefined;
@@ -30,18 +36,11 @@ export class _RenderItemFrame extends _RenderEntity {
     public _armLeftBox: _RenderBox | undefined;
     public _armLeftOBox: _RenderBox | undefined;
 
-    public static _headMatrix: mat4 = mat4.create();
-    public static _chestMatrix: mat4 = mat4.create();
-    public static _legRightMatrix: mat4 = mat4.create();
-    public static _legLeftMatrix: mat4 = mat4.create();
-    public static _armLeftMatrix: mat4 = mat4.create();
-    public static _armRightMatrix: mat4 = mat4.create();
-
-    constructor(klocki: _Klocki){
-        super(klocki)
+    constructor(klocki: _Klocki) {
+        super(klocki);
         this._skinLoaded = false;
         
-        const skinInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/"+_Klocki._forbiddenWord+"/textures/entity/creeper/creeper.png", null, (tex: _KlockiTexture) => {
+        const skinInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/entity/creeper/creeper.png", null, (tex: _KlockiTexture) => {
             const limbOffsets = [
                 [0, 16, 0, 32],
                 [16, 48, 0, 48],
@@ -81,20 +80,17 @@ export class _RenderItemFrame extends _RenderEntity {
         this._skinInfo = skinInfo;
     }
 
-    public _render(entity: _KlockiEntityItemFrame){
-        if(!this._skinLoaded){
+    public _render(entity: _KlockiEntityItemFrame) {
+        if (!this._skinLoaded) {
             return;
         }
         super._render(entity);
-        //console.log("render cree");
-        //const playerScale = 0.9375;
+        // console.log("render cree");
+        // const playerScale = 0.9375;
         // console.log("rendering player");
-        //const partial = this._klocki._getPartialTicks();
-        //const matEntity = _RenderEntityLiving._positionMatrix;
-        //mat4.scale(matEntity, matEntity, [playerScale, playerScale, playerScale]);
-
-
-
+        // const partial = this._klocki._getPartialTicks();
+        // const matEntity = _RenderEntityLiving._positionMatrix;
+        // mat4.scale(matEntity, matEntity, [playerScale, playerScale, playerScale]);
 
     }
 }

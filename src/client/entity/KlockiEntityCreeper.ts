@@ -2,13 +2,12 @@
 import { _Klocki } from "../Klocki";
 import { _TextureInfo } from "../txt/TextureInfo";
 import { _KlockiTexture } from "../txt/KlockiTexture";
+import { _RenderPlayer } from "../render/RenderPlayer";
 
 import { _KlockiEntityLiving } from "./KlockiEntityLiving";
 import { _RenderBox } from "./RenderBox";
-import { _RenderPlayer } from "../render/RenderPlayer";
 
 export class _KlockiEntityCreeper extends _KlockiEntityLiving {
-
 
     constructor(klocki: _Klocki) {
         super(klocki);

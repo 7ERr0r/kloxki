@@ -82,7 +82,7 @@ export class _BlockProperties {
         return this;
     }
     public _lootFrom(block: _Block): _BlockProperties {
-        //this._loot = block._loot
+        // this._loot = block._loot
 
         return this;
     }

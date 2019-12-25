@@ -1,5 +1,5 @@
 import { _BlockRegistry } from "./BlockRegistry";
-import { _LeavesBlock, _PistonBlock, _BlockPistonExtension, _SandBlock, _GrassBlock, _DeadBushBlock, _GrassBushBlock, _FlowerBlock } from "./Blocks";
+import { _BlockPistonExtension, _DeadBushBlock, _FlowerBlock, _GrassBlock, _GrassBushBlock, _LeavesBlock, _PistonBlock, _SandBlock } from "./Blocks";
 import { _Block } from "./Block";
 
 export class _BlocksHelper {

@@ -1,6 +1,6 @@
 import { _GoRect } from "./GoRect";
 
-// RGBA32
+// rGBA32
 export class _GoImage {
     public _rect: _GoRect;
     public _stride: number;

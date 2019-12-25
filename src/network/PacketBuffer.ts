@@ -225,8 +225,8 @@ export class _PacketBuffer {
     public _readUint32Array(n: number): Uint32Array {
         const start = this._v.byteOffset + this._r;
         const end = start + n * 4;
-        if(end > this._v.byteLength){
-            throw new RangeError("can't read "+n+" more uint32s");
+        if (end > this._v.byteLength) {
+            throw new RangeError("can't read " + n + " more uint32s");
         }
         const arr: Uint32Array = new Uint32Array(this._b.slice(start, end));
         this._r += n * 4;
@@ -236,8 +236,8 @@ export class _PacketBuffer {
     public _readInt32Array(n: number): Int32Array {
         const start = this._v.byteOffset + this._r;
         const end = start + n * 4;
-        if(end > this._v.byteLength){
-            throw new RangeError("can't read "+n+" more int32s");
+        if (end > this._v.byteLength) {
+            throw new RangeError("can't read " + n + " more int32s");
         }
         const arr: Int32Array = new Int32Array(this._b.slice(start, end));
         this._r += n * 4;
@@ -263,9 +263,9 @@ export class _PacketBuffer {
         const b = this._readUint32();
         const a = this._readUint32();
         const arr = new Int32Array(3);
-        arr[0] = b >>> (38-32);
+        arr[0] = b >>> (38 - 32);
         arr[1] = a & 0xFFF;
-        arr[2] = (a >>> 12)|((b&0x3F)<<12);
+        arr[2] = (a >>> 12) | ((b & 0x3F) << 12);
         
         return arr;
     }

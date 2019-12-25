@@ -52,9 +52,9 @@ export class _LineRenderer {
 
         const b = this._f32;
         const i = this._count * 4;
-        b[i + 2] = z; // Math.round((z)) // 8 9 10 11
-        b[i + 1] = y; // Math.round((y)) // 4 5 6 7
-        b[i] = x; // Math.round((x)) // 0 1 2 3
+        b[i + 2] = z; // math.round((z)) // 8 9 10 11
+        b[i + 1] = y; // math.round((y)) // 4 5 6 7
+        b[i] = x; // math.round((x)) // 0 1 2 3
 
         return this;
     }

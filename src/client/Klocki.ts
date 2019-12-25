@@ -1,22 +1,24 @@
 import { mat4, vec3, vec4 } from "gl-matrix";
+import { isString } from "util";
 
+import { _Timer } from "../util/Timer";
 import { _BlockRegistry } from "../block/BlockRegistry";
-import { _CPacketLoginStart } from "../network/login/client/CPacketLoginStart";
 import { _EnumConnectionState } from "../network/EnumConnectionState";
 import { _Deque } from "../util/Deque";
 import { _CPacketChatMessage } from "../network/play/client/CPacketChatMessage";
 import { _CHandshake } from "../network/handshake/client/CHandshake";
 import { _NetworkManager } from "../network/NetworkManager";
-import { _Timer } from "../util/Timer";
+import { _CPacketLoginStart } from "../network/login/client/CPacketLoginStart";
 import { _CPacketPositionAndLook } from "../network/play/client/CPacketPositionAndLook";
 import { _Heap } from "../util/Heap";
 import { _AudioManager } from "../audio/AudioManager";
 import { _ModelRegistry } from "../block/model/ModelRegistry";
 import { _NbtReader } from "../nbt/Nbt";
 import { _PacketBuffer } from "../network/PacketBuffer";
+import { _ItemRegistry } from "../item/ItemRegistry";
 
+import { _WorldRenderer } from "./renderer/WorldRenderer";
 import { _RenderList } from "./world/RenderList";
-import { _WorldClient } from "./world/WorldClient";
 import { _NetHandlerLoginClient } from "./network/NetHandlerLoginClient";
 import { _TextureManager } from "./txt/TextureManager";
 import { _FontRenderer } from "./renderer/FontRenderer";
@@ -26,7 +28,7 @@ import { _GameSettings } from "./settings/GameSettings";
 import { _ShaderWorld } from "./shaders/ShaderWorld";
 import { _GuiChat } from "./gui/GuiChat";
 import { _BakeTask } from "./world/BakeTask";
-import { _WorldRenderer } from "./renderer/WorldRenderer";
+import { _WorldClient } from "./world/WorldClient";
 import { _Controls } from "./Controls";
 import { _Frustum } from "./world/Frustum";
 import { _ShaderMobs } from "./shaders/ShaderMobs";
@@ -36,14 +38,12 @@ import { _OriginRenderOcTree } from "./world/OriginRenderOcTree";
 import { _UIRenderer } from "./renderer/UIRenderer";
 import { _EntityRenders } from "./render/EntityRenders";
 import { _GuiOverlayEquipment } from "./gui/GuiOverlayEquipment";
-import { _ItemRegistry } from "../item/ItemRegistry";
 import { _ChunkSection } from "./world/ChunkSection";
-import { isString } from "util";
 
 export class _Klocki {
     public static _utilVec3 = vec3.create();
     public static _utilVec4 = vec4.create();
-    public static _forbiddenWord = "mine"+"craft";
+    public static _forbiddenWord = "mine" + "craft";
 
     public _protocol: number = 498;
     public _assetsVersion: string = "1.14";
@@ -68,7 +68,7 @@ export class _Klocki {
     public _blockRegistry!: _BlockRegistry;
     public _itemRegistry!: _ItemRegistry;
     public _scheduledBakeTasks: _Deque<_BakeTask>;
-    //public _scheduledBakeTasksSet: Set<_BakeTask>;
+    // public _scheduledBakeTasksSet: Set<_BakeTask>;
     // public _scheduledBakeTasks: _Heap<_BakeTask>;
     public _worldRenderer!: _WorldRenderer;
     public _worldRendererMobs!: _WorldRenderer;
@@ -96,26 +96,24 @@ export class _Klocki {
     public _zoomed: boolean;
     public _entityRenders!: _EntityRenders;
     public _reuseGlBuffers: WebGLBuffer[][];
-    public _bakeSectionsByDistanceSquared: (_OriginRenderOcTree|number)[][];
-    public _sectionsByDistanceSquared: (any[]|number)[][];
+    public _bakeSectionsByDistanceSquared: (_OriginRenderOcTree | number)[][];
+    public _sectionsByDistanceSquared: (any[] | number)[][];
+    public _glBuffersEntities!: WebGLBuffer[];
+    public _glBuffersEntitiesIndex: number;
+    public _glBuffersEntitiesCount: number;
+    public _sectionLookingAt: _ChunkSection | null;
+    public _reuseGlBuffersIndexRemover: number;
+    public _reuseGlBuffersIndexAdder: number;
+    public _assetsJson: any;
+    public _soundsJson: any;
+    public _randomInts!: Uint32Array;
+    public _renderX: number;
+    public _renderY: number;
+    public _renderZ: number;
+    public _sectionsPerChunkDistance: number;
 
     private readonly _isGamePaused: boolean = false;
-    _glBuffersEntities!: WebGLBuffer[];
-    _glBuffersEntitiesIndex: number;
-    _glBuffersEntitiesCount: number;
-    _sectionLookingAt: _ChunkSection | null;
-    _reuseGlBuffersIndexRemover: number;
-    _reuseGlBuffersIndexAdder: number;
-    _assetsJson: any;
-    _soundsJson: any;
-    _randomInts!: Uint32Array;
-    _renderX: number;
-    _renderY: number;
-    _renderZ: number;
-    public _sectionsPerChunkDistance: number;
     
-
-
     constructor() {
         this._gameSettings = new _GameSettings();
         this._gameSettings._loadOptions();
@@ -134,7 +132,7 @@ export class _Klocki {
         this._renderY = 65;
         this._renderZ = 0;
         this._reuseGlBuffers = new Array<WebGLBuffer[]>(3);
-        for(let i = 0; i<this._reuseGlBuffers.length; i++){
+        for (let i = 0; i < this._reuseGlBuffers.length; i++) {
             this._reuseGlBuffers[i] = [];
         }
         this._reuseGlBuffersIndexRemover = 1;
@@ -143,11 +141,11 @@ export class _Klocki {
         const bakeSec = this._bakeSectionsByDistanceSquared = new Array(sectionsLen);
         const sec = this._sectionsByDistanceSquared = new Array(sectionsLen);
         const secsPerDistance = this._sectionsPerChunkDistance = 2000;
-        for(let i = 0; i<bakeSec.length; i++){
-            bakeSec[i] = new Array(secsPerDistance+1);
+        for (let i = 0; i < bakeSec.length; i++) {
+            bakeSec[i] = new Array(secsPerDistance + 1);
             bakeSec[i][0] = 0; // first element is amount of sections stored last render
 
-            sec[i] = new Array(secsPerDistance+1);
+            sec[i] = new Array(secsPerDistance + 1);
             sec[i][0] = 0;
         }
         /*const compareBakes = (a: _BakeTask, b: _BakeTask): number => {
@@ -164,7 +162,7 @@ export class _Klocki {
             }
         };*/
         this._scheduledBakeTasks = new _Deque<_BakeTask>(); // (compareBakes);
-        //this._scheduledBakeTasksSet = new Set<_BakeTask>();
+        // this._scheduledBakeTasksSet = new Set<_BakeTask>();
         this._joinedThisFrame = 0;
         this._maxJoinsPerFrame = 3;
         
@@ -186,6 +184,9 @@ export class _Klocki {
         }
 
         return result;
+    }
+    public static _hashToPath(hash: string) {
+        return "assets/objects/" + hash.substr(0, 2) + "/" + hash;
     }
 
     public _getPartialTicks() {
@@ -242,7 +243,6 @@ export class _Klocki {
                 thePlayer._jumping = true;
             }
 
-
             if (this._controls._pressed.get('a')) {
                 thePlayer._movementStrafe += 1;
             }
@@ -275,7 +275,7 @@ export class _Klocki {
     }
     public _scheduleBaking(task: _BakeTask): void {
         this._scheduledBakeTasks._enqueue(task);
-        //this._scheduledBakeTasksSet.add(task);
+        // this._scheduledBakeTasksSet.add(task);
     }
 
     public _runGameLoop(time: number): void {
@@ -296,68 +296,64 @@ export class _Klocki {
             this._runTick();
         }
 
-
         this._renderGame();
         // this._runheavyTasks();
 
         this._nextFrame();
 
-        //window.setTimeout(() => {this._runheavyTasks()}, 0)
+        // window.setTimeout(() => {this._runheavyTasks()}, 0)
     }
 
     public _runheavyTasks(deadline: any) {
         
         (<any>window).requestIdleCallback((deadline: any) => {
-            this._runheavyTasks(deadline)
-        }, {timeout: 1000});
-        if(this._networkManager != null){
+            this._runheavyTasks(deadline);
+        }, { timeout: 1000 });
+        if (this._networkManager != null) {
             this._networkManager._idleCallback();
         }
         let baked = 0;
         const maxBakes = deadline.didTimeout ? 1 : 5;
         
-        let secs = this._bakeSectionsByDistanceSquared;
+        const secs = this._bakeSectionsByDistanceSquared;
         theBaking:
-        if(1){
-            for(let secsIndex = 0; secsIndex < secs.length; ++secsIndex){
+        if (1) {
+            for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
                 const sections = secs[secsIndex];
                 const count = sections[0];
-                for(let i = 1; i<=count; i++){
+                for (let i = 1; i <= count; i++) {
                     const t = (<_OriginRenderOcTree>sections[i])._bakeTask;
-                    if(t != null){
-                        if(!t._done){
+                    if (t != null) {
+                        if (!t._done) {
                             t._bake(this._worldRendererBaker);
                             baked++;
-                            if(baked >= maxBakes){
+                            if (baked >= maxBakes) {
                                 break theBaking;
                             }
-                            if(deadline.timeRemaining() == 0){
+                            if (deadline.timeRemaining() == 0) {
                                 break theBaking;
                             }
                         }
-                        
                         
                     }
                 }
             }
             
-            
             while (baked < maxBakes && this._scheduledBakeTasks._size() > 0) {
                 // const t: _BakeTask = this._scheduledBakeTasks._dequeue();
                 const t: _BakeTask | undefined = this._scheduledBakeTasks._dequeue();
 
-                //const t: _BakeTask | undefined = this._scheduledBakeTasksSet.
+                // const t: _BakeTask | undefined = this._scheduledBakeTasksSet.
                 // if(t){
-                if(!t._done){
+                if (!t._done) {
                     t._bake(this._worldRendererBaker);
                     baked++;
                 }
-                if(deadline.timeRemaining() == 0){
+                if (deadline.timeRemaining() == 0) {
                     break;
                 }
                 // }
                 
-
             }
         }
         
@@ -369,7 +365,7 @@ export class _Klocki {
         }
     }
     public _makeBlurTex() {
-        // TODO maybe motion blur postprocessing
+        // tODO maybe motion blur postprocessing
         
         // create to render to
         const targetTextureWidth = this._display._width;
@@ -396,31 +392,30 @@ export class _Klocki {
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         }
     }
-    public _scheduleDeleteBuffer(buf: WebGLBuffer){
+    public _scheduleDeleteBuffer(buf: WebGLBuffer) {
         this._reuseGlBuffers[this._reuseGlBuffersIndexAdder].push(buf);
     }
 
     public _renderGame(): void {
         const gl = this._display._gl;
         const toDelete = this._reuseGlBuffers[this._reuseGlBuffersIndexRemover];
-        for(let i = 0; i<toDelete.length; i++){
+        for (let i = 0; i < toDelete.length; i++) {
             gl.deleteBuffer(toDelete[i]);
-            //console.log("deleteing");
+            // console.log("deleteing");
         }
         this._reuseGlBuffers[this._reuseGlBuffersIndexRemover] = [];
-        if(++this._reuseGlBuffersIndexRemover >= this._reuseGlBuffers.length){
+        if (++this._reuseGlBuffersIndexRemover >= this._reuseGlBuffers.length) {
             this._reuseGlBuffersIndexRemover = 0;
         }
-        if(++this._reuseGlBuffersIndexAdder >= this._reuseGlBuffers.length){
+        if (++this._reuseGlBuffersIndexAdder >= this._reuseGlBuffers.length) {
             this._reuseGlBuffersIndexAdder = 0;
         }
-        let bakeSecs = this._bakeSectionsByDistanceSquared;
-        let secs = this._sectionsByDistanceSquared;
-        for(let secsIndex = 0; secsIndex < secs.length; ++secsIndex){
+        const bakeSecs = this._bakeSectionsByDistanceSquared;
+        const secs = this._sectionsByDistanceSquared;
+        for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
             bakeSecs[secsIndex][0] = 0;
             secs[secsIndex][0] = 0;
         }
-
 
         if (this._smoothCam || this._zoomed) {
             const world = this._theWorld;
@@ -435,8 +430,8 @@ export class _Klocki {
 
         this._textureManager._resetBoxBuf();
         const testMatrix = mat4.create();
-        //mat4.translate(testMatrix, testMatrix, [Math.sin(Date.now() / 1000), Math.sin(Date.now() / 1300), Math.sin(Date.now() / 1500)]);
-        //mat4.rotateY(testMatrix, testMatrix, Math.sin(Date.now() / 2300));
+        // mat4.translate(testMatrix, testMatrix, [Math.sin(Date.now() / 1000), Math.sin(Date.now() / 1300), Math.sin(Date.now() / 1500)]);
+        // mat4.rotateY(testMatrix, testMatrix, Math.sin(Date.now() / 2300));
         this._textureManager._pushGroupMatrix(testMatrix);
         // this._textureManager._pushCubeParams(Math.sin(Date.now()/2000), Math.sin(Date.now()/2300), Math.sin(Date.now()/2500), 0, 0, 0, 0);
 
@@ -447,10 +442,8 @@ export class _Klocki {
 
         this._joinedThisFrame = 0;
         
-
         // this._makeBlurTex();
         
-
         // const attachmentPoint = gl.COLOR_ATTACHMENT0;
        // gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, this._blurTexture, 0);
 
@@ -482,7 +475,6 @@ export class _Klocki {
 
         const modelViewMatrix = mat4.create();
 
-
         let debugBlock = "none";
         let debugBlock2 = "";
         let debugBlock3 = "";
@@ -500,10 +492,8 @@ export class _Klocki {
             this._renderY = ry;
             this._renderZ = rz;
 
-
             const now = this._audioManager._audioCtx.currentTime;
 
-            
             if (this._audioManager._listener.positionX) {
                 this._audioManager._listener.positionX.setValueAtTime(rx, now);
                 this._audioManager._listener.positionY.setValueAtTime(ry, now);
@@ -522,7 +512,6 @@ export class _Klocki {
             const upy = _Klocki._utilVec3[1];
             const upz = _Klocki._utilVec3[2];
            
-            
             if (this._audioManager._listener.forwardX) {
                 this._audioManager._listener.forwardX.setValueAtTime(viewx, now);
                 this._audioManager._listener.forwardY.setValueAtTime(viewy, now);
@@ -549,25 +538,25 @@ export class _Klocki {
                 debugBlock = blockPos[0] + " " + blockPos[1] + " " + blockPos[2];
                 const section = this._theWorld._getSection(blockPos[0] >> 4, blockPos[1] >> 4, blockPos[2] >> 4);
                 this._sectionLookingAt = section;
-                if(section != null){
-                    if(section._debugInfo){
+                if (section != null) {
+                    if (section._debugInfo) {
                         debugBlock3 = section._debugInfo;
                     }
-                    debugBlock3 += " "+this._theWorld._isUglyChunkLoaded(blockPos[0] >> 4, blockPos[2] >> 4)
+                    debugBlock3 += " " + this._theWorld._isUglyChunkLoaded(blockPos[0] >> 4, blockPos[2] >> 4);
                 }
                 const stateId = this._theWorld._getBlockType(blockPos[0], blockPos[1], blockPos[2]);
                 const btype = stateId >> 4;
                 const bdata = stateId & 15;
-                //const bdm = this._blockRegistry._blocksByLegacyId[btype];
+                // const bdm = this._blockRegistry._blocksByLegacyId[btype];
                 const block = this._blockRegistry._byStateId(stateId);
-                if(this._protocol >= 340){
-                    if(block){
-                        debugBlock2 = stateId+"="+block._baseStateId+"+"+(stateId-block._baseStateId);
-                    }else{
-                        debugBlock2 = stateId+"=?";
+                if (this._protocol >= 340) {
+                    if (block) {
+                        debugBlock2 = stateId + "=" + block._baseStateId + "+" + (stateId - block._baseStateId);
+                    } else {
+                        debugBlock2 = stateId + "=?";
                     }
-                }else{
-                    debugBlock2 = stateId+"="+btype + ":" + bdata;
+                } else {
+                    debugBlock2 = stateId + "=" + btype + ":" + bdata;
                 }
                 if (block) {
                     debugBlock2 += " " + block._name;
@@ -596,8 +585,6 @@ export class _Klocki {
         this._shaderWorld._zeroOffset();
         this._renderList._renderAll(this._worldRenderer, this._shaderWorld);
 
-        
-
         gl.useProgram(this._shaderMobs._program);
         gl.uniformMatrix4fv(
             this._shaderMobs._uniformLocations._projectionMatrix,
@@ -613,10 +600,10 @@ export class _Klocki {
             this._textureManager._uploadGroupParamTex();
             this._worldRendererMobs._endAndUpload(this._shaderMobs, this._glBuffersEntities[this._glBuffersEntitiesIndex]);
 
-            //this._worldRendererMobs._endAndUploadSetSize(this._shaderMobs, buf, true);
+            // this._worldRendererMobs._endAndUploadSetSize(this._shaderMobs, buf, true);
 
-            if(++this._glBuffersEntitiesIndex >= this._glBuffersEntitiesCount){
-                this._glBuffersEntitiesIndex = 0
+            if (++this._glBuffersEntitiesIndex >= this._glBuffersEntitiesCount) {
+                this._glBuffersEntitiesIndex = 0;
             }
         }
 
@@ -711,53 +698,7 @@ export class _Klocki {
     public _toggleSmoothCam() {
         this._smoothCam = !this._smoothCam;
     }
-    public static _hashToPath(hash: string){
-        return "assets/objects/"+hash.substr(0, 2)+"/"+hash;
-    }
-    private _startGame(): void {
-
-        this._controls = new _Controls(this);
-
-        this._shaderUI = new _ShaderUI(this);
-        this._shaderWorld = new _ShaderWorld(this);
-        this._shaderMobs = new _ShaderMobs(this);
-        this._shaderLines = new _ShaderLines(this);
-
-        this._renderList = new _RenderList(this, 8, 1, 8);
-
-        this._textureManager = new _TextureManager(this);
-        this._uiRenderer = new _UIRenderer(this);
-        this._fontRenderer = new _FontRenderer(this);
-        this._worldRenderer = new _WorldRenderer(this, 2 * 1024 * 1024, false, false);
-        this._lineRenderer = new _LineRenderer(this);
-        this._worldRendererBaker = new _WorldRenderer(this, 8 * 1024 * 1024, false, false);
-        this._worldRendererMobs = new _WorldRenderer(this, 32 * 1024 * 1024, false, true);
-        this._worldRendererMobsHelper = new _WorldRenderer(this, 0.5 * 1024 * 1024, false, true);
-
-        fetch("assets/indexes/"+this._assetsVersion+".json").then(response => {
-            return response.json()
-        }).then(assetsJson => {
-            this._assetsJson = assetsJson
-            if(!this._assetsJson.objects){
-                throw new Error("no objects found in assets index file");
-            }
-
-            const soundsFileHash = this._assetsJson.objects[_Klocki._forbiddenWord+"/sounds.json"].hash
-            if(!isString(soundsFileHash)){
-                throw new Error("soundsFileHash is not a string");
-            }
-            const soundsFilePath = _Klocki._hashToPath(<string>soundsFileHash);
-
-            fetch(soundsFilePath).then(response => {
-                return response.json()
-            }).then(soundsJson => {
-                this._soundsJson = soundsJson
-                this._startGameSecond()
-            })
-
-        })
-    }
-    public _startGameSecond(){
+    public _startGameSecond() {
         this._modelRegistry = new _ModelRegistry(this);
             
         this._blockRegistry = new _BlockRegistry(this._textureManager, this._modelRegistry);
@@ -769,13 +710,11 @@ export class _Klocki {
 
         this._entityRenders = new _EntityRenders(this);
 
-
-
         this._audioManager = new _AudioManager(this);
         const panner = this._audioManager._newPanner();
-        //panner._setPosition(-58, 69, 7);
+        // panner._setPosition(-58, 69, 7);
         // panner._setPosition(0, 80, 0);
-        //panner._setPosition(-230, 75, 230);
+        // panner._setPosition(-230, 75, 230);
         panner._setPosition(-150, 75, 150);
         
         // const track = this._audioManager._audioCtx.createMediaElementSource(audio);
@@ -784,15 +723,14 @@ export class _Klocki {
         this._guiChat = new _GuiChat(this);
         this._guiOverlayEquipment = new _GuiOverlayEquipment(this);
 
-        
         const gl = this._display._gl;
         this._mainVao = gl.createVertexArray()!;
         this._glBuffersEntities = new Array(this._glBuffersEntitiesCount);
-        for(let i = 0; i<this._glBuffersEntities.length; i++){
+        for (let i = 0; i < this._glBuffersEntities.length; i++) {
             const buf = this._display._gl.createBuffer()!;
             this._glBuffersEntities[i] = buf;
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-            gl.bufferData(gl.ARRAY_BUFFER, 1024*1024*32, gl.DYNAMIC_DRAW);
+            gl.bufferData(gl.ARRAY_BUFFER, 1024 * 1024 * 32, gl.DYNAMIC_DRAW);
         }
         // blur texture postprocess here?
         // this._blurTexture = gl.createTexture()!;
@@ -825,19 +763,18 @@ export class _Klocki {
         make8DaudioXD();
         */
 
-        const ri = this._randomInts = new Uint32Array(1024*16);
-        for(let i = 0; i<ri.length; ++i){
-            ri[i] = Math.floor(Math.random()*Math.pow(2, 21));
+        const ri = this._randomInts = new Uint32Array(1024 * 16);
+        for (let i = 0; i < ri.length; ++i) {
+            ri[i] = Math.floor(Math.random() * Math.pow(2, 21));
         }
 
-        (<any>window).requestIdleCallback((deadline: any) => { this._runheavyTasks(deadline); }, {timeout: 500});
+        (<any>window).requestIdleCallback((deadline: any) => { this._runheavyTasks(deadline); }, { timeout: 500 });
         // this.myNetworkManager._sendPacket();
         this._nextFrame();
     }
 
-
-    public connectSocket(protoVersion: number, wsUrl: string){
-        this._protocol = protoVersion
+    public connectSocket(protoVersion: number, wsUrl: string) {
+        this._protocol = protoVersion;
         if (!this._networkManager) {
             this._networkManager = new _NetworkManager(this, wsUrl);
             this._networkManager._packetListener = new _NetHandlerLoginClient(this);
@@ -845,6 +782,49 @@ export class _Klocki {
             this._networkManager._sendPacket(new _CPacketLoginStart("Klocek_" + (this._controls._isMobile ? "m_" : "") + _Klocki._randomString(6)));
 
         }
+    }
+    private _startGame(): void {
+
+        this._controls = new _Controls(this);
+
+        this._shaderUI = new _ShaderUI(this);
+        this._shaderWorld = new _ShaderWorld(this);
+        this._shaderMobs = new _ShaderMobs(this);
+        this._shaderLines = new _ShaderLines(this);
+
+        this._renderList = new _RenderList(this, 8, 1, 8);
+
+        this._textureManager = new _TextureManager(this);
+        this._uiRenderer = new _UIRenderer(this);
+        this._fontRenderer = new _FontRenderer(this);
+        this._worldRenderer = new _WorldRenderer(this, 2 * 1024 * 1024, false, false);
+        this._lineRenderer = new _LineRenderer(this);
+        this._worldRendererBaker = new _WorldRenderer(this, 8 * 1024 * 1024, false, false);
+        this._worldRendererMobs = new _WorldRenderer(this, 32 * 1024 * 1024, false, true);
+        this._worldRendererMobsHelper = new _WorldRenderer(this, 0.5 * 1024 * 1024, false, true);
+
+        fetch("assets/indexes/" + this._assetsVersion + ".json").then(response => {
+            return response.json();
+        }).then(assetsJson => {
+            this._assetsJson = assetsJson;
+            if (!this._assetsJson.objects) {
+                throw new Error("no objects found in assets index file");
+            }
+
+            const soundsFileHash = this._assetsJson.objects[_Klocki._forbiddenWord + "/sounds.json"].hash;
+            if (!isString(soundsFileHash)) {
+                throw new Error("soundsFileHash is not a string");
+            }
+            const soundsFilePath = _Klocki._hashToPath(soundsFileHash);
+
+            fetch(soundsFilePath).then(response => {
+                return response.json();
+            }).then(soundsJson => {
+                this._soundsJson = soundsJson;
+                this._startGameSecond();
+            });
+
+        });
     }
 
 }

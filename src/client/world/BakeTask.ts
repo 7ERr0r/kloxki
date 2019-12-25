@@ -2,14 +2,14 @@ import { _Block } from "../../block/Block";
 import { _TextureInfo } from "../txt/TextureInfo";
 import { _BlockRegistry } from "../../block/BlockRegistry";
 import { _WorldRenderer } from "../renderer/WorldRenderer";
-
-import { _ChunkSection } from "./ChunkSection";
-import { _OriginRenderOcTree } from "./OriginRenderOcTree";
 import { _Uint32BlockStorage } from "../../world/chunk/storage/Uint32BlockStorage";
 import { _Klocki } from "../Klocki";
 
+import { _ChunkSection } from "./ChunkSection";
+import { _OriginRenderOcTree } from "./OriginRenderOcTree";
+
 const faceVertices = [
-    { // Up
+    { // up
         indices: [0, 1, 2, 3, 2, 1],
         verts: [
             { X: 0, Y: 1, Z: 0, TOffsetX: 0, TOffsetY: 0 },
@@ -19,7 +19,7 @@ const faceVertices = [
         ],
         direction: { X: 0, Y: 1, Z: 0 },
     },
-    { // Down
+    { // down
         indices: [0, 1, 2, 3, 2, 1],
         verts: [
             { X: 0, Y: 0, Z: 0, TOffsetX: 0, TOffsetY: 1 },
@@ -29,7 +29,7 @@ const faceVertices = [
         ],
         direction: { X: 0, Y: -1, Z: 0 },
     },
-    { // North
+    { // north
         indices: [0, 1, 2, 3, 2, 1],
         verts: [
             { X: 0, Y: 0, Z: 0, TOffsetX: 1, TOffsetY: 1 },
@@ -39,7 +39,7 @@ const faceVertices = [
         ],
         direction: { X: 0, Y: 0, Z: -1 },
     },
-    { // South
+    { // south
         indices: [0, 1, 2, 3, 2, 1],
         verts: [
             { X: 0, Y: 0, Z: 1, TOffsetX: 0, TOffsetY: 1 },
@@ -49,7 +49,7 @@ const faceVertices = [
         ],
         direction: { X: 0, Y: 0, Z: 1 },
     },
-    { // West
+    { // west
         indices: [0, 1, 2, 3, 2, 1],
         verts: [
             { X: 0, Y: 0, Z: 0, TOffsetX: 0, TOffsetY: 1 },
@@ -59,7 +59,7 @@ const faceVertices = [
         ],
         direction: { X: -1, Y: 0, Z: 0 },
     },
-    { // East
+    { // east
         indices: [0, 1, 2, 3, 2, 1],
         verts: [
             { X: 1, Y: 0, Z: 0, TOffsetX: 1, TOffsetY: 1 },
@@ -81,7 +81,7 @@ export class _BakeTask {
     public _sections: (_ChunkSection | null)[];
     public _registry: _BlockRegistry;
     public _stillDirty: boolean;
-    _done: boolean;
+    public _done: boolean;
 
     constructor(renderLeaf: _OriginRenderOcTree, section: _ChunkSection) {
         this._renderLeaf = renderLeaf;
@@ -140,18 +140,18 @@ export class _BakeTask {
         if (!section) {
             this._renderLeaf._baking = false;
             this._renderLeaf._bakeTask = null;
+
             // this._renderLeaf._unmarkDirty();
             return;
         }
-
 
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
                 for (let z = 0; z < 3; z++) {
                     let section = world._getSection(sx + x - 1, sy + y - 1, sz + z - 1);
-                    if(section == null){
-                        if(world._isUglyChunkLoaded(sx + x - 1, sz + z - 1)){
-                            section = _BakeTask._airSection
+                    if (section == null) {
+                        if (world._isUglyChunkLoaded(sx + x - 1, sz + z - 1)) {
+                            section = _BakeTask._airSection;
                         }
                     }
                     this._sections[(x << 4) | (y << 2) | z] = section;
@@ -164,11 +164,11 @@ export class _BakeTask {
             for (let y = 0; y < bs; y++) {
                 for (let z = 0; z < bs; z++) {
                     const stateId = this._getBlockTypeFast(x, y, z);
-                    //const blockType = id >> 4;
-                    //const blockData = id & 15;
+                    // const blockType = id >> 4;
+                    // const blockData = id & 15;
                     if (stateId != 0) {
 
-                        //let blockTypeInstance = registry._blocksByLegacyId[blockType];
+                        // let blockTypeInstance = registry._blocksByLegacyId[blockType];
                         let block = registry._globalPalette[stateId];
                         if (!block) {
                             block = registry._globalPalette[1];
@@ -177,7 +177,6 @@ export class _BakeTask {
                         if (!block._hasModel) {
                             continue;
                         }
-
 
                         wr._atlas = 0;
 
@@ -191,7 +190,7 @@ export class _BakeTask {
         const gl = this._renderLeaf._klocki._display._gl;
 
         _OriginRenderOcTree._usedVideoMemory -= this._renderLeaf._drawCount * stride;
-        if(this._renderLeaf._glBuffer != null){
+        if (this._renderLeaf._glBuffer != null) {
             this._renderLeaf._klocki._scheduleDeleteBuffer(this._renderLeaf._glBuffer);
             this._renderLeaf._glBuffer = null;
         }
@@ -219,7 +218,7 @@ export class _BakeTask {
         let lastColor = 0xFFFFFFFF;
         let lastUV: number[] = _BakeTask._initUV;
         const registry = this._registry;
-        //const globalPalette = registry._globalPalette;
+        // const globalPalette = registry._globalPalette;
         const globalPaletteOpaque = registry._globalPaletteOpaque;
         let oneFaceDrawn = false;
         let topRendered = false;
@@ -246,7 +245,7 @@ export class _BakeTask {
                             // console.log("loading", textureName);
                             // this._renderLeaf._klocki._guiChat._appendMessage({"text":"loading "+textureName});
                             if (textureName != "") {
-                                texInfo = this._renderLeaf._klocki._textureManager._loadCached(`assets/`+_Klocki._forbiddenWord+`/textures/` + textureName + `.png`, true);
+                                texInfo = this._renderLeaf._klocki._textureManager._loadCached(`assets/` + _Klocki._forbiddenWord + `/textures/` + textureName + `.png`, true);
                                 
                             }
                         }
@@ -271,8 +270,8 @@ export class _BakeTask {
                             // const facecull = faceVertices[modelFace._cullfaceIndex];
                             // const dir = facecull.direction;
                             const neighborBlockId = this._getBlockTypeFastDir(x, y, z, modelFace._cullfaceIndex);
-                            if(neighborBlockId >= 0 && neighborBlockId < globalPaletteOpaque.length){
-                                //const blockType = neighborBlockId >> 4;
+                            if (neighborBlockId >= 0 && neighborBlockId < globalPaletteOpaque.length) {
+                                // const blockType = neighborBlockId >> 4;
                                 // const blockData = neighborBlockId & 15;
                                 /*
                                 const block = globalPalette[neighborBlockId];
@@ -284,7 +283,7 @@ export class _BakeTask {
                                     continue;
                                 }*/
                                 const blockOpaque = globalPaletteOpaque[neighborBlockId];
-                                if(blockOpaque != 0){
+                                if (blockOpaque != 0) {
                                     continue;
                                 }
 

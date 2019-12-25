@@ -198,15 +198,15 @@ export class _NbtReader {
             }
 
             return new _NbtIntArray(this._buf._readInt32Array(size));
-        }else if (id == 12) {
+        } else if (id == 12) {
             const size = this._buf._readUint32();
             if (size < 0 || size > 1024 * 1024) {
                 throw new Error("nbt long array size " + size + " too large");
             }
 
             return new _NbtLongArray(this._buf._readInt64Array(size));
-        }else{
-            throw new Error("wrong nbt tag ID "+id);
+        } else {
+            throw new Error("wrong nbt tag ID " + id);
         }
 
         return null;

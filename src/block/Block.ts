@@ -27,7 +27,6 @@ export class _Block {
         this._baseStateId = -1;
     }
 
-
     public _loadModelTexture(manager: _TextureManager): void {
         if (this._hasModel) {
             

@@ -798,9 +798,8 @@ export class _SoundEvents {
     public static _ENTITY_ZOMBIE_VILLAGER_HURT = _SoundEvents.register("entity.zombie_villager.hurt");
     public static _ENTITY_ZOMBIE_VILLAGER_STEP = _SoundEvents.register("entity.zombie_villager.step");
 
-    private static register(key: string)
-    {
-        //return Registry.register(Registry.SOUND_EVENT, key, new SoundEvent(new ResourceLocation(key)));
+    private static register(key: string) {
+        // return Registry.register(Registry.SOUND_EVENT, key, new SoundEvent(new ResourceLocation(key)));
         return new _SoundEvent(key);
     }
 }

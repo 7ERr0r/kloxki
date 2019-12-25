@@ -93,7 +93,7 @@ export class _TextureManager {
                 
                 textureInfo._promise = null;
             };
-            //const cache: string | null = localStorage.getItem(url);
+            // const cache: string | null = localStorage.getItem(url);
             const cache: string | null = null;
             if (cache) {
                 const v: ArrayBuffer = this._str2ab(cache);
@@ -158,15 +158,14 @@ export class _TextureManager {
     }
     public _uploadGroupParamTex() {
         const gl = this._klocki._display._gl;
-        //const sliced = new Float32Array(this._groupParamsBuf, 0, this._groupParamsCount * 16);
+        // const sliced = new Float32Array(this._groupParamsBuf, 0, this._groupParamsCount * 16);
         // const sliced = this._boxParamsBuf.slice(0, this._boxParamsCount*8);
-        //gl.activeTexture(gl.TEXTURE1);
+        // gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this._groupParamTexture);
-        //gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this._groupParamsTexSize, this._groupParamsTexSize, gl.RGBA, gl.FLOAT, sliced, 0);
+        // gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this._groupParamsTexSize, this._groupParamsTexSize, gl.RGBA, gl.FLOAT, sliced, 0);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, this._groupParamsTexSize, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
         
-
-        //gl.activeTexture(gl.TEXTURE0);
+        // gl.activeTexture(gl.TEXTURE0);
     }
 
     private _downloadTextureFromURL(url: string, precallback: Function | null, postcallback: Function | null, fixedAlias: boolean, textureInfo: _TextureInfo): void {

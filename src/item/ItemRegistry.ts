@@ -31,7 +31,7 @@ export class _ItemRegistry {
         registerItemBlock(h._OAK_SAPLING!, (new _ItemMultiTexture(h._OAK_SAPLING!, h._OAK_SAPLING!))._setUnlocalizedName("sapling"));
         registerItemBlock(h._BEDROCK!);
         
-        // TODO
+        // tODO
 
         registerItem(256, "iron_shovel", (new _ItemSpade(_Item._ToolMaterial._IRON))._setUnlocalizedName("shovelIron"));
         registerItem(257, "iron_pickaxe", (new _ItemPickaxe(_Item._ToolMaterial._IRON))._setUnlocalizedName("pickaxeIron"));
@@ -57,6 +57,6 @@ export class _ItemRegistry {
         registerItem(277, "diamond_shovel", (new _ItemSpade(_Item._ToolMaterial._DIAMOND))._setUnlocalizedName("shovelDiamond"));
         registerItem(278, "diamond_pickaxe", (new _ItemPickaxe(_Item._ToolMaterial._DIAMOND))._setUnlocalizedName("pickaxeDiamond"));
         registerItem(279, "diamond_axe", (new _ItemAxe(_Item._ToolMaterial._DIAMOND))._setUnlocalizedName("hatchetDiamond"));
-        // TODO
+        // tODO
     }
 }

@@ -78,11 +78,10 @@ export class _NetHandlerPlayClient implements _INetHandler {
         this._inPacketArr[reg._CLIENT_SPAWN_MOB] = _SPacketSpawnMob;
         this._inPacketArr[reg._CLIENT_BLOCK_CHANGE] = _SPacketBlockChange;
         this._inPacketArr[reg._CLIENT_MULTI_BLOCK_CHANGE] = _SPacketMultiBlockChange;
-        this._inPacketArr[reg._CLIENT_UNLOAD_CHUNK] = _SPacketChunkUnload;   
+        this._inPacketArr[reg._CLIENT_UNLOAD_CHUNK] = _SPacketChunkUnload;
         if (this._protocol <= 47) {
             this._inPacketArr[reg._CLIENT_CHUNK_DATA] = _SPacketChunkData47;
             this._inPacketArr[reg._CLIENT_MAP_CHUNK_BULK] = _SPacketMapChunkBulk47;
-            
             
             this._inPacketArr[reg._CLIENT_OPEN_WINDOW] = _SPacketOpenWindow;
             this._inPacketArr[reg._CLIENT_WINDOW_ITEMS] = _SPacketWindowItems;
@@ -169,18 +168,18 @@ export class _NetHandlerPlayClient implements _INetHandler {
         }
 
         console.log(v);
-        if(this._protocol >= 107){
+        if (this._protocol >= 107) {
             this._netManager._sendPacket(new _CPacketTeleportConfirm(packet._teleportId!));
         }
     }
     public _handleChunkData47(packet: _SPacketChunkData47): void {
-        if(!this._world){
+        if (!this._world) {
             return;
         }
-        //console.log(`Received one chunk at pos ${packet._chunkX}x${packet._chunkZ}`);
+        // console.log(`Received one chunk at pos ${packet._chunkX}x${packet._chunkZ}`);
         const primaryMask = packet._primaryBitMask!;
 
-        this._world!._setUglyChunkLoaded(packet._chunkX!, packet._chunkZ!)
+        this._world._setUglyChunkLoaded(packet._chunkX!, packet._chunkZ!);
         let offset = 0;
         for (let y = 0; y < 16; y++) {
             if ((primaryMask & (1 << y)) !== 0) {
@@ -197,12 +196,12 @@ export class _NetHandlerPlayClient implements _INetHandler {
             const x = packet._chunkX!;
             const z = packet._chunkZ!;
 
-            world._setUglyChunkUnloaded(x, z)
-            for(let y = 0; y<16; y++){
+            world._setUglyChunkUnloaded(x, z);
+            for (let y = 0; y < 16; y++) {
                 const key = _WorldClient._sectionKey(x, y, z);
 
                 const w = world._sections.get(key);
-                if(w != null){
+                if (w != null) {
                     w._setSection(null);
                     
                 }
@@ -218,7 +217,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
             const x = packet._chunkX![i];
             const z = packet._chunkZ![i];
 
-            this._world!._setUglyChunkLoaded(x, z)
+            this._world!._setUglyChunkLoaded(x, z);
             // const len = packet._chunkData![i].length;
             // console.log(`Received chunk in bulk at pos ${x}x${z} with ${len} bytes`);
 
@@ -296,17 +295,17 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleSpawnMob(packet: _SPacketSpawnMob) {
         const world = this._world;
         if (world != null) {
-            //console.log("spawning mob eid", packet._eid, " type ", packet._mobType);
+            // console.log("spawning mob eid", packet._eid, " type ", packet._mobType);
 
-            let entity: _KlockiEntityLiving | null = null
-            let creeperType = 50
-            if(this._protocol >= 480){
-                creeperType = 11
+            let entity: _KlockiEntityLiving | null = null;
+            let creeperType = 50;
+            if (this._protocol >= 480) {
+                creeperType = 11;
             }
-            if(packet._mobType == creeperType){
+            if (packet._mobType == creeperType) {
                 entity = new _KlockiEntityCreeper(this._klocki);
             }
-            if(entity != null){
+            if (entity != null) {
                 entity._eid = packet._eid!;
                 entity._serverPosX = packet._serverx!;
                 entity._serverPosY = packet._servery!;
@@ -340,17 +339,17 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleSpawnObject(packet: _SPacketSpawnObject) {
         const world = this._world;
         if (world != null) {
-            //console.log("spawning mob eid", packet._eid, " type ", packet._mobType);
+            // console.log("spawning mob eid", packet._eid, " type ", packet._mobType);
 
-            let entity: _KlockiEntityBase | null = null
-            let itemFrameType = 50
-            if(this._protocol >= 480){
-                itemFrameType = 71
+            let entity: _KlockiEntityBase | null = null;
+            let itemFrameType = 50;
+            if (this._protocol >= 480) {
+                itemFrameType = 71;
             }
-            if(packet._mobType == itemFrameType){
+            if (packet._mobType == itemFrameType) {
                 entity = new _KlockiEntityItemFrame(this._klocki);
             }
-            if(entity != null){
+            if (entity != null) {
                 entity._eid = packet._eid!;
                 entity._serverPosX = packet._serverx!;
                 entity._serverPosY = packet._servery!;
@@ -515,43 +514,43 @@ export class _NetHandlerPlayClient implements _INetHandler {
             const x = bx >> 4;
             const y = by >> 4;
             const z = bz >> 4;
-            //const section = world._getSection(x,y,z);
+            // const section = world._getSection(x,y,z);
             let w = world._getSectionWatcher(x, y, z);
-            //console.log("block change", bx,by,bz,packet._blockID!);
+            // console.log("block change", bx,by,bz,packet._blockID!);
             let section = w._section;
-            if(!w._section){
-                section = new _ChunkSection(x,y,z, new _Uint32BlockStorage(y, false, new Uint32Array(4096)));
+            if (!w._section) {
+                section = new _ChunkSection(x, y, z, new _Uint32BlockStorage(y, false, new Uint32Array(4096)));
                 w._setSection(section);
             }
-            if(section){
-                const sx = bx&15;
-                const sy = by&15;
-                const sz = bz&15;
+            if (section) {
+                const sx = bx & 15;
+                const sy = by & 15;
+                const sz = bz & 15;
                 section._setBlockType(sx, sy, sz, packet._blockID!);
                 w._notify();
 
-                if(sx == 15){
+                if (sx == 15) {
                     w = world._getSectionWatcher(x + 1, y, z);
                     w._notify();
                 }
-                if(sz == 15){
+                if (sz == 15) {
                     w = world._getSectionWatcher(x, y, z + 1);
                     w._notify();
                 }
-                if(sy == 15){
-                    w = world._getSectionWatcher(x, y+1, z);
+                if (sy == 15) {
+                    w = world._getSectionWatcher(x, y + 1, z);
                     w._notify();
                 }
-                if(sx == 0){
+                if (sx == 0) {
                     w = world._getSectionWatcher(x - 1, y, z);
                     w._notify();
                 }
-                if(sz == 0){
+                if (sz == 0) {
                     w = world._getSectionWatcher(x, y, z - 1);
                     w._notify();
                 }
-                if(sy == 0){
-                    w = world._getSectionWatcher(x, y-1, z);
+                if (sy == 0) {
+                    w = world._getSectionWatcher(x, y - 1, z);
                     w._notify();
                 }
             }
@@ -565,67 +564,65 @@ export class _NetHandlerPlayClient implements _INetHandler {
             const watchersToNotify: Set<_SectionWatcher> = new Set();
 
             const records = packet._records!;
-            const offsetX = packet._chunkX!*16;
-            const offsetZ = packet._chunkZ!*16;
-            for(let i = 0; i<records.length; i+= 4){
-                const bx = offsetX+records[i];
-                const by = records[i+1];
-                const bz = offsetZ+records[i+2];
-                const blockID = records[i+3];
+            const offsetX = packet._chunkX! * 16;
+            const offsetZ = packet._chunkZ! * 16;
+            for (let i = 0; i < records.length; i += 4) {
+                const bx = offsetX + records[i];
+                const by = records[i + 1];
+                const bz = offsetZ + records[i + 2];
+                const blockID = records[i + 3];
                 const x = bx >> 4;
                 const y = by >> 4;
                 const z = bz >> 4;
-                //const section = world._getSection(x,y,z);
+                // const section = world._getSection(x,y,z);
                 let w = world._getSectionWatcher(x, y, z);
-                //console.log("multi block change", bx,by,bz, blockID);
+                // console.log("multi block change", bx,by,bz, blockID);
                 let section = w._section;
-                if(!w._section){
-                    section = new _ChunkSection(x,y,z, new _Uint32BlockStorage(y, false, new Uint32Array(4096)));
+                if (!w._section) {
+                    section = new _ChunkSection(x, y, z, new _Uint32BlockStorage(y, false, new Uint32Array(4096)));
                     w._setSection(section);
                 }
-                if(section){
-                    const sx = bx&15;
-                    const sy = by&15;
-                    const sz = bz&15;
+                if (section) {
+                    const sx = bx & 15;
+                    const sy = by & 15;
+                    const sz = bz & 15;
                     section._setBlockType(sx, sy, sz, blockID);
                     watchersToNotify.add(w);
     
-                    if(sx == 15){
+                    if (sx == 15) {
                         w = world._getSectionWatcher(x + 1, y, z);
                         watchersToNotify.add(w);
                     }
-                    if(sz == 15){
+                    if (sz == 15) {
                         w = world._getSectionWatcher(x, y, z + 1);
                         watchersToNotify.add(w);
                     }
-                    if(sy == 15){
-                        w = world._getSectionWatcher(x, y+1, z);
+                    if (sy == 15) {
+                        w = world._getSectionWatcher(x, y + 1, z);
                         watchersToNotify.add(w);
                     }
-                    if(sx == 0){
+                    if (sx == 0) {
                         w = world._getSectionWatcher(x - 1, y, z);
                         watchersToNotify.add(w);
                     }
-                    if(sz == 0){
+                    if (sz == 0) {
                         w = world._getSectionWatcher(x, y, z - 1);
                         watchersToNotify.add(w);
                     }
-                    if(sy == 0){
-                        w = world._getSectionWatcher(x, y-1, z);
+                    if (sy == 0) {
+                        w = world._getSectionWatcher(x, y - 1, z);
                         watchersToNotify.add(w);
                     }
                 }
             }
             watchersToNotify.forEach((w) => w._notify());
 
-
-           
         }
 
     }
     public _handleChunkData107(packet: _SPacketChunkData107) {
 
-        //console.log(`Received one new chunk at pos ${packet._chunkX}x${packet._chunkZ}`, packet._heightmaps);
+        // console.log(`Received one new chunk at pos ${packet._chunkX}x${packet._chunkZ}`, packet._heightmaps);
 
         const world = this._world;
         if (!world) {
@@ -636,16 +633,16 @@ export class _NetHandlerPlayClient implements _INetHandler {
         const buf = new _PacketBuffer(packet._data!.buffer, packet._data!.byteOffset, packet._data!.byteLength);
         const x = packet._chunkX!;
         const z = packet._chunkZ!;
-        world._setUglyChunkLoaded(x, z)
+        world._setUglyChunkLoaded(x, z);
         // let offset = 0;
         for (let y = 0; y < 16; y++) {
             if ((primaryMask & (1 << y)) !== 0) {
                 const nonAirBlocks = buf._readUint16();
                 void(nonAirBlocks);
 
-                let bitsPerBlock = buf._readUint8();
-                if(bitsPerBlock < 4){
-                    //bitsPerBlock = 4;
+                const bitsPerBlock = buf._readUint8();
+                if (bitsPerBlock < 4) {
+                    // bitsPerBlock = 4;
                 }
                 let blockMap: Uint32Array | null = null;
                 if (bitsPerBlock <= 8) {
@@ -656,13 +653,13 @@ export class _NetHandlerPlayClient implements _INetHandler {
                         blockMap[i] = bid;
                     }
                     
-                    //throw new Error("unimplemented global pallete" + bitsPerBlock);
+                    // throw new Error("unimplemented global pallete" + bitsPerBlock);
                 } else {
-                    //throw new Error("unimplemented global pallete" + bitsPerBlock);
+                    // throw new Error("unimplemented global pallete" + bitsPerBlock);
                 }
                 const blocks = new Uint32Array(4096);
                 const blen = buf._readVarInt();
-                if(blen < 0 || blen > 1024*1024){
+                if (blen < 0 || blen > 1024 * 1024) {
                     throw new Error("wrong count of uint64s in block array");
                 }
                 const packed = buf._readUint32Array(blen * 2);
@@ -670,19 +667,19 @@ export class _NetHandlerPlayClient implements _INetHandler {
                 // change byte order
                 let val1 = 0;
                 let val2 = 0;
-                for(let i = 0; i<packed.length; i+=2){
+                for (let i = 0; i < packed.length; i += 2) {
                     val1 = packed[i];
-                    val2 = packed[i+1];
-                    packed[i+1] = ((val1 & 0xFF) << 24) | ((val1 & 0xFF00) << 8) | ((val1 >>> 8) & 0xFF00) | ((val1 >>> 24) & 0xFF);
+                    val2 = packed[i + 1];
+                    packed[i + 1] = ((val1 & 0xFF) << 24) | ((val1 & 0xFF00) << 8) | ((val1 >>> 8) & 0xFF00) | ((val1 >>> 24) & 0xFF);
                     packed[i] = ((val2 & 0xFF) << 24) | ((val2 & 0xFF00) << 8) | ((val2 >>> 8) & 0xFF00) | ((val2 >>> 24) & 0xFF);
                 }
 
                 const bitMap = new _BitMap(bitsPerBlock, packed);
-                if(blockMap == null){
+                if (blockMap == null) {
                     for (let i = 0; i < 4096; i++) {
                         blocks[i] = bitMap._get(i);
                     }
-                }else{
+                } else {
                     for (let i = 0; i < 4096; i++) {
                         blocks[i] = blockMap[bitMap._get(i)];
                     }
@@ -691,7 +688,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
                 const storage = new _Uint32BlockStorage(y, false, blocks);
 
                 const section = new _ChunkSection(x, y, z, storage);
-                section._debugInfo = "bits:"+bitsPerBlock;
+                section._debugInfo = "bits:" + bitsPerBlock;
                 let w = world._getSectionWatcher(x, y, z);
                 w._setSection(section);
 
@@ -704,7 +701,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
                 w = world._getSectionWatcher(x, y, z - 1);
                 w._notify();
 
-                //buf._peekUint8Array(4096);
+                // buf._peekUint8Array(4096);
                 // const cpblocks = packet._data!.slice(offset, offset + 8192);
 
                 // this._loadChunk107(packet._chunkX!, y, packet._chunkZ!, cpblocks);

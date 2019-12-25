@@ -1,4 +1,4 @@
-// Thanks to Thinkofname for making an awesome steven-go and steven-rust
+// thanks to Thinkofname for making an awesome steven-go and steven-rust
 export class _TraceGen {
     
     public _count: number;

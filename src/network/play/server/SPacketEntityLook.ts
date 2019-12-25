@@ -16,7 +16,7 @@ export class _SPacketEntityLook extends _Packet<_NetHandlerPlayClient> {
     public _readPacketData(buf: _PacketBuffer, reg: _PacketRegistry): void {
         this._eid = buf._readVarInt();
         this._yaw = buf._readInt8() / 256 * Math.PI * 2;
-	    this._pitch = buf._readInt8() / 256 * Math.PI * 2;
+	       this._pitch = buf._readInt8() / 256 * Math.PI * 2;
 
         buf._setReaderIndex(buf._u8.byteLength);
     }

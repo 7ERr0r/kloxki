@@ -62,7 +62,6 @@ export class _RenderLayerVoxels {
                 color = 0xFF999999;
             }
             
-
             const cubeIndices = face.cubeIndices;
 
             for (let i = 0; i < 4; i++) {
@@ -77,59 +76,59 @@ export class _RenderLayerVoxels {
         const texOffsetY = tex._subRect._min._y / as;
         const texScaleX = tex._subRect._dx() / as;
         const texScaleY = tex._subRect._dy() / as;
-        let color = 0xFFFFFFFF;
+        const color = 0xFFFFFFFF;
 
-        let vx = 0.0;
+        let vx = 0;
         
-        let vy = 1.0;
-        let vz = 0.0;
-        let fixtexx = 0.0;
-        let fixtexz = 0.0;
-        function poormacro(){
-            wr._pos(x+dx*vx, y+dy*vy, z+dz*vz)._tex(texOffsetX + (vx+fixtexx) * texScaleX, texOffsetY + (vz+fixtexz) * texScaleY)._color(color)._endVertex();
+        let vy = 1;
+        let vz = 0;
+        let fixtexx = 0;
+        let fixtexz = 0;
+        function poormacro() {
+            wr._pos(x + dx * vx, y + dy * vy, z + dz * vz)._tex(texOffsetX + (vx + fixtexx) * texScaleX, texOffsetY + (vz + fixtexz) * texScaleY)._color(color)._endVertex();
         }
 
-        vx = 0.0;
-        vz = 0.0;
+        vx = 0;
+        vz = 0;
         poormacro();
-        vx = 1.0;
+        vx = 1;
         poormacro();
-        vx = 0.0;
-        vz = 1.0;
+        vx = 0;
+        vz = 1;
         poormacro();
-        vx = 1.0;
+        vx = 1;
         poormacro();
 
         vy = 0;
-        vx = 1.0;
-        vz = 0.0;
+        vx = 1;
+        vz = 0;
         poormacro();
-        vx = 0.0;
+        vx = 0;
         poormacro();
-        vx = 1.0;
-        vz = 1.0;
+        vx = 1;
+        vz = 1;
         poormacro();
-        vx = 0.0;
+        vx = 0;
         poormacro();
 
-        let divisions = 16;
-        let delta = 1.0/divisions;
-        vz = 0.0;
+        const divisions = 16;
+        const delta = 1 / divisions;
+        vz = 0;
         fixtexx = 0;
-        fixtexz = delta/2;
-        for(let i = 0; i<divisions; i++){
-            vy = 0.0;
-            vx = 0.0;
+        fixtexz = delta / 2;
+        for (let i = 0; i < divisions; i++) {
+            vy = 0;
+            vx = 0;
             poormacro();
-            vy = 0.0;
-            vx = 1.0;
+            vy = 0;
+            vx = 1;
             poormacro();
 
-            vy = 1.0;
-            vx = 0.0;
+            vy = 1;
+            vx = 0;
             poormacro();
-            vy = 1.0;
-            vx = 1.0;
+            vy = 1;
+            vx = 1;
             poormacro();
 
             vz += delta;
@@ -137,80 +136,71 @@ export class _RenderLayerVoxels {
         }
         vz = delta;
         fixtexx = 0;
-        fixtexz = -delta/2;
-        for(let i = 0; i<divisions; i++){
-            vy = 1.0;
-            vx = 0.0;
+        fixtexz = -delta / 2;
+        for (let i = 0; i < divisions; i++) {
+            vy = 1;
+            vx = 0;
             poormacro();
-            vy = 1.0;
-            vx = 1.0;
+            vy = 1;
+            vx = 1;
             poormacro();
             
-            vy = 0.0;
-            vx = 0.0;
+            vy = 0;
+            vx = 0;
             poormacro();
-            vy = 0.0;
-            vx = 1.0;
+            vy = 0;
+            vx = 1;
             poormacro();
 
             vz += delta;
             
         }
 
-        
-
         vx = delta;
-        fixtexx = -delta/2;
+        fixtexx = -delta / 2;
         fixtexz = 0;
-        for(let i = 0; i<divisions; i++){
+        for (let i = 0; i < divisions; i++) {
 
-            vy = 0.0;
-            vz = 0.0;
+            vy = 0;
+            vz = 0;
             poormacro();
-            vy = 0.0;
-            vz = 1.0;
+            vy = 0;
+            vz = 1;
             poormacro();
 
-            vy = 1.0;
-            vz = 0.0;
+            vy = 1;
+            vz = 0;
             poormacro();
-            vy = 1.0;
-            vz = 1.0;
+            vy = 1;
+            vz = 1;
             poormacro();
 
             vx += delta;
             
         }
 
-
-        vx = 0.0;
-        fixtexx = delta/2;
+        vx = 0;
+        fixtexx = delta / 2;
         fixtexz = 0;
-        for(let i = 0; i<divisions; i++){
-            vy = 1.0;
-            vz = 0.0;
+        for (let i = 0; i < divisions; i++) {
+            vy = 1;
+            vz = 0;
             poormacro();
-            vy = 1.0;
-            vz = 1.0;
+            vy = 1;
+            vz = 1;
             poormacro();
             
-            vy = 0.0;
-            vz = 0.0;
+            vy = 0;
+            vz = 0;
             poormacro();
-            vy = 0.0;
-            vz = 1.0;
+            vy = 0;
+            vz = 1;
             poormacro();
 
             vx += delta;
             
         }
 
-
-        
-
-
-
-        
         this._cachedBuf = new Uint8Array(wr._copyBuf());
     }
 
@@ -219,8 +209,7 @@ export class _RenderLayerVoxels {
         wr._putPrepared(this._cachedBuf);
         const matID = wr._klocki._textureManager._pushGroupMatrix(m);
 
-        wr._matMany(matID, (2+16*4)*4);
-
+        wr._matMany(matID, (2 + 16 * 4) * 4);
 
     }
 }

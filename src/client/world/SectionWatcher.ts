@@ -1,8 +1,7 @@
 import { _ChunkSection } from "./ChunkSection";
 import { _OriginRenderOcTree } from "./OriginRenderOcTree";
 
-
-// Section Watcher watches the watched chunk section to be watched and watches it to the other end of watch listener though it could be implemented as simple pointer but who cares, have a nice day
+// section Watcher watches the watched chunk section to be watched and watches it to the other end of watch listener though it could be implemented as simple pointer but who cares, have a nice day
 export class _SectionWatcher {
 
     public _section: _ChunkSection | null;

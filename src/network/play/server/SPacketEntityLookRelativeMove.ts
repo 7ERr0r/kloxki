@@ -18,17 +18,17 @@ export class _SPacketEntityLookRelativeMove extends _Packet<_NetHandlerPlayClien
 
     public _readPacketData(buf: _PacketBuffer, reg: _PacketRegistry): void {
         this._eid = buf._readVarInt();
-        if(reg._protocol >= 107){
+        if (reg._protocol >= 107) {
             this._serverx = buf._readInt16() / (32 * 128);
             this._servery = buf._readInt16() / (32 * 128);
             this._serverz = buf._readInt16() / (32 * 128);
-        }else{
+        } else {
             this._serverx = buf._readInt8() / 32;
             this._servery = buf._readInt8() / 32;
             this._serverz = buf._readInt8() / 32;
         }
         this._yaw = buf._readInt8() / 256 * Math.PI * 2;
-	    this._pitch = buf._readInt8() / 256 * Math.PI * 2;
+	       this._pitch = buf._readInt8() / 256 * Math.PI * 2;
 
         buf._setReaderIndex(buf._u8.byteLength);
     }

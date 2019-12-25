@@ -20,7 +20,7 @@ export class _WorldClient {
     public _renderEntityFunc: (e: _KlockiEntityBase) => any;
     public _tickEntityFunc: (e: _KlockiEntityBase) => any;
     public _playHandler: _NetHandlerPlayClient;
-    _loadedUglyLimitedHeightChunks: Map<number, boolean>;
+    public _loadedUglyLimitedHeightChunks: Map<number, boolean>;
 
     constructor(klocki: _Klocki, playHandler: _NetHandlerPlayClient) {
         this._klocki = klocki;
@@ -77,14 +77,14 @@ export class _WorldClient {
 
         return watcher._section;
     }
-    public _setUglyChunkLoaded(x: number, z: number){
-        this._loadedUglyLimitedHeightChunks.set(_WorldClient._uglyChunkKey(x,z), true)
+    public _setUglyChunkLoaded(x: number, z: number) {
+        this._loadedUglyLimitedHeightChunks.set(_WorldClient._uglyChunkKey(x, z), true);
     }
     public _isUglyChunkLoaded(x: number, z: number): boolean {
-        return this._loadedUglyLimitedHeightChunks.get(_WorldClient._uglyChunkKey(x,z)) === true
+        return this._loadedUglyLimitedHeightChunks.get(_WorldClient._uglyChunkKey(x, z)) === true;
     }
-    public _setUglyChunkUnloaded(x: number, z: number){
-        this._loadedUglyLimitedHeightChunks.delete(_WorldClient._uglyChunkKey(x,z))
+    public _setUglyChunkUnloaded(x: number, z: number) {
+        this._loadedUglyLimitedHeightChunks.delete(_WorldClient._uglyChunkKey(x, z));
 
     }
 
@@ -113,10 +113,10 @@ export class _WorldClient {
             for (let y = miny; y < maxy; y++) {
                 for (let z = minz; z < maxz; z++) {
                     const id = this._getBlockType(x, y, z);
-                    //if (id != -1 && !_Placeholders._isTranslucentBlock(id)) {
+                    // if (id != -1 && !_Placeholders._isTranslucentBlock(id)) {
                     if (id >= 1) {
                         const block = reg._byStateId(id);
-                        if(block && block._opaque){
+                        if (block && block._opaque) {
                             /*aabbs = aabbs[:0]
                             if id == 126 || id == 182 || id == 44 {
                                 data := int(serverSide.worldState.GetBlockDataAt(x, y, z))

@@ -2,8 +2,7 @@ import { _Klocki } from "../Klocki";
 import { _ShaderWorld } from "../shaders/ShaderWorld";
 import { _ShaderMobs } from "../shaders/ShaderMobs";
 
-
-// Hard to read, but maybe runs fast
+// hard to read, but maybe runs fast
 export class _WorldRenderer {
 
     public _buf: ArrayBuffer;
@@ -68,9 +67,9 @@ export class _WorldRenderer {
         } else {
             const b = this._f32;
             const i = this._count * this._stride4;
-            b[i + 2] = z; // Math.round((z)) // 8 9 10 11
-            b[i + 1] = y; // Math.round((y)) // 4 5 6 7
-            b[i] = x; // Math.round((x)) // 0 1 2 3
+            b[i + 2] = z; // math.round((z)) // 8 9 10 11
+            b[i + 1] = y; // math.round((y)) // 4 5 6 7
+            b[i] = x; // math.round((x)) // 0 1 2 3
         }
         
         return this;
@@ -133,8 +132,8 @@ export class _WorldRenderer {
         const b = this._u32;
         const stride4 = this._stride4;
         let i = this._count * stride4 + 7;
-        let end = i + stride4*num;
-        for(; i<end; i += stride4){
+        const end = i + stride4 * num;
+        for (; i < end; i += stride4) {
             b[i] = matID;
         }
         this._count += num;
@@ -327,14 +326,13 @@ export class _WorldRenderer {
     public _upload(shaderWorld: _ShaderWorld | _ShaderMobs, setSize: boolean): number {
         const gl = this._klocki._display._gl;
         if (this._count > 0) {
-            //gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(this._buf, 0, this._count * this._stride), gl.DYNAMIC_DRAW);
+            // gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(this._buf, 0, this._count * this._stride), gl.DYNAMIC_DRAW);
             const len = this._count * this._stride;
-            if(setSize){
+            if (setSize) {
                 gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(this._buf, 0, len), gl.DYNAMIC_DRAW);
-            }else{
+            } else {
                 gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Uint8Array(this._buf, 0, len), 0, len);
             }
-
 
             // gl.bufferData(gl.ARRAY_BUFFER, this._buf.slice(0, this._count * this._stride), gl.DYNAMIC_DRAW);
         }

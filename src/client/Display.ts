@@ -25,7 +25,7 @@ export class _Display {
         this._gl = webgl;
         this._canvas = canvas;
 
-        // TODO retina 2x scaling on mobile
+        // tODO retina 2x scaling on mobile
         this._resize();
         window.addEventListener("resize", (ev: Event) => this._resize());
 

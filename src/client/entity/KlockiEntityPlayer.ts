@@ -2,10 +2,10 @@
 import { _Klocki } from "../Klocki";
 import { _TextureInfo } from "../txt/TextureInfo";
 import { _KlockiTexture } from "../txt/KlockiTexture";
+import { _RenderPlayer } from "../render/RenderPlayer";
 
 import { _KlockiEntityLiving } from "./KlockiEntityLiving";
 import { _RenderBox } from "./RenderBox";
-import { _RenderPlayer } from "../render/RenderPlayer";
 import { _RenderLayerVoxels } from "./RenderLayerVoxels";
 
 export class _KlockiEntityPlayer extends _KlockiEntityLiving {
@@ -44,7 +44,7 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
 
         this._idleTime = 0;
 
-        const skinInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/"+_Klocki._forbiddenWord+"/textures/entity/steve.png", null, (tex: _KlockiTexture) => {
+        const skinInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/entity/steve.png", null, (tex: _KlockiTexture) => {
             /*[
                 tex._subTex(8/64.0, 8/64.0, 8/64.0, 8/64.0),
                 tex._subTex(24/64.0, 8/64.0, 8/64.0, 8/64.0),
@@ -100,10 +100,10 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
             this._skinLoaded = true;
         }, false);
 
-        const wingInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/"+_Klocki._forbiddenWord+"/textures/item/stone_pickaxe.png", null, (tex: _KlockiTexture) => {
-            this._wingLeft = new _RenderLayerVoxels(klocki, 0, 1, 0, 1, 1/16, 1, tex);
+        const wingInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/item/stone_pickaxe.png", null, (tex: _KlockiTexture) => {
+            this._wingLeft = new _RenderLayerVoxels(klocki, 0, 1, 0, 1, 1 / 16, 1, tex);
             this._wingLoaded = true;
-        }, false);  
+        }, false);
         this._skinInfo = skinInfo;
         this._wingInfo = wingInfo;
     }

@@ -13,7 +13,7 @@ export class _AirBlock extends _Block {
 export class _SnowyDirtBlock extends _Block {
     constructor(proto: number, prop: _BlockProperties) {
         super(prop);
-        if(proto >= 480){
+        if (proto >= 480) {
             this._states = 2;
         }
     }
@@ -59,7 +59,7 @@ export class _SaplingBlock extends _Block {
     public _tree: _Tree;
     constructor(proto: number, tree: _Tree, prop: _BlockProperties) {
         super(prop);
-        if(proto >= 480){
+        if (proto >= 480) {
             this._states = 2;
         }
         this._tree = tree;
@@ -85,9 +85,8 @@ export class _OreBlock extends _Block {
 export class _RotatedPillarBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        //this._setStateExponent(2);
+        // this._setStateExponent(2);
         this._states = 3;
-
 
     }
 }
@@ -138,7 +137,7 @@ export class _FlowingFluidBlock extends _Block {
 export class _LeavesBlock extends _Block {
     constructor(proto: number, prop: _BlockProperties) {
         super(prop);
-        this._states = 2*7;
+        this._states = 2 * 7;
         /*
         this._textureCallback = function (img: _GoImage) {
             const w = img._rect._dx();
@@ -169,25 +168,25 @@ export class _GlassBlock extends _Block {
 export class _DispenserBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 6*2;
+        this._states = 6 * 2;
     }
 }
 export class _NoteBlock extends _Block {
     constructor(proto: number, prop: _BlockProperties) {
         super(prop);
-        this._states = 16*2*25;
+        this._states = 16 * 2 * 25;
     }
 }
 export class _PoweredRailBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 6*2;
+        this._states = 6 * 2;
     }
 }
 export class _DetectorRailBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 6*2;
+        this._states = 6 * 2;
     }
 }
 export class _DirectionalBlock extends _Block {
@@ -205,20 +204,19 @@ export class _PistonBlock extends _DirectionalBlock {
     }
 }
 
-
 export class _BlockWeb extends _Block {
 
 }
 export class _BlockPistonExtension extends _DirectionalBlock {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states *= 2*2;
+        this._states *= 2 * 2;
     }
 }
 export class _MovingPistonBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 6*2;
+        this._states = 6 * 2;
     }
 }
 export class _FlowerBlock extends _Block {
@@ -258,7 +256,7 @@ export class _WallTorchBlock extends _Block {
 export class _FireBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 16*2*2*2*2*2;
+        this._states = 16 * 2 * 2 * 2 * 2 * 2;
     }
 }
 export class _MobSpawnerBlock extends _Block {
@@ -269,20 +267,20 @@ export class _StairsBlock extends _Block {
     constructor(parent: _Block, prop: _BlockProperties) {
         super(prop);
         this._parent = parent;
-        this._states = 4*2*5*2;
+        this._states = 4 * 2 * 5 * 2;
     }
 }
 
 export class _ChestBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*3*2;
+        this._states = 4 * 3 * 2;
     }
 }
 export class _RedstoneWireBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = Math.pow(3, 4)*16;
+        this._states = Math.pow(3, 4) * 16;
     }
 }
 
@@ -304,7 +302,7 @@ export class _FarmlandBlock extends _Block {
 export class _AbstractFurnaceBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2;
+        this._states = 4 * 2;
     }
 }
 export class _FurnaceBlock extends _AbstractFurnaceBlock {
@@ -316,19 +314,19 @@ export class _FurnaceBlock extends _AbstractFurnaceBlock {
 export class _StandingSignBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 16*2;
+        this._states = 16 * 2;
     }
 }
 export class _DoorBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2*2*2*2;
+        this._states = 4 * 2 * 2 * 2 * 2;
     }
 }
 export class _LadderBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2;
+        this._states = 4 * 2;
     }
 }
 export class _RailBlock extends _Block {
@@ -338,17 +336,16 @@ export class _RailBlock extends _Block {
     }
 }
 
-
 export class _WallSignBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2;
+        this._states = 4 * 2;
     }
 }
 export class _LeverBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 3*4*2;
+        this._states = 3 * 4 * 2;
     }
 }
 export enum _PressureSensitivity {
@@ -381,13 +378,13 @@ export class _RedstoneTorchBlock extends _Block {
 export class _WallRedstoneTorchBlock extends _RedstoneTorchBlock {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2;
+        this._states = 4 * 2;
     }
 }
 export class _AbstractButtonBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2*3;
+        this._states = 4 * 2 * 3;
     }
 }
 export class _StoneButtonBlock extends _AbstractButtonBlock {
@@ -433,7 +430,7 @@ export class _JukeboxBlock extends _Block {
 export class _FenceBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = Math.pow(2, 4)*2;
+        this._states = Math.pow(2, 4) * 2;
     }
 }
 export class _PumpkinBlock extends _Block {
@@ -473,13 +470,13 @@ export class _RedstoneDiodeBlock extends _Block {
 export class _RepeaterBlock extends _RedstoneDiodeBlock {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*4*2*2;
+        this._states = 4 * 4 * 2 * 2;
     }
 }
 export class _TrapDoorBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2*2*2*2;
+        this._states = 4 * 2 * 2 * 2 * 2;
     }
 }
 export class _SilverfishBlock extends _Block {
@@ -501,7 +498,7 @@ export class _HugeMushroomBlock extends _Block {
 export class _PaneBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = Math.pow(2, 4)*2;
+        this._states = Math.pow(2, 4) * 2;
     }
 }
 
@@ -537,7 +534,7 @@ export class _VineBlock extends _Block {
 export class _FenceGateBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2*2*2;
+        this._states = 4 * 2 * 2 * 2;
     }
 }
 export class _MyceliumBlock extends _SnowyDirtBlock {
@@ -574,7 +571,7 @@ export class _EndPortalBlock extends _Block {
 export class _EndPortalFrameBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2;
+        this._states = 4 * 2;
     }
 }
 export class _DragonEggBlock extends _Block {
@@ -590,13 +587,13 @@ export class _RedstoneLampBlock extends _Block {
 export class _CocoaBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*3;
+        this._states = 4 * 3;
     }
 }
 export class _EnderChestBlock extends _ChestBlock {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2;
+        this._states = 4 * 2;
     }
 }
 export class _TripWireBlock extends _Block {
@@ -604,19 +601,19 @@ export class _TripWireBlock extends _Block {
     constructor(parent: _Block, prop: _BlockProperties) {
         super(prop);
         this._parent = parent;
-        this._states = 2*2*2*Math.pow(2, 4);
+        this._states = 2 * 2 * 2 * Math.pow(2, 4);
     }
 }
 export class _TripWireHookBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2*2;
+        this._states = 4 * 2 * 2;
     }
 }
 export class _CommandBlockBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 6*2;
+        this._states = 6 * 2;
     }
 }
 export class _BeaconBlock extends _Block {
@@ -625,7 +622,7 @@ export class _BeaconBlock extends _Block {
 export class _WallBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = Math.pow(2, 5)*2;
+        this._states = Math.pow(2, 5) * 2;
     }
 }
 export class _FlowerPotBlock extends _Block {
@@ -708,14 +705,14 @@ export class _WeightedPressurePlateBlock extends _PressurePlateBlock {
 export class _BlockRedstoneComparator extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2*2;
+        this._states = 4 * 2 * 2;
     }
 }
 
 export class _BlockDaylightDetector extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 16*2;
+        this._states = 16 * 2;
     }
 }
 export class _BlockRedstone extends _Block {
@@ -724,11 +721,9 @@ export class _BlockRedstone extends _Block {
 export class _BlockHopper extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 5*2;
+        this._states = 5 * 2;
     }
 }
-
-
 
 export class _BlockDropper extends _DispenserBlock {
 
@@ -794,7 +789,7 @@ export class _BlockShearableDoublePlant extends _DoublePlantBlock {
 export class _SlabBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 3*2;
+        this._states = 3 * 2;
     }
 }
 export class _BedBlock extends _Block {
@@ -802,10 +797,9 @@ export class _BedBlock extends _Block {
     constructor(dyeColor: number, prop: _BlockProperties) {
         super(prop);
         this._dyeColor = dyeColor;
-        this._states = 4*2*2;
+        this._states = 4 * 2 * 2;
     }
 }
-
 
 export class _SeaGrassBlock extends _BushBlock {
 
@@ -849,7 +843,7 @@ export class _ChorusPlantBlock extends _Block {
     }
 }
 export class _ChorusFlowerBlock extends _Block {
-    _parent: _Block;
+    public _parent: _Block;
     constructor(parent: _Block, prop: _BlockProperties) {
         super(prop);
         this._parent = parent;
@@ -895,11 +889,11 @@ export class _StructureVoidBlock extends _Block {
 export class _ObserverBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 6*2;
+        this._states = 6 * 2;
     }
 }
 export class _ShulkerBoxBlock extends _Block {
-    _dyeColor: number;
+    public _dyeColor: number;
     constructor(dyeColor: number, prop: _BlockProperties) {
         super(prop);
         this._dyeColor = dyeColor;
@@ -913,7 +907,7 @@ export class _GlazedTerracottaBlock extends _Block {
     }
 }
 export class _ConcretePowderBlock extends _Block {
-    _parent: _Block;
+    public _parent: _Block;
     constructor(parent: _Block, prop: _BlockProperties) {
         super(prop);
         this._parent = parent;
@@ -926,7 +920,7 @@ export class _KelpTopBlock extends _Block {
     }
 }
 export class _KelpBlock extends _Block {
-    _parent: _Block;
+    public _parent: _Block;
     constructor(parent: _Block, prop: _BlockProperties) {
         super(prop);
         this._states = 1;
@@ -936,11 +930,11 @@ export class _KelpBlock extends _Block {
 export class _TurtleEggBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 3*4;
+        this._states = 3 * 4;
     }
 }
 export class _CoralBlock extends _Block {
-    _parent: _Block;
+    public _parent: _Block;
     constructor(parent: _Block, prop: _BlockProperties) {
         super(prop);
         this._parent = parent;
@@ -958,7 +952,7 @@ export class _DeadCoralPlantBlock extends _AbstractCoralPlantBlock {
     }
 }
 export class _CoralPlantBlock extends _AbstractCoralPlantBlock {
-    _parent: _Block;
+    public _parent: _Block;
     constructor(parent: _Block, prop: _BlockProperties) {
         super(prop);
         this._parent = parent;
@@ -971,7 +965,7 @@ export class _DeadCoralFanBlock extends _AbstractCoralPlantBlock {
     }
 }
 export class _CoralFanBlock extends _DeadCoralFanBlock {
-    _parent: _Block;
+    public _parent: _Block;
     constructor(parent: _Block, prop: _BlockProperties) {
         super(prop);
         this._parent = parent;
@@ -981,11 +975,11 @@ export class _CoralFanBlock extends _DeadCoralFanBlock {
 export class _DeadCoralWallFanBlock extends _DeadCoralFanBlock {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2;
+        this._states = 4 * 2;
     }
 }
 export class _CoralWallFanBlock extends _DeadCoralWallFanBlock {
-    _parent: _Block;
+    public _parent: _Block;
     constructor(parent: _Block, prop: _BlockProperties) {
         super(prop);
         this._parent = parent;
@@ -994,7 +988,7 @@ export class _CoralWallFanBlock extends _DeadCoralWallFanBlock {
 export class _SeaPickleBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2;
+        this._states = 4 * 2;
     }
 }
 export class _BreakableBlock extends _Block {
@@ -1016,7 +1010,7 @@ export class _BambooSaplingBlock extends _Block {
 export class _BambooBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 2*3*2;
+        this._states = 2 * 3 * 2;
     }
 }
 export class _BubbleColumnBlock extends _Block {
@@ -1028,7 +1022,7 @@ export class _BubbleColumnBlock extends _Block {
 export class _ScaffoldingBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 8*2*2;
+        this._states = 8 * 2 * 2;
     }
 }
 export class _LoomBlock extends _Block {
@@ -1040,7 +1034,7 @@ export class _LoomBlock extends _Block {
 export class _BarrelBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 6*2;
+        this._states = 6 * 2;
     }
 }
 export class _SmokerBlock extends _AbstractFurnaceBlock {
@@ -1066,13 +1060,13 @@ export class _FletchingTableBlock extends _Block {
 export class _GrindstoneBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 3*4;
+        this._states = 3 * 4;
     }
 }
 export class _LecternBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*2*2;
+        this._states = 4 * 2 * 2;
     }
 }
 export class _SmithingTableBlock extends _Block {
@@ -1089,7 +1083,7 @@ export class _StonecutterBlock extends _Block {
 export class _BellBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 4*4;
+        this._states = 4 * 4;
     }
 }
 export class _LanternBlock extends _Block {
@@ -1101,7 +1095,7 @@ export class _LanternBlock extends _Block {
 export class _CampfireBlock extends _Block {
     constructor(prop: _BlockProperties) {
         super(prop);
-        this._states = 2*2*2*4;
+        this._states = 2 * 2 * 2 * 4;
     }
 }
 export class _SweetBerryBushBlock extends _BushBlock {
