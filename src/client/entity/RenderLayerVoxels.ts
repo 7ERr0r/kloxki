@@ -18,8 +18,10 @@ export class _RenderLayerVoxels {
     public _dz: number;
     public _texture: _KlockiTexture;
     public _cachedBuf: Uint8Array;
+    public _divisions: number;
 
-    constructor(klocki: _Klocki, x: number, y: number, z: number, dx: number, dy: number, dz: number, texture: _KlockiTexture) {
+    constructor(klocki: _Klocki, divisions: number, x: number, y: number, z: number, dx: number, dy: number, dz: number, texture: _KlockiTexture) {
+        this._divisions = divisions;
         this._x = x;
         this._y = y;
         this._z = z;
@@ -73,7 +75,6 @@ export class _RenderLayerVoxels {
         vx = 0;
         poormacro();
 
-        const divisions = 16;
         const delta = 1 / divisions;
         vz = 0;
         fixtexx = 0;
@@ -171,7 +172,7 @@ export class _RenderLayerVoxels {
         wr._putPrepared(this._cachedBuf);
         const matID = wr._klocki._textureManager._pushGroupMatrix(m);
 
-        wr._matMany(matID, (2 + 16 * 4) * 4);
+        wr._matMany(matID, (2 + this._divisions * 4) * 4);
 
     }
 }

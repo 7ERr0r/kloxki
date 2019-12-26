@@ -14,6 +14,7 @@ export class _RenderPlayer extends _RenderEntity {
     public static _armLeftMatrix: mat4 = mat4.create();
     public static _armRightMatrix: mat4 = mat4.create();
     public static _wingLeftMatrix: mat4 = mat4.create();
+    public static _wingRightMatrix: mat4 = mat4.create();
 
     public _render(entity: _KlockiEntityPlayer) {
         super._render(entity);
@@ -74,8 +75,46 @@ export class _RenderPlayer extends _RenderEntity {
         entity._armLeftBox!._renderAt(wr, _RenderPlayer._armLeftMatrix);
         entity._armLeftOBox!._renderAt(wr, _RenderPlayer._armLeftMatrix);
 
-        mat4.translate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._chestMatrix, [-1, 12 / 16 + 12 / 16, -1]);
-        
-        entity._wingLeft!._renderAt(wr, _RenderPlayer._wingLeftMatrix);
+        if(entity._wingLoaded){
+            let wingArg = (Date.now())/1000;
+            // translate to the center of body, but due to legacy spaghetti code...
+
+            for(let wing = 0; wing<2; wing++){
+                let wingSide = -wing*2+1;
+                mat4.translate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._chestMatrix, [-wingSide*2/16, -12 / 16, 2/16]);
+                
+                
+                let weirdScale = 1.5*1.25;
+                
+                mat4.rotate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, (90/180)*Math.PI, [1.0, 0.0, 0.0]);
+                mat4.rotateZ(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, Math.PI/2);
+                
+                let rotPx = 2/16;
+                let rotPy = -wingSide*2/16;
+                let rotPz = 0/16;
+                mat4.translate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, [rotPx, rotPy, rotPz]);
+                //mat4.translate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, [wingSide*-2 * 0.0625, wingSide*2 * 0.0625, 2 * 0.0625]);
+                
+                mat4.rotateZ(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, wingSide*((24.0 + Math.sin(wingArg / 2)*20)/180)*Math.PI);
+                
+                mat4.rotate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, (100/180)*Math.PI, [0.0, 1.0, 0.0]);
+
+                mat4.translate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, [-rotPx, -rotPy, -rotPz]);
+
+                mat4.scale(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, [weirdScale, weirdScale, weirdScale]);
+                
+
+                
+                mat4.rotateX(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, Math.PI);
+                mat4.translate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, [0, 0, -1]);
+                
+                
+                mat4.translate(_RenderPlayer._wingLeftMatrix, _RenderPlayer._wingLeftMatrix, [0, -1/64, 0]);
+                
+
+                let wingMesh = wing == 0 ? entity._wingLeft : entity._wingRight;
+                wingMesh!._renderAt(wr, _RenderPlayer._wingLeftMatrix);
+            }
+        }
     }
 }

@@ -32,6 +32,7 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
     public _armLeftBox: _RenderBox | undefined;
     public _armLeftOBox: _RenderBox | undefined;
     public _wingLeft: _RenderLayerVoxels | undefined;
+    public _wingRight: _RenderLayerVoxels | undefined;
     public _idleTime: number;
 
     constructor(klocki: _Klocki) {
@@ -100,8 +101,11 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
             this._skinLoaded = true;
         }, false);
 
-        const wingInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/item/stone_pickaxe.png", null, (tex: _KlockiTexture) => {
-            this._wingLeft = new _RenderLayerVoxels(klocki, 0, 1, 0, 1, 1 / 16, 1, tex);
+
+        const wingInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/wings/wings3.png", null, (tex: _KlockiTexture) => {
+            let divisions = 32;
+            this._wingLeft = new _RenderLayerVoxels(klocki, divisions, 0, 0, 0, 1, 1 / divisions, 1, tex);
+            this._wingRight = new _RenderLayerVoxels(klocki, divisions, 0, 0, 0, 1, 1 / divisions, 1, tex);
             this._wingLoaded = true;
         }, false);
         this._skinInfo = skinInfo;
