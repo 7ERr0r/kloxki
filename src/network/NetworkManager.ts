@@ -9,18 +9,26 @@ import { _v47 } from './registry/v47';
 import { _v480 } from './registry/v480';
 
 export class _NetworkManager {
-    public readonly _w: Worker;
+    public _w: Worker | null;
     public _packetListener: _INetHandler | null = null;
     public _writeArrayBuffer: ArrayBuffer;
     public _writePacketBuffer: _PacketBuffer;
     public _packetRegistry: _PacketRegistry;
     public _protocol: number;
     public _requestPackets: boolean;
+    public _createdPromise: Promise<void>;
+    
     constructor(klocki: _Klocki, url: string) {
-        this._w = new Worker("network.js");
-        this._w.onerror = (event: ErrorEvent) => this._onError(event);
-        this._w.onmessage = (event: MessageEvent) => this._onMessage(event);
-        this._w.postMessage(url);
+        this._w = null;
+        let f = fetch(klocki._assetURI+"network.js");
+        this._createdPromise = f.then((r)=> r.blob())
+        .then((blob)=>{
+            this._w = new Worker(window.URL.createObjectURL(blob))
+            this._w.onerror = (event: ErrorEvent) => this._onError(event);
+            this._w.onmessage = (event: MessageEvent) => this._onMessage(event);
+            this._w.postMessage(url);
+        });
+        
        
         this._writeArrayBuffer = new ArrayBuffer(2 * 1024 * 1024);
         this._writePacketBuffer = new _PacketBuffer(this._writeArrayBuffer);
@@ -55,11 +63,14 @@ export class _NetworkManager {
         const r: number = buff._getReaderIndex();
         const w: number = buff._getWriterIndex();
         const written: ArrayBuffer = this._writeArrayBuffer.slice(r, w);
-        this._w.postMessage(written, [written]);
+        if(this._w != null){
+            this._w.postMessage(written, [written]);
+        }
     }
     public _close(): void {
-
-        this._w.postMessage("string that is not arraybuffer");
+        if(this._w != null){
+            this._w.postMessage("string that is not arraybuffer");
+        }
     }
     public _onError(event: ErrorEvent): void {
         console.log(event);
@@ -106,7 +117,9 @@ export class _NetworkManager {
     }
     public _idleCallback() {
         if (this._requestPackets) {
-            this._w.postMessage(0);
+            if(this._w != null){
+                this._w.postMessage(0);
+            }
         }
     }
 }

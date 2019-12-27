@@ -22,6 +22,7 @@ export class _RenderPlayer extends _RenderEntity {
         // console.log("rendering player");
         const partial = this._klocki._getPartialTicks();
         const matEntity = _RenderEntity._positionMatrix;
+        const thickness = entity._armThickness;
         mat4.scale(matEntity, matEntity, [playerScale, playerScale, playerScale]);
 
         // if(Math.floor(Math.random()*100) == 0){
@@ -59,7 +60,7 @@ export class _RenderPlayer extends _RenderEntity {
             iTime -= Math.PI * 2;
         }
 
-        mat4.translate(_RenderPlayer._armRightMatrix, _RenderPlayer._positionMatrix, [-6 / 16, 12 / 16 + 12 / 16, 0]);
+        mat4.translate(_RenderPlayer._armRightMatrix, _RenderPlayer._positionMatrix, [-(4+thickness/2) / 16, 12 / 16 + 12 / 16, 0]);
         mat4.rotateZ(_RenderPlayer._armRightMatrix, _RenderPlayer._armRightMatrix, (Math.cos(iTime) * 0.06) - 0.06);
         const rightRotX = (Math.sin(limbSwing * 0.6662 + Math.PI) * limbSwingAmount) - ((7.5 - Math.abs(armTime - 7.5)) / 7.5);
         mat4.rotateX(_RenderPlayer._armRightMatrix, _RenderPlayer._armRightMatrix, rightRotX);
@@ -67,7 +68,7 @@ export class _RenderPlayer extends _RenderEntity {
         entity._armRightBox!._renderAt(wr, _RenderPlayer._armRightMatrix);
         entity._armRightOBox!._renderAt(wr, _RenderPlayer._armRightMatrix);
 
-        mat4.translate(_RenderPlayer._armLeftMatrix, _RenderPlayer._positionMatrix, [6 / 16, 12 / 16 + 12 / 16, 0]);
+        mat4.translate(_RenderPlayer._armLeftMatrix, _RenderPlayer._positionMatrix, [(4+thickness/2) / 16, 12 / 16 + 12 / 16, 0]);
         mat4.rotateZ(_RenderPlayer._armLeftMatrix, _RenderPlayer._armLeftMatrix, -(Math.cos(iTime) * 0.06) + 0.06);
         const leftRotX = (Math.sin(limbSwing * 0.6662) * limbSwingAmount);
         mat4.rotateX(_RenderPlayer._armLeftMatrix, _RenderPlayer._armLeftMatrix, leftRotX);

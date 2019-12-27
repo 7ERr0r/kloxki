@@ -47,6 +47,7 @@ export class _Klocki {
 
     public _protocol: number = 498;
     public _assetsVersion: string = "1.14";
+    public _assetURI: string = "";
     public _gameSettings: _GameSettings;
     public _display: _Display;
     public _theWorld: _WorldClient | null = null;
@@ -113,15 +114,23 @@ export class _Klocki {
     public _sectionsPerChunkDistance: number;
 
     private readonly _isGamePaused: boolean = false;
+    public _debugInfo: boolean;
+    public fov: number;
+    public defaultArmThickness: number;
+    public showUI: boolean;
     
-    constructor() {
+    constructor(domID: string, resizeGetter: Function) {
         this._gameSettings = new _GameSettings();
         this._gameSettings._loadOptions();
-        this._display = new _Display();
+        this._display = new _Display(domID, resizeGetter);
         this._fpsDeque = new _Deque<number>();
         this._scheduledTasks = new _Deque<Function>();
         this._frustum = new _Frustum();
+        this.fov = 70;
+        this.showUI = true;
+        this.defaultArmThickness = 4;
         this._smoothCam = false;
+        this._debugInfo = false;
         this._yawSmoothSpeed = 0;
         this._pitchSmoothSpeed = 0;
         this._zoomed = false;
@@ -172,7 +181,7 @@ export class _Klocki {
             return eval(s);
         };
 
-        this._run();
+        //this._run();
     }
 
     public static _randomString(length: number) {
@@ -192,7 +201,7 @@ export class _Klocki {
     public _getPartialTicks() {
         return this._timer._renderPartialTicks;
     }
-    public _run(): void {
+    public run(): void {
         this._startGame();
         
     }
@@ -460,7 +469,7 @@ export class _Klocki {
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        const fieldOfView = (this._zoomed ? 20 : 70) * Math.PI / 180;
+        const fieldOfView = (this._zoomed ? 20 : this.fov) * Math.PI / 180;
         const aspect = this._display._width / this._display._height;
         const zNear = 0.05;
         const zFar = 1000;
@@ -480,8 +489,11 @@ export class _Klocki {
         let debugBlock3 = "";
         if (this._theWorld !== null && this._theWorld._thePlayer !== null) {
             const thePlayer = this._theWorld._thePlayer;
-
-            mat4.rotate(modelViewMatrix, modelViewMatrix, thePlayer._pitch, [1, 0, 0]);
+            if(this._personViewMode == 2){
+                mat4.rotate(modelViewMatrix, modelViewMatrix, -thePlayer._pitch, [1, 0, 0]);
+            }else{
+                mat4.rotate(modelViewMatrix, modelViewMatrix, thePlayer._pitch, [1, 0, 0]);
+            }
             mat4.rotate(modelViewMatrix, modelViewMatrix, thePlayer._yaw + Math.PI, [0, 1, 0]);
 
             const rx = thePlayer._renderX(this._timer._renderPartialTicks);
@@ -527,8 +539,11 @@ export class _Klocki {
                 mat4.translate(modelViewMatrix, modelViewMatrix, [viewx * 4, viewy * 4, viewz * 4]);
             }
             if (this._personViewMode == 2) {
-                // mat4.translate(modelViewMatrix, modelViewMatrix, [-viewx*3, -viewy*3, -viewz*3]);
-                // :/
+                
+                mat4.translate(modelViewMatrix, modelViewMatrix, [viewx*4, viewy*4, viewz*4]);
+                mat4.rotateY(modelViewMatrix, modelViewMatrix, Math.PI);
+                
+                
             }
 
             mat4.translate(modelViewMatrix, modelViewMatrix, [-rx, -ry, -rz]);
@@ -567,7 +582,9 @@ export class _Klocki {
                 const sz = blockPos[2] - delta;
                 const s = 1 + 2 * delta;
                 
-                this._lineRenderer._drawOutline(sx, sy, sz, s, s, s, 0xFF000000);
+                if(this.showUI){
+                    this._lineRenderer._drawOutline(sx, sy, sz, s, s, s, 0xFF000000);
+                }
                 
             }
         }
@@ -642,30 +659,33 @@ export class _Klocki {
 
         this._calcFps();
         const fr = this._fontRenderer;
-        fr._drawString("\xa7a" + this._fpsDeque._size() + "fps", 1, 1, 0xFFFFFFFF, true);
-        // fr._drawString("\xa7a" + this._mmpsDeque.length + "mmps", 1, 11, 0xffffffff, true)
-        // fr._drawString("\xa7a" + lastFrameTime + "ms", 1, 21, 0xffffffff, true)
-
-        // fr._drawString("\xa7a" + this._controls._lastOrientA+" "+this._controls._lastOrientG, 1, 11, 0xffffffff, true)
-        
-        if (this._theWorld) {
-            const thePlayer = this._theWorld._thePlayer!;
-            fr._drawString("\xa7eYaw:  " + Math.round((thePlayer._yaw * (180 / Math.PI)) * 10) / 10, 1, 11, 0xFFFFFFFF, true);
-            fr._drawString("\xa7ePitch:" + Math.round((thePlayer._pitch * (180 / Math.PI)) * 10) / 10, 1, 21, 0xFFFFFFFF, true);
-            fr._drawString("\xa7eX:" + Math.round(thePlayer._posX * 10) / 10, 1, 31, 0xFFFFFFFF, true);
-            fr._drawString("\xa7eY:" + Math.round(thePlayer._posY * 10) / 10, 1, 41, 0xFFFFFFFF, true);
-            fr._drawString("\xa7eZ:" + Math.round(thePlayer._posZ * 10) / 10, 1, 51, 0xFFFFFFFF, true);
-            fr._drawString("\xa7eVRAM:" + Math.round((_OriginRenderOcTree._usedVideoMemory / (1024 * 1024)) * 10) / 10, 1, 61, 0xFFFFFFFF, true);
-            // fr._
-            fr._drawString("\xa7eBlock:" + debugBlock, this._display._guiWidth - 190, 1, 0xFFFFFFFF, true);
-            fr._drawString("\xa7e" + debugBlock2, this._display._guiWidth - 190, 11, 0xFFFFFFFF, true);
-            fr._drawString("\xa7e" + debugBlock3, this._display._guiWidth - 190, 21, 0xFFFFFFFF, true);
-            fr._drawString("\xa7echunks: " + this._theWorld._loadedUglyLimitedHeightChunks.size, this._display._guiWidth - 190, 41, 0xFFFFFFFF, true);
-            
+       
+        if(this._debugInfo){
+            fr._drawString("\xa7a" + this._fpsDeque._size() + "fps", 1, 1, 0xFFFFFFFF, true);
+            // fr._drawString("\xa7a" + this._mmpsDeque.length + "mmps", 1, 11, 0xffffffff, true)
+            // fr._drawString("\xa7a" + lastFrameTime + "ms", 1, 21, 0xffffffff, true)
+    
+            // fr._drawString("\xa7a" + this._controls._lastOrientA+" "+this._controls._lastOrientG, 1, 11, 0xffffffff, true)
+            if (this._theWorld) {
+                const thePlayer = this._theWorld._thePlayer!;
+                fr._drawString("\xa7eYaw:  " + Math.round((thePlayer._yaw * (180 / Math.PI)) * 10) / 10, 1, 11, 0xFFFFFFFF, true);
+                fr._drawString("\xa7ePitch:" + Math.round((thePlayer._pitch * (180 / Math.PI)) * 10) / 10, 1, 21, 0xFFFFFFFF, true);
+                fr._drawString("\xa7eX:" + Math.round(thePlayer._posX * 10) / 10, 1, 31, 0xFFFFFFFF, true);
+                fr._drawString("\xa7eY:" + Math.round(thePlayer._posY * 10) / 10, 1, 41, 0xFFFFFFFF, true);
+                fr._drawString("\xa7eZ:" + Math.round(thePlayer._posZ * 10) / 10, 1, 51, 0xFFFFFFFF, true);
+                fr._drawString("\xa7eVRAM:" + Math.round((_OriginRenderOcTree._usedVideoMemory / (1024 * 1024)) * 10) / 10, 1, 61, 0xFFFFFFFF, true);
+                // fr._
+                fr._drawString("\xa7eBlock:" + debugBlock, this._display._guiWidth - 190, 1, 0xFFFFFFFF, true);
+                fr._drawString("\xa7e" + debugBlock2, this._display._guiWidth - 190, 11, 0xFFFFFFFF, true);
+                fr._drawString("\xa7e" + debugBlock3, this._display._guiWidth - 190, 21, 0xFFFFFFFF, true);
+                fr._drawString("\xa7echunks: " + this._theWorld._loadedUglyLimitedHeightChunks.size, this._display._guiWidth - 190, 41, 0xFFFFFFFF, true);
+                
+            }
         }
-
-        this._guiChat._render();
-        this._guiOverlayEquipment._render();
+        if(this.showUI){
+            this._guiChat._render();
+            this._guiOverlayEquipment._render();
+        }
 
         uir._endAndUpload(this._shaderUI);
 
@@ -697,6 +717,12 @@ export class _Klocki {
     }
     public _toggleSmoothCam() {
         this._smoothCam = !this._smoothCam;
+    }
+    public _toggleDebugInfo() {
+        this._debugInfo = !this._debugInfo;
+    }
+    public _toggleUI() {
+        this.showUI = !this.showUI;
     }
     public _startGameSecond() {
         this._modelRegistry = new _ModelRegistry(this);
@@ -776,10 +802,12 @@ export class _Klocki {
     public connectSocket(protoVersion: number, wsUrl: string) {
         this._protocol = protoVersion;
         if (!this._networkManager) {
-            this._networkManager = new _NetworkManager(this, wsUrl);
-            this._networkManager._packetListener = new _NetHandlerLoginClient(this);
-            this._networkManager._sendPacket(new _CHandshake(this._protocol, "klocki.pl", 25565, _EnumConnectionState._Login));
-            this._networkManager._sendPacket(new _CPacketLoginStart("Klocek_" + (this._controls._isMobile ? "m_" : "") + _Klocki._randomString(6)));
+            let nm = this._networkManager = new _NetworkManager(this, wsUrl);
+            nm._createdPromise.then(()=>{
+                nm._packetListener = new _NetHandlerLoginClient(this);
+                nm._sendPacket(new _CHandshake(this._protocol, "klocki.pl", 25565, _EnumConnectionState._Login));
+                nm._sendPacket(new _CPacketLoginStart("Klocek_" + (this._controls._isMobile ? "m_" : "") + _Klocki._randomString(6)));
+            });
 
         }
     }
@@ -803,7 +831,7 @@ export class _Klocki {
         this._worldRendererMobs = new _WorldRenderer(this, 32 * 1024 * 1024, false, true);
         this._worldRendererMobsHelper = new _WorldRenderer(this, 0.5 * 1024 * 1024, false, true);
 
-        fetch("assets/indexes/" + this._assetsVersion + ".json").then(response => {
+        fetch(this._assetURI+"assets/indexes/" + this._assetsVersion + ".json").then(response => {
             return response.json();
         }).then(assetsJson => {
             this._assetsJson = assetsJson;
@@ -817,7 +845,7 @@ export class _Klocki {
             }
             const soundsFilePath = _Klocki._hashToPath(soundsFileHash);
 
-            fetch(soundsFilePath).then(response => {
+            fetch(this._assetURI+soundsFilePath).then(response => {
                 return response.json();
             }).then(soundsJson => {
                 this._soundsJson = soundsJson;
@@ -825,6 +853,9 @@ export class _Klocki {
             });
 
         });
+    }
+    public setAssetURI(uri: string){
+        this._assetURI = uri;
     }
 
 }

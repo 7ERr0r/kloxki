@@ -135,7 +135,7 @@ export class _Controls {
     }
     public _keydown(e: KeyboardEvent) {
         if (this._mouseLocked) {
-            if (e.ctrlKey || e.key === "F3" || e.key === "F5" || e.key === "F8" || e.key == "Tab" || e.key == "Control" || e.key == "Shift") {
+            if (e.ctrlKey || e.key == ' ' || e.key === "F1" || e.key === "F3" || e.key === "F5" || e.key === "F8" || e.key == "Tab" || e.key == "Control" || e.key == "Shift") {
                 e.preventDefault();
                 e.stopPropagation();
                 // return false;
@@ -156,12 +156,19 @@ export class _Controls {
         if (was) {
             return;
         }
+        if (key == 'f1') {
+            this._klocki._toggleUI();
+        }
+        if (key == 'f3') {
+            this._klocki._toggleDebugInfo();
+        }
         if (key == 'f5') {
             this._klocki._cyclePersonView();
         }
         if (key == 'f8') {
             this._klocki._toggleSmoothCam();
         }
+
         if (key == 'c') {
             this._klocki._yawSmoothSpeed = 0;
             this._klocki._pitchSmoothSpeed = 0;

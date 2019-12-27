@@ -76,15 +76,16 @@ export class _RenderList {
                 const drawCount = (<number>arr[1]);
                 const glBuf = (<WebGLBuffer>arr[2]);
                 // s[0]._drawSelf(shaderWorld, s._origin._offsetarr!)
+                if(glBuf != null){
+                    gl.bindBuffer(gl.ARRAY_BUFFER, glBuf);
+                    baker._setupPointers(shaderWorld);
+                    // gl.uniform4fv(shaderWorld._uniformLocations._offset, off);
+                    shaderWorld._updateOffset(s._origin._offsetarr!);
+                    // gl.drawArrays(gl.TRIANGLES, 0, this._drawCount);
                 
-                gl.bindBuffer(gl.ARRAY_BUFFER, glBuf);
-                baker._setupPointers(shaderWorld);
-                // gl.uniform4fv(shaderWorld._uniformLocations._offset, off);
-                shaderWorld._updateOffset(s._origin._offsetarr!);
-                // gl.drawArrays(gl.TRIANGLES, 0, this._drawCount);
-            
-                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuf);
-                gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_INT, 0);
+                    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuf);
+                    gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_INT, 0);
+                }
             }
         }
 

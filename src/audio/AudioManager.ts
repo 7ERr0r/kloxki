@@ -72,7 +72,7 @@ export class _AudioManager {
 
             const request = new Request(resourcePath);
 
-            fetch(request).then(function (response) {
+            fetch(this._klocki._assetURI+request).then(function (response) {
                 return response.arrayBuffer();
             }).then((buffer) => {
 

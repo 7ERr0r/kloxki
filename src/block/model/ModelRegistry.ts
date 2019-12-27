@@ -19,7 +19,7 @@ export class _ModelRegistry {
             guiChat._appendMessage({ text: "Loading model " + name });
         }
 
-        return fetch("assets/" + _Klocki._forbiddenWord + "/models/" + name + ".json")
+        return fetch(this._klocki._assetURI+"assets/" + _Klocki._forbiddenWord + "/models/" + name + ".json")
             .then(function (response) {
                 if (response.status !== 200) {
                     return null;

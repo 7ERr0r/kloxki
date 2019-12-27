@@ -7,14 +7,16 @@ export class _Display {
     public _guiHeight: number = 0;
     public _guiScale: number = 2;
     public _indexBuffer!: WebGLBuffer;
+    public _resizeGetter: Function;
 
-    constructor() {
-        const canvas: HTMLElement | null = document.getElementById('klockicanvas');
+    constructor(domID: string, resizeGetter: Function) {
+        this._resizeGetter = resizeGetter;
+        const canvas: HTMLElement | null = document.getElementById(domID);
         if (!canvas) {
-            throw new Error('#klockicanvas not found');
+            throw new Error('#'+domID+' not found');
         }
         if (!(canvas instanceof HTMLCanvasElement)) {
-            throw new Error('#klockicanvas is not a canvas');
+            throw new Error('#'+domID+' is not a canvas');
         }
         const attributes = { antialias: false, translucent: false };
         const webgl = canvas.getContext('webgl2', attributes) || canvas.getContext('experimental-webgl2', attributes);
@@ -33,8 +35,9 @@ export class _Display {
 
     }
     public _resize(): void {
-        this._width = window.innerWidth;
-        this._height = window.innerHeight;
+        let resizeInfo = this._resizeGetter();
+        this._width = resizeInfo.width;
+        this._height = resizeInfo.height;
 
         this._guiWidth = this._width / this._guiScale;
         this._guiHeight = this._height / this._guiScale;
@@ -44,8 +47,7 @@ export class _Display {
 
         this._canvas.width = this._width;
         this._canvas.height = this._height;
-        // this._canvas.style.width = this._width+"px";
-        // this._canvas.style.height = this._height+"px";
+
         this._gl.viewport(0, 0, this._width, this._height);
     }
 

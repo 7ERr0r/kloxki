@@ -34,11 +34,14 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
     public _wingLeft: _RenderLayerVoxels | undefined;
     public _wingRight: _RenderLayerVoxels | undefined;
     public _idleTime: number;
+    public _armThickness: number;
 
     constructor(klocki: _Klocki) {
         super(klocki);
         this._width = 0.6;
         this._height = 1.8;
+
+        this._armThickness = klocki.defaultArmThickness;
 
         this._skinLoaded = false;
         this._wingLoaded = false;
@@ -72,12 +75,18 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
             ];
             const limbBoxes = this._limbBoxes = new Array<_RenderBox>(8);
             for (let i = 0; i < 4; i++) {
-                const off = limbOffsets[i];
-                const litex = tex._stdBox64(off[0] + 4, off[1] + 4, 4, 12, 4);
-                const lotex = tex._stdBox64(off[2] + 4, off[3] + 4, 4, 12, 4);
+                let arms = i >= 2;
+                let thichness = arms?this._armThickness:4;
 
-                limbBoxes[i * 2] = new _RenderBox(klocki, -2 / 16, -12 / 16, -2 / 16, 4 / 16, 12 / 16, 4 / 16, litex);
-                limbBoxes[i * 2 + 1] = new _RenderBox(klocki, -2.2 / 16, -12.2 / 16, -2.2 / 16, 4.4 / 16, 12.4 / 16, 4.4 / 16, lotex);
+                const off = limbOffsets[i];
+                // i inside, o outside
+                const litex = tex._stdBox64(off[0] + 4, off[1] + 4, thichness, 12, 4);
+                const lotex = tex._stdBox64(off[2] + 4, off[3] + 4, thichness, 12, 4);
+
+                
+
+                limbBoxes[i * 2] = new _RenderBox(klocki, -(thichness/2) / 16, -12 / 16, -2 / 16, thichness / 16, 12 / 16, 4 / 16, litex);
+                limbBoxes[i * 2 + 1] = new _RenderBox(klocki, -(thichness+0.4)/2 / 16, -12.2 / 16, -2.2 / 16, (thichness+0.4) / 16, 12.4 / 16, 4.4 / 16, lotex);
 
             }
 
@@ -107,7 +116,7 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
             this._wingLeft = new _RenderLayerVoxels(klocki, divisions, 0, 0, 0, 1, 1 / divisions, 1, tex);
             this._wingRight = new _RenderLayerVoxels(klocki, divisions, 0, 0, 0, 1, 1 / divisions, 1, tex);
             this._wingLoaded = true;
-        }, false);
+        }, true);
         this._skinInfo = skinInfo;
         this._wingInfo = wingInfo;
     }

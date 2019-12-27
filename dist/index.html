@@ -26,7 +26,12 @@
         imported.addEventListener("load", ()=>{
             console.log("loaded main klocki")
             setTimeout(()=>{
-                klocki.connectSocket(498, `wss://`+window.location.hostname+`:55565/ws`)
+                window.klocki = new Klocki("klockicanvas", ()=>{return {width: window.innerWidth, height: window.innerHeight}});
+                klocki.defaultArmThickness = 3;
+
+                klocki.run();
+                klocki.connectSocket(498, `wss://`+window.location.hostname+`:55565/ws`);
+
             }, 1);
         });
         document.head.appendChild(imported);

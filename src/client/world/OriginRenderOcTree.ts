@@ -389,7 +389,6 @@ export class _OriginRenderOcTree {
     }
 
     public _addToLastSectionsByDistanceSquared(pos: vec3, bake: boolean, draw: boolean) {
-            // "use asm";
         const klocki = this._klocki;
         const dx = (klocki._renderX - pos[0]) | 0;
         const dy = (klocki._renderY - pos[1]) | 0;
