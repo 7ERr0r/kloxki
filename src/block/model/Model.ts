@@ -75,7 +75,7 @@ export class _ModelElement {
 }
 
 export class _BlockModel {
-    public _parent!: string;
+    public _parent: string | null;
     public _parentModel: _BlockModel | null;
     public _selfElements: _ModelElement[];
     public _selfTextures: Map<string, string>;
@@ -83,6 +83,7 @@ export class _BlockModel {
     public _elements: _ModelElement[];
     public constructor() {
         this._parentModel = null;
+        this._parent = null;
         this._selfTextures = new Map<string, string>();
         this._textures = new Map<string, string>();
         this._elements = [];
@@ -92,7 +93,8 @@ export class _BlockModel {
     public static _load(mjson: any): _BlockModel {
         const m = new _BlockModel();
 
-        m._parent = mjson.parent;
+
+        m._parent = typeof(mjson.parent) === 'string' ? mjson.parent : null;
         // m._selfTextures =
 
         const texs = mjson.textures;

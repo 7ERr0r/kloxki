@@ -64,9 +64,14 @@ export class _BlockRegistry {
     public _postRegister() {
         for (let i = 0; i < this._currentNameOrderIndex; i++) {
             const b = this._blocksByNameOrder[i];
-            this._modelRegistry._loadModel("block/" + b._name).then(function(model: _BlockModel) {
-                b._model = model;
-            });
+            try {
+                this._modelRegistry._loadModel("block/" + b._name).then(function(model: _BlockModel) {
+                    console.log("loaded model "+b._name)
+                    b._model = model;
+                });
+            }catch(e){
+                console.log("can't load model "+b._name, e)
+            }
         }
         // this._makeGlobalPalette();
 

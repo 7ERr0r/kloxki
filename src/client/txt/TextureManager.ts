@@ -169,9 +169,11 @@ export class _TextureManager {
     }
 
     private _downloadTextureFromURL(url: string, precallback: Function | null, postcallback: Function | null, fixedAlias: boolean, textureInfo: _TextureInfo): void {
-        fetch(this._klocki._assetURI+url).then(async (v: Response) => {
+        const realURL = this._klocki._assetURI+url;
+        console.log("fetch?", realURL);
+        fetch(this._klocki._assetURI+url).then((v: Response) => {
             if (!v.ok) {
-                throw Error(v.statusText);
+                throw new Error("texture fetch: "+v.statusText);
             }
 
             return v.arrayBuffer();

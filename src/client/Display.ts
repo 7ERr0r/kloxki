@@ -8,9 +8,14 @@ export class _Display {
     public _guiScale: number = 2;
     public _indexBuffer!: WebGLBuffer;
     public _resizeGetter: Function;
+    public _translucent: boolean;
 
-    constructor(domID: string, resizeGetter: Function) {
-        this._resizeGetter = resizeGetter;
+    constructor(domID: string, attributes: any) {
+        if(attributes && attributes.resizeGetter instanceof Function){
+            this._resizeGetter = attributes.resizeGetter
+        }else{
+            this._resizeGetter = ()=>({ width: window.innerWidth, height: window.innerHeight })
+        }
         const canvas: HTMLElement | null = document.getElementById(domID);
         if (!canvas) {
             throw new Error('#'+domID+' not found');
@@ -18,8 +23,15 @@ export class _Display {
         if (!(canvas instanceof HTMLCanvasElement)) {
             throw new Error('#'+domID+' is not a canvas');
         }
-        const attributes = { antialias: false, translucent: false };
-        const webgl = canvas.getContext('webgl2', attributes) || canvas.getContext('experimental-webgl2', attributes);
+        const glAttributes = { antialias: false, translucent: false };
+        if(attributes && typeof attributes.antialias !== "undefined"){
+            glAttributes.antialias = attributes.antialias
+        }
+        if(attributes && typeof attributes.translucent !== "undefined"){
+            glAttributes.translucent = attributes.translucent
+        }
+        this._translucent = glAttributes.translucent;
+        const webgl = canvas.getContext('webgl2', glAttributes) || canvas.getContext('experimental-webgl2', glAttributes);
         if (!(webgl instanceof WebGL2RenderingContext)) {
             alert('WebGL2 is not supported in your browser');
             throw new Error('WebGL2 not supported');

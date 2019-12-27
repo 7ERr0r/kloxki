@@ -119,10 +119,10 @@ export class _Klocki {
     public defaultArmThickness: number;
     public showUI: boolean;
     
-    constructor(domID: string, resizeGetter: Function) {
+    constructor(domID: string, optionals: any) {
         this._gameSettings = new _GameSettings();
         this._gameSettings._loadOptions();
-        this._display = new _Display(domID, resizeGetter);
+        this._display = new _Display(domID, optionals);
         this._fpsDeque = new _Deque<number>();
         this._scheduledTasks = new _Deque<Function>();
         this._frustum = new _Frustum();
@@ -456,7 +456,7 @@ export class _Klocki {
         // const attachmentPoint = gl.COLOR_ATTACHMENT0;
        // gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, this._blurTexture, 0);
 
-        gl.clearColor(0.6, 0.7, 1, 1);
+        gl.clearColor(0.6, 0.7, 1, this._display._translucent?0:1);
         gl.clearDepth(1);
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);

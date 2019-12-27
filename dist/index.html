@@ -26,9 +26,8 @@
         imported.addEventListener("load", ()=>{
             console.log("loaded main klocki")
             setTimeout(()=>{
-                window.klocki = new Klocki("klockicanvas", ()=>{return {width: window.innerWidth, height: window.innerHeight}});
+                window.klocki = new Klocki("klockicanvas", {});
                 klocki.defaultArmThickness = 3;
-
                 klocki.run();
                 klocki.connectSocket(498, `wss://`+window.location.hostname+`:55565/ws`);
 
