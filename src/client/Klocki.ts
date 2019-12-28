@@ -97,8 +97,8 @@ export class _Klocki {
     public _zoomed: boolean;
     public _entityRenders!: _EntityRenders;
     public _reuseGlBuffers: WebGLBuffer[][];
-    public _bakeSectionsByDistanceSquared: (_OriginRenderOcTree | number)[][];
-    public _sectionsByDistanceSquared: (any[] | number)[][];
+    public _bakeSectionsByDistanceSquared: ((_OriginRenderOcTree | number)[] | null)[];
+    public _sectionsByDistanceSquared: ((any | number)[] | null)[];
     public _glBuffersEntities!: WebGLBuffer[];
     public _glBuffersEntitiesIndex: number;
     public _glBuffersEntitiesCount: number;
@@ -147,16 +147,25 @@ export class _Klocki {
         this._reuseGlBuffersIndexRemover = 1;
         this._reuseGlBuffersIndexAdder = 0;
         const sectionsLen = Math.pow(48, 2);
-        const bakeSec = this._bakeSectionsByDistanceSquared = new Array(sectionsLen);
-        const sec = this._sectionsByDistanceSquared = new Array(sectionsLen);
-        const secsPerDistance = this._sectionsPerChunkDistance = 2000;
+        this._bakeSectionsByDistanceSquared = new Array(sectionsLen);
+        this._sectionsByDistanceSquared = new Array(sectionsLen);
+        this._sectionsPerChunkDistance = 2000;
+
+        const sec = this._sectionsByDistanceSquared;
+        const bakeSec = this._bakeSectionsByDistanceSquared;
         for (let i = 0; i < bakeSec.length; i++) {
-            bakeSec[i] = new Array(secsPerDistance + 1);
-            bakeSec[i][0] = 0; // first element is amount of sections stored last render
+            bakeSec[i] = null;
+            sec[i] = null;
+        }
+
+        /*
+        for (let i = 0; i < bakeSec.length; i++) {
+
 
             sec[i] = new Array(secsPerDistance + 1);
             sec[i][0] = 0;
         }
+        */
         /*const compareBakes = (a: _BakeTask, b: _BakeTask): number => {
             const world = this._theWorld;
             if (world !== null) {
@@ -182,6 +191,24 @@ export class _Klocki {
         };
 
         //this._run();
+    }
+    public _getBakeSections(distanceSq: number){
+        const bakeSec = this._bakeSectionsByDistanceSquared;
+        let sections = bakeSec[distanceSq];
+        if(sections == null){
+            sections = bakeSec[distanceSq] = new Array(this._sectionsPerChunkDistance + 1);
+            sections[0] = 0; // first element is amount of sections stored last render
+        }
+        return sections;
+    }
+    public _getRenderSections(distanceSq: number){
+        const sec = this._sectionsByDistanceSquared;
+        let sections = sec[distanceSq];
+        if(sections == null){
+            sections = sec[distanceSq] = new Array(this._sectionsPerChunkDistance + 1);
+            sections[0] = 0;
+        }
+        return sections;
     }
 
     public static _randomString(length: number) {
@@ -328,7 +355,7 @@ export class _Klocki {
         theBaking:
         if (1) {
             for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
-                const sections = secs[secsIndex];
+                const sections = this._getRenderSections(secsIndex);
                 const count = sections[0];
                 for (let i = 1; i <= count; i++) {
                     const t = (<_OriginRenderOcTree>sections[i])._bakeTask;
@@ -422,8 +449,14 @@ export class _Klocki {
         const bakeSecs = this._bakeSectionsByDistanceSquared;
         const secs = this._sectionsByDistanceSquared;
         for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
-            bakeSecs[secsIndex][0] = 0;
-            secs[secsIndex][0] = 0;
+            const a = bakeSecs[secsIndex];
+            if(a != null){
+                a[0] = 0;
+            }
+            const b = secs[secsIndex];
+            if(b != null){
+                b[0] = 0;
+            }
         }
 
         if (this._smoothCam || this._zoomed) {
@@ -820,7 +853,7 @@ export class _Klocki {
         this._shaderMobs = new _ShaderMobs(this);
         this._shaderLines = new _ShaderLines(this);
 
-        this._renderList = new _RenderList(this, 8, 1, 8);
+        this._renderList = new _RenderList(this, 4, 1, 4);
 
         this._textureManager = new _TextureManager(this);
         this._uiRenderer = new _UIRenderer(this);

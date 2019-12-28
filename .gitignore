@@ -1,5 +1,6 @@
 node_modules
 package-lock.json
 build
+/src/mods
 /dist/*.js
 /dist/*.js.map

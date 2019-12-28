@@ -395,11 +395,10 @@ export class _OriginRenderOcTree {
         const dz = (klocki._renderZ - pos[2]) | 0;
         const distanceSq = (dx * dx + dy * dy + dz * dz) | 0;
         const distanceChunk = (distanceSq >> 8) | 0;
-        const bakeSec = this._klocki._bakeSectionsByDistanceSquared;
-        const sec = this._klocki._sectionsByDistanceSquared;
-        if (distanceChunk >= 0 && distanceChunk < bakeSec.length) {
-                const bakeSectionsArr = bakeSec[distanceChunk];
-                const sectionsArr = sec[distanceChunk];
+        const secLen = this._klocki._bakeSectionsByDistanceSquared.length;
+        if (distanceChunk >= 0 && distanceChunk < secLen) {
+                const bakeSectionsArr = this._klocki._getBakeSections(distanceChunk);
+                const sectionsArr = this._klocki._getRenderSections(distanceChunk);
                 const indexLast = 1 + (<number>bakeSectionsArr[0]) | 0;
                 if (!!bake && indexLast < bakeSectionsArr.length) {
                     bakeSectionsArr[indexLast] = this;

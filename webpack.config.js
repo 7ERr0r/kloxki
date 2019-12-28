@@ -1,30 +1,22 @@
-const path = require('path');;
+const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
 
-const uglifyJsOptions = {
 
-};
 const minimizer = [];
 if (false) {
-    uglifyJsOptions.mangle = {
-        properties: {
-            regex: /^_.+$/
-        }
-    }
-
-
     minimizer.push(new TerserPlugin({
         sourceMap: true,
-        minify(file, sourceMap) {
-            if (sourceMap) {
-                uglifyJsOptions.sourceMap = {
-                    content: sourceMap,
-                };
+        terserOptions: {
+            ecma: 5,
+            mangle: {
+                toplevel: true,
+                properties: {
+                    regex: /^_.+$/
+                }
             }
-            return require('uglify-js').minify(file, uglifyJsOptions);
-        },
+        }
     }));
 }
 module.exports = {
