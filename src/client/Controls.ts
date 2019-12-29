@@ -46,6 +46,11 @@ export class _Controls {
                 e.preventDefault(); // disable mouse back and forward buttons
             }
         });
+        document.addEventListener("mousedown",  (e) => {
+            if (this._mouseLocked) {
+                this._klocki._onClick();
+            }
+        });
 
         document.addEventListener("keydown", (e) => this._keydown(e));
         document.addEventListener("keyup", (e) => this._keyup(e));
@@ -57,6 +62,7 @@ export class _Controls {
             if (!this._mouseLocked) {
                 this._requestLock();
                 // this._klocki._display._canvas.requestFullscreen();
+
             }
         });
         this._addTouchHandlers();

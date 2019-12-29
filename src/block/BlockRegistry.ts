@@ -107,6 +107,9 @@ export class _BlockRegistry {
 
         return this._globalPalette[id];
     }
+    public _byName(name: string) {
+        return this._blocksByName.get(name);
+    }
     
     public _registerBlocks(proto: number) {
         const registry = this;
@@ -362,11 +365,11 @@ export class _BlockRegistry {
         const block34 = new _CactusBlock(_BlockProperties._create(_Material._CACTUS)._needsRandomTick()._hardnessAndResistance(0.4)._sound(_SoundType._CLOTH));
         register(81, 0, "cactus", block34);
         register(82, 0, "clay", new _ClayBlock(_BlockProperties._create(_Material._CLAY)._hardnessAndResistance(0.6)._sound(_SoundType._GROUND)));
-        register(83, 0, "sugar_cane", new _SugarCaneBlock(_BlockProperties._create(_Material._PLANTS)._setTranslucent()._needsRandomTick()._zeroHardnessAndResistance()._sound(_SoundType._PLANT)));
-        register(84, 0, "jukebox", new _JukeboxBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._hardnessAndResistance(2, 6)));
-        register(85, 0, "oak_fence", new _FenceBlock(_BlockProperties._create(_Material._WOOD, block3._prop._materialColor)._hardnessAndResistance(2, 3)._sound(_SoundType._WOOD)));
+        h._SUGAR_CANE = register(83, 0, "sugar_cane", new _SugarCaneBlock(_BlockProperties._create(_Material._PLANTS)._setTranslucent()._needsRandomTick()._zeroHardnessAndResistance()._sound(_SoundType._PLANT)));
+        h._JUKEBOX = register(84, 0, "jukebox", new _JukeboxBlock(_BlockProperties._create(_Material._WOOD, _MaterialColor._DIRT)._hardnessAndResistance(2, 6)));
+        h._OAK_FENCE = register(85, 0, "oak_fence", new _FenceBlock(_BlockProperties._create(_Material._WOOD, block3._prop._materialColor)._hardnessAndResistance(2, 3)._sound(_SoundType._WOOD)));
         const blockstemgrown = new _PumpkinBlock(_BlockProperties._create(_Material._GOURD, _MaterialColor._ADOBE)._hardnessAndResistance(1)._sound(_SoundType._WOOD));
-        register(86, 0, "pumpkin", blockstemgrown);
+        h._PUMPKIN = register(86, 0, "pumpkin", blockstemgrown);
         register(87, 0, "netherrack", new _Block(_BlockProperties._create(_Material._ROCK, _MaterialColor._NETHERRACK)._hardnessAndResistance(0.4)));
         register(88, 0, "soul_sand", new _SoulSandBlock(_BlockProperties._create(_Material._SAND, _MaterialColor._BROWN)._needsRandomTick()._hardnessAndResistance(0.5)._sound(_SoundType._SAND)));
         register(89, 0, "glowstone", new _GlowstoneBlock(_BlockProperties._create(_Material._GLASS, _MaterialColor._SAND)._hardnessAndResistance(0.3)._sound(_SoundType._GLASS)._lightValue(15)));

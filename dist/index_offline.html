@@ -33,6 +33,7 @@
                     window.klocki = new Klocki("klockicanvas", {
                         antialias: true,
                         translucent: true,
+                        reducedMemory: true,
                     });
                     klocki.defaultArmThickness = 3;
                     klocki.fov = 45;
@@ -41,8 +42,28 @@
                         landing.innerHTML = "<h1>Uruchamianie</h1>";
                         await klocki.run();
                         klocki.offlineJoinGame();
-                        klocki.offlineTeleport(0, 64, 0, (22/180)*Math.PI, -Math.PI/15);
-                        klocki.offlineSpawnPlayer(69, -1, 65.5, 3, (210/180)*Math.PI, -Math.PI/10);
+                        const ox = 3;
+                        const oy = 70;
+                        const oz = 3;
+                        klocki.offlineTeleport(ox, oy, oz, (23/180)*Math.PI, -Math.PI/15);
+                        klocki.offlineSpawnPlayer(69, ox-1, oy+1.5, oz+3, (215/180)*Math.PI, Math.PI/12);
+
+                        function c(typ1, typ2, ax, ay, az, bx, by, bz){
+                            for(let x = ax; x<=bx; x++){
+                                for(let y = ay; y<=by; y++){
+                                    for(let z = az; z<=bz; z++){
+                                        klocki.offlineSetBlock(x, y, z, y == by?typ2:typ1);
+                                    }
+                                }
+                            }
+                        }
+                        const grass = klocki.stateIdByName("grass_block");
+                        const dirt = klocki.stateIdByName("dirt");
+                        const jukebox = klocki.stateIdByName("jukebox");
+                        c(dirt, grass, 1, 65, 1, 1+5, 65+2, 1+2);
+                        c(dirt, grass, 1+3, 65, 1+2, 1+5, 65+2, 1+5);
+                        klocki.offlineSetBlock(1+4, 65+2+1, 1+1, jukebox);
+                        
                         document.body.removeChild(landing);
                         
                     }, 0);

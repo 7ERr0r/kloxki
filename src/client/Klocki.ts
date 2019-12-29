@@ -43,9 +43,11 @@ import { _ChunkSection } from "./world/ChunkSection";
 import { _KlockiEntityPlayerSP } from "./entity/KlockiEntityPlayerSP";
 import { _KlockiEntityPlayer } from "./entity/KlockiEntityPlayer";
 import { _KlockiEntityPlayerMP } from "./entity/KlockiEntityPlayerMP";
+import { _Uint32BlockStorage } from "../world/chunk/storage/Uint32BlockStorage";
 
 
 export class _Klocki {
+ 
     private readonly _pako: any = require('../pako');
     public static _utilVec3 = vec3.create();
     public static _utilVec4 = vec4.create();
@@ -125,15 +127,21 @@ export class _Klocki {
     public defaultArmThickness: number;
     public showUI: boolean;
     public _assetsJsons: any;
+    public _targetBlock: number[] | null;
+    public _made8Daudio: boolean = false;
+    public _reducedMemory: boolean;
 
     
     constructor(domID: string, optionals: any) {
+        const reduced: boolean = !!optionals.reducedMemory;
+        this._reducedMemory = reduced;
         this._gameSettings = new _GameSettings();
         this._gameSettings._loadOptions();
         this._display = new _Display(domID, optionals);
         this._fpsDeque = new _Deque<number>();
         this._scheduledTasks = new _Deque<Function>();
         this._frustum = new _Frustum();
+        this._targetBlock = null;
         this.fov = 70;
         this.showUI = true;
         this.defaultArmThickness = 4;
@@ -143,7 +151,7 @@ export class _Klocki {
         this._pitchSmoothSpeed = 0;
         this._zoomed = false;
         this._glBuffersEntitiesIndex = 0;
-        this._glBuffersEntitiesCount = 3;
+        this._glBuffersEntitiesCount = 1;
         this._sectionLookingAt = null;
         this._renderX = 0;
         this._renderY = 65;
@@ -154,10 +162,10 @@ export class _Klocki {
         }
         this._reuseGlBuffersIndexRemover = 1;
         this._reuseGlBuffersIndexAdder = 0;
-        const _sectionsLen = Math.pow(48, 2);
+        const _sectionsLen = Math.pow(reduced?10:48, 2);
         this._bakeSectionsByDistanceSquared = new Array(_sectionsLen);
         this._sectionsByDistanceSquared = new Array(_sectionsLen);
-        this._sectionsPerChunkDistance = 2000;
+        this._sectionsPerChunkDistance = reduced?200:2000;
 
         const _sec = this._sectionsByDistanceSquared;
         const _bakeSec = this._bakeSectionsByDistanceSquared;
@@ -594,8 +602,10 @@ export class _Klocki {
 
             mat4.translate(modelViewMatrix, modelViewMatrix, [-rx, -ry, -rz]);
 
-            const blockPos = this._theWorld._traceAnyBlock(200, new Float64Array([rx, ry, rz]), new Float64Array([viewx, viewy, viewz]));
+            const blockPos = this._theWorld._traceAnyBlock(10, new Float64Array([rx, ry, rz]), new Float64Array([viewx, viewy, viewz]));
+            this._targetBlock = blockPos;
             if (blockPos != null) {
+                
                 debugBlock = blockPos[0] + " " + blockPos[1] + " " + blockPos[2];
                 const section = this._theWorld._getSection(blockPos[0] >> 4, blockPos[1] >> 4, blockPos[2] >> 4);
                 this._sectionLookingAt = section;
@@ -781,11 +791,7 @@ export class _Klocki {
         await _Klocki._yield();
         this._renderList = new _RenderList(this, 4, 1, 4);
         await _Klocki._yield();
-        const panner = this._audioManager._newPanner();
-        // panner._setPosition(-58, 69, 7);
-        // panner._setPosition(0, 80, 0);
-        // panner._setPosition(-230, 75, 230);
-        panner._setPosition(-150, 75, 150);
+
         
         // const track = this._audioManager._audioCtx.createMediaElementSource(audio);
         // track.connect(panner._panner).connect(this._audioManager._audioCtx.destination);
@@ -800,7 +806,7 @@ export class _Klocki {
             const buf = this._display._gl.createBuffer()!;
             this._glBuffersEntities[i] = buf;
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-            gl.bufferData(gl.ARRAY_BUFFER, 1024 * 1024 * 32, gl.DYNAMIC_DRAW);
+            gl.bufferData(gl.ARRAY_BUFFER, 1024 * 1024 * (this._reducedMemory?2:32), gl.DYNAMIC_DRAW);
         }
         // blur texture postprocess here?
         // this._blurTexture = gl.createTexture()!;
@@ -809,27 +815,7 @@ export class _Klocki {
         // gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
         /*
-        const audioCtx = this._audioManager._audioCtx;
-        function make8DaudioXD() {
-            const source = audioCtx.createBufferSource();
-
-            const request = new Request('11min.webm');
-
-            fetch(request).then(function (response) {
-                return response.arrayBuffer();
-            }).then(function (buffer) {
-                audioCtx.decodeAudioData(buffer, function (decodedData: AudioBuffer) {
-                    source.buffer = decodedData;
-                    const gainer = audioCtx.createGain();
-                    gainer.gain.value = 0.5;
-                    source.connect(panner._panner).connect(gainer).connect(audioCtx.destination);
-                    
-                    const startTime = audioCtx.currentTime;
-                    source.start(startTime, 0);
-                    
-                });
-            });
-        }
+        
         make8DaudioXD();
         */
         /*
@@ -843,6 +829,32 @@ export class _Klocki {
         (<any>window).requestIdleCallback((deadline: any) => { this._runheavyTasks(deadline); }, { timeout: 500 });
         // this.myNetworkManager._sendPacket();
         this._nextFrame();
+    }
+
+    public _makeAudio8D(x: number, y: number, z: number){
+        const audioCtx = this._audioManager._audioCtx;
+        const source = audioCtx.createBufferSource();
+
+        const request = new Request('kuku.webm');
+
+        const panner = this._audioManager._newPanner();
+        panner._setPosition(x, y, z);
+
+        fetch(request).then(function (response) {
+            return response.arrayBuffer();
+        }).then(function (buffer) {
+            audioCtx.decodeAudioData(buffer, function (decodedData: AudioBuffer) {
+                source.buffer = decodedData;
+                const gainer = audioCtx.createGain();
+                gainer.gain.value = 0.5;
+                source.connect(panner._panner).connect(gainer).connect(audioCtx.destination);
+                
+                const startTime = audioCtx.currentTime;
+                source.start(startTime, 0);
+                
+            });
+        });
+        
     }
 
     public connectSocket(protoVersion: number, wsUrl: string) {
@@ -931,6 +943,62 @@ export class _Klocki {
         thePlayer._yaw = yaw;
         thePlayer._pitch = pitch;
     }
+    public stateIdByName(name: string){
+        const block = this._blockRegistry._byName(name);
+        if(block){
+            return block._baseStateId;
+        }
+        return 0;
+    }
+
+    public offlineSetBlock(bx: number, by: number, bz: number, typ: number) {
+        const world = this._theWorld;
+        if (world != null) {
+            const x = bx >> 4;
+            const y = by >> 4;
+            const z = bz >> 4;
+            let w = world._getSectionWatcher(x, y, z);
+            // console.log("block change", bx,by,bz,packet._blockID!);
+            let section = w._section;
+            if (!w._section) {
+                section = new _ChunkSection(x, y, z, new _Uint32BlockStorage(y, false, new Uint32Array(4096)));
+                w._setSection(section);
+            }
+            if (section) {
+                const sx = bx & 15;
+                const sy = by & 15;
+                const sz = bz & 15;
+                section._setBlockType(sx, sy, sz, typ);
+                w._notify();
+
+                if (sx == 15) {
+                    w = world._getSectionWatcher(x + 1, y, z);
+                    w._notify();
+                }
+                if (sz == 15) {
+                    w = world._getSectionWatcher(x, y, z + 1);
+                    w._notify();
+                }
+                if (sy == 15) {
+                    w = world._getSectionWatcher(x, y + 1, z);
+                    w._notify();
+                }
+                if (sx == 0) {
+                    w = world._getSectionWatcher(x - 1, y, z);
+                    w._notify();
+                }
+                if (sz == 0) {
+                    w = world._getSectionWatcher(x, y, z - 1);
+                    w._notify();
+                }
+                if (sy == 0) {
+                    w = world._getSectionWatcher(x, y - 1, z);
+                    w._notify();
+                }
+            }
+        }
+    }
+
 
     private async _startGame(): Promise<void> {
 
@@ -944,11 +1012,11 @@ export class _Klocki {
         this._textureManager = new _TextureManager(this);
         this._uiRenderer = new _UIRenderer(this);
         this._fontRenderer = new _FontRenderer(this);
-        this._worldRenderer = new _WorldRenderer(this, 2 * 1024 * 1024, false, false);
+        this._worldRenderer = new _WorldRenderer(this, (this._reducedMemory?1/8:2) * 1024 * 1024, false, false);
         this._lineRenderer = new _LineRenderer(this);
-        this._worldRendererBaker = new _WorldRenderer(this, 8 * 1024 * 1024, false, false);
-        this._worldRendererMobs = new _WorldRenderer(this, 32 * 1024 * 1024, false, true);
-        this._worldRendererMobsHelper = new _WorldRenderer(this, 0.5 * 1024 * 1024, false, true);
+        this._worldRendererBaker = new _WorldRenderer(this, (this._reducedMemory?1/8:4) * 1024 * 1024, false, false);
+        this._worldRendererMobs = new _WorldRenderer(this, (this._reducedMemory?1:32) * 1024 * 1024, false, true);
+        this._worldRendererMobsHelper = new _WorldRenderer(this, (this._reducedMemory?1/64:0.5) * 1024 * 1024, false, true);
 
         this._modelRegistry = new _ModelRegistry(this);
         this._blockRegistry = new _BlockRegistry(this._textureManager, this._modelRegistry);
@@ -1046,6 +1114,23 @@ export class _Klocki {
                 resolve();
             }, ms);
         });
+    }
+
+
+    public _onClick() {
+        if(this._theWorld != null){
+            const blockPos = this._targetBlock;
+            if(blockPos != null){
+                const stateId = this._theWorld._getBlockType(blockPos[0], blockPos[1], blockPos[2]);
+                const block = this._blockRegistry._byStateId(stateId);
+                if(block == this._blockRegistry._helper._JUKEBOX){
+                    if(!this._made8Daudio){
+                        this._made8Daudio = true;
+                        this._makeAudio8D(blockPos[0], blockPos[1], blockPos[2]);
+                    }
+                }
+            }
+        }
     }
 
 }
