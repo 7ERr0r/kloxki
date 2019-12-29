@@ -87,7 +87,7 @@ export class _KlockiEntityBase {
         this._prevYaw = this._yaw;
         this._prevPitch = this._pitch;
     }
-    public getAABB() {
+    public _getAABB() {
         return _AxisAlignedBB._createEntityAABB(this._posX, this._posY, this._posZ, this._width, this._height);
     }
 
@@ -168,7 +168,7 @@ export class _KlockiEntityBase {
         this._prevPosY = y;
         this._prevPosZ = z;
     }
-    public calcAccelerationFlying(strafe: number, forward: number, moveFactor: number, yaw: number) {
+    public _calcAccelerationFlying(strafe: number, forward: number, moveFactor: number, yaw: number) {
         let v = strafe * strafe + forward * forward;
         if (v >= 0.0001) {
             v = Math.sqrt(v);
@@ -191,8 +191,9 @@ export class _KlockiEntityBase {
             this._lastAccelerationZ = 0;
         }
     }
-    public accelerateFlying(strafe: number, forward: number, moveFactor: number) {
-        this.calcAccelerationFlying(strafe, forward, moveFactor, this._yaw);
+
+    public _accelerateFlying(strafe: number, forward: number, moveFactor: number) {
+        this._calcAccelerationFlying(strafe, forward, moveFactor, this._yaw);
         this._motionX += this._lastAccelerationX;
         this._motionZ += this._lastAccelerationZ;
     }
@@ -213,7 +214,7 @@ export class _KlockiEntityBase {
         return [x, sinpitch, z];
     }
 
-    public moveEntity(deltaX: number, deltaY: number, deltaZ: number, inputOnGround: boolean, inputaabb: _AxisAlignedBB) {// (X, Y, Z, predeltaX, predeltaY, predeltaZ float64, IsColidedHorizontally, OnGround bool) {
+    public _moveEntity(deltaX: number, deltaY: number, deltaZ: number, inputOnGround: boolean, inputaabb: _AxisAlignedBB) {// (X, Y, Z, predeltaX, predeltaY, predeltaZ float64, IsColidedHorizontally, OnGround bool) {
         let predeltaX = deltaX;
         let predeltaY = deltaY;
         let predeltaZ = deltaZ;

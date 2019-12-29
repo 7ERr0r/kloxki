@@ -35,54 +35,30 @@ export class _ModelRegistry {
         }
             
     }
-    public _loadModel(name: string): Promise<any> {
-        let promise = this._namePromiseMap.get(name);
-        if (promise) {
-            return promise;
+    public _loadModel(name: string): _BlockModel | null {
+        let mjson = this._klocki._getAssetJSON("models/"+name);
+        if(!mjson){
+            //console.warn("no model for "+name);
+            return null;
         }
-        promise = new Promise((resolve, reject) => {
-            let f = this._fetchModel(name);
-            if(f == null){
-                resolve(null);
-                return;
+        const loaded = _BlockModel._load(mjson);
+        //console.log(name, mjson, loaded)
+        if (loaded._parent !== null) {
+            const parentModel = this._getModel(loaded._parent);
+            if(parentModel != null){
+                loaded._init(parentModel);
+            }else{
+                console.log("null parentModel?", name)
+                return null;
             }
-            
-                
-                f.then((mjson) => {
-                    if (mjson === null) {
-                        resolve(null);
-                    } else {
-                        
-                            
-                            const loaded = _BlockModel._load(mjson);
-                            console.log(name, mjson, loaded)
-                            if (loaded._parent !== null) {
-                                this._getModel(loaded._parent).then((parentModel: _BlockModel) => {
-                                    if(parentModel != null){
-                                        loaded._init(parentModel);
-                                        resolve(loaded);
-                                    }else{
-                                        console.log("null parentModel?")
-                                        resolve(null);
-                                    }
-                                });
-                            }else{
-                                resolve(loaded);
-                            }
-                        
-                    }
-                });
-            
-        });
-        
-        this._namePromiseMap.set(name, promise);
+        }
 
-        return promise;
+        return loaded;
     }
-    public async _getModel(name: string): Promise<_BlockModel> {
+    public _getModel(name: string): _BlockModel | null {
         const model = this._nameModelMap.get(name);
         if (!model) {
-            return await this._loadModel(name);
+            return this._loadModel(name);
         }
 
         return model;

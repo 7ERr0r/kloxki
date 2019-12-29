@@ -181,9 +181,9 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
             
             if (!this._isFlying && (block == h._WATER! || block == h._LAVA!)) {
                 // let preY = this.posY
-                this.accelerateFlying(this._movementStrafe, this._movementForward, 0.02 * moveFactor);
+                this._accelerateFlying(this._movementStrafe, this._movementForward, 0.02 * moveFactor);
                 const [nextPosX, nextPosY, nextPosZ, nextMotionX, nextMotionY, nextMotionZ, nextIsColidedHorizontally, nextOnGround] =
-                    this.moveEntity(this._motionX, this._motionY, this._motionZ, this._onGround, this.getAABB());
+                    this._moveEntity(this._motionX, this._motionY, this._motionZ, this._onGround, this._getAABB());
 
                 this._posX = <number> nextPosX;
                 this._posY = <number> nextPosY;
@@ -219,10 +219,10 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
                 if (this._isFlying && this._getSprinting()) {
                     flyfactor *= 4;
                 }
-                this.accelerateFlying(this._movementStrafe, this._movementForward, flyfactor * moveFactor);
+                this._accelerateFlying(this._movementStrafe, this._movementForward, flyfactor * moveFactor);
 
                 const [nextPosX, nextPosY, nextPosZ, nextMotionX, nextMotionY, nextMotionZ, nextIsColidedHorizontally, nextOnGround] =
-                    this.moveEntity(this._motionX, this._motionY, this._motionZ, this._onGround, this.getAABB());
+                    this._moveEntity(this._motionX, this._motionY, this._motionZ, this._onGround, this._getAABB());
 
                 this._posX = <number> nextPosX;
                 this._posY = <number> nextPosY;

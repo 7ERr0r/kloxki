@@ -128,13 +128,13 @@ fn run() -> Result<()> {
         let name = file.name().to_string();
         
 
-        if name.contains("/minecraft/models/") {
+        if name.contains("/minecraft/models/") || name.contains("/minecraft/blockstates/") {
             //println!("Filename: {}", name);
             lazy_static! {
-                static ref RE: regex::Regex = regex::Regex::new(r"/minecraft/models/([a-zA-Z0-9_/]+)\.json$").unwrap();
+                static ref RE: regex::Regex = regex::Regex::new(r"/minecraft/((?:models|blockstates)/[a-zA-Z0-9_/]+)\.json$").unwrap();
             }
             let captures = RE.captures(name.as_str()).ok_or_else(|| McPackError::new(format!("regex didn't match for {}", name)))?;
-            let matched = captures.get(0).ok_or_else(|| McPackError::new(format!("regex didn't match 1st group for {}", name)))?;
+            let matched = captures.get(1).ok_or_else(|| McPackError::new(format!("regex didn't match 1st group for {}", name)))?;
             let model_name = matched.as_str();
             buffer.clear();
             use std::io::Read;
@@ -156,6 +156,12 @@ fn run() -> Result<()> {
                 models.serialize(&mut Serializer::new(&mut buf))?;
                 buf
             };
+            {
+                let out_name = "jsons.msgpack";
+                let mut file = std::fs::File::create(out_name)?;
+                file.write_all(msgpack_buf.as_slice())?;
+                println!("created file {}", out_name);
+            }
             let zlib_buf = {
                 let mut buf = Vec::new();
                 let mut options: zopfli::Options = Default::default();
@@ -166,14 +172,15 @@ fn run() -> Result<()> {
                     &msgpack_buf, 
                     &mut buf
                 )?;
-                
                 buf
             };
 
-            let out_name = "models.msgpack";
-            let mut file = std::fs::File::create(out_name)?;
-            file.write_all(zlib_buf.as_slice())?;
-            println!("created file {}", out_name);
+            {
+                let out_name = "jsons.msgpack.zlib";
+                let mut file = std::fs::File::create(out_name)?;
+                file.write_all(zlib_buf.as_slice())?;
+                println!("created file {}", out_name);
+            }
         
         },
         _ => {}

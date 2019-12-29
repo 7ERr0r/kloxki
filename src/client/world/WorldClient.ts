@@ -19,10 +19,10 @@ export class _WorldClient {
     public _entities: Map<number, _KlockiEntityBase>;
     public _renderEntityFunc: (e: _KlockiEntityBase) => any;
     public _tickEntityFunc: (e: _KlockiEntityBase) => any;
-    public _playHandler: _NetHandlerPlayClient;
+    public _playHandler: _NetHandlerPlayClient | null;
     public _loadedUglyLimitedHeightChunks: Map<number, boolean>;
 
-    constructor(klocki: _Klocki, playHandler: _NetHandlerPlayClient) {
+    constructor(klocki: _Klocki, playHandler: _NetHandlerPlayClient | null) {
         this._klocki = klocki;
         this._playHandler = playHandler;
         this._sections = new Map();
@@ -50,8 +50,9 @@ export class _WorldClient {
             // thePlayer._tick();
 
             this._klocki._renderList._updatePositions(thePlayer._posX, thePlayer._posY, thePlayer._posZ);
-
+            if(this._playHandler != null){
             this._playHandler._sendPosition(thePlayer._posX, thePlayer._posY, thePlayer._posZ, thePlayer._yaw, thePlayer._pitch, thePlayer._onGround);
+            }
         }
         
     }

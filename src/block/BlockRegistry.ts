@@ -65,10 +65,9 @@ export class _BlockRegistry {
         for (let i = 0; i < this._currentNameOrderIndex; i++) {
             const b = this._blocksByNameOrder[i];
             try {
-                this._modelRegistry._loadModel("block/" + b._name).then(function(model: _BlockModel) {
-                    console.log("loaded model "+b._name)
-                    b._model = model;
-                });
+                const model = this._modelRegistry._loadModel("block/" + b._name);
+                //console.log("loaded model "+b._name);
+                b._model = model;
             }catch(e){
                 console.log("can't load model "+b._name, e)
             }

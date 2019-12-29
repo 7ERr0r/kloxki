@@ -19,7 +19,7 @@ export class _RenderItemFrame extends _RenderEntity {
     public static _armLeftMatrix: mat4 = mat4.create();
     public static _armRightMatrix: mat4 = mat4.create();
 
-    public _skinInfo: _TextureInfo;
+    public _skinInfo: _TextureInfo | null;
     public _skinLoaded: boolean;
 
     public _headBox: _RenderBox | undefined;
@@ -39,7 +39,8 @@ export class _RenderItemFrame extends _RenderEntity {
     constructor(klocki: _Klocki) {
         super(klocki);
         this._skinLoaded = false;
-        
+        this._skinInfo = null;
+        /*
         const skinInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/entity/creeper/creeper.png", null, (tex: _KlockiTexture) => {
             const limbOffsets = [
                 [0, 16, 0, 32],
@@ -77,7 +78,8 @@ export class _RenderItemFrame extends _RenderEntity {
 
             this._skinLoaded = true;
         }, false);
-        this._skinInfo = skinInfo;
+        */
+        //this._skinInfo = skinInfo;
     }
 
     public _render(entity: _KlockiEntityItemFrame) {

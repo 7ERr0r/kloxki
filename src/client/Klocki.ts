@@ -1,5 +1,6 @@
 import { mat4, vec3, vec4 } from "gl-matrix";
 import { isString } from "util";
+import { decode } from "@msgpack/msgpack";
 
 import { _Timer } from "../util/Timer";
 import { _BlockRegistry } from "../block/BlockRegistry";
@@ -39,8 +40,13 @@ import { _UIRenderer } from "./renderer/UIRenderer";
 import { _EntityRenders } from "./render/EntityRenders";
 import { _GuiOverlayEquipment } from "./gui/GuiOverlayEquipment";
 import { _ChunkSection } from "./world/ChunkSection";
+import { _KlockiEntityPlayerSP } from "./entity/KlockiEntityPlayerSP";
+import { _KlockiEntityPlayer } from "./entity/KlockiEntityPlayer";
+import { _KlockiEntityPlayerMP } from "./entity/KlockiEntityPlayerMP";
+
 
 export class _Klocki {
+    private readonly _pako: any = require('../pako');
     public static _utilVec3 = vec3.create();
     public static _utilVec4 = vec4.create();
     public static _forbiddenWord = "mine" + "craft";
@@ -105,9 +111,9 @@ export class _Klocki {
     public _sectionLookingAt: _ChunkSection | null;
     public _reuseGlBuffersIndexRemover: number;
     public _reuseGlBuffersIndexAdder: number;
-    public _assetsJson: any;
-    public _soundsJson: any;
-    public _randomInts!: Uint32Array;
+    public _assetsJson: any = null;
+    public _soundsJson: any = null;
+    //public _randomInts!: Uint32Array;
     public _renderX: number;
     public _renderY: number;
     public _renderZ: number;
@@ -118,6 +124,8 @@ export class _Klocki {
     public fov: number;
     public defaultArmThickness: number;
     public showUI: boolean;
+    public _assetsJsons: any;
+
     
     constructor(domID: string, optionals: any) {
         this._gameSettings = new _GameSettings();
@@ -146,17 +154,18 @@ export class _Klocki {
         }
         this._reuseGlBuffersIndexRemover = 1;
         this._reuseGlBuffersIndexAdder = 0;
-        const sectionsLen = Math.pow(48, 2);
-        this._bakeSectionsByDistanceSquared = new Array(sectionsLen);
-        this._sectionsByDistanceSquared = new Array(sectionsLen);
+        const _sectionsLen = Math.pow(48, 2);
+        this._bakeSectionsByDistanceSquared = new Array(_sectionsLen);
+        this._sectionsByDistanceSquared = new Array(_sectionsLen);
         this._sectionsPerChunkDistance = 2000;
 
-        const sec = this._sectionsByDistanceSquared;
-        const bakeSec = this._bakeSectionsByDistanceSquared;
-        for (let i = 0; i < bakeSec.length; i++) {
-            bakeSec[i] = null;
-            sec[i] = null;
+        const _sec = this._sectionsByDistanceSquared;
+        const _bakeSec = this._bakeSectionsByDistanceSquared;
+        for (let i = 0; i < _bakeSec.length; i++) {
+            _bakeSec[i] = null;
+            _sec[i] = null;
         }
+
 
         /*
         for (let i = 0; i < bakeSec.length; i++) {
@@ -228,9 +237,8 @@ export class _Klocki {
     public _getPartialTicks() {
         return this._timer._renderPartialTicks;
     }
-    public run(): void {
-        this._startGame();
-        
+    public async run(): Promise<void> {
+        await this._startGame();
     }
     public _nextFrame(): void {
         requestAnimationFrame((time: number) => this._currentFrame(time));
@@ -355,22 +363,27 @@ export class _Klocki {
         theBaking:
         if (1) {
             for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
-                const sections = this._getRenderSections(secsIndex);
-                const count = sections[0];
-                for (let i = 1; i <= count; i++) {
-                    const t = (<_OriginRenderOcTree>sections[i])._bakeTask;
-                    if (t != null) {
-                        if (!t._done) {
-                            t._bake(this._worldRendererBaker);
-                            baked++;
-                            if (baked >= maxBakes) {
-                                break theBaking;
+                const sections = secs[secsIndex];
+                if(sections != null){
+                    const count = sections[0];
+                    if(count > 0){
+                        //console.log("baking", count, "sections at distanceSq", secsIndex)
+                    }
+                    for (let i = 1; i <= count; i++) {
+                        const t = (<_OriginRenderOcTree>sections[i])._bakeTask;
+                        if (t != null) {
+                            if (!t._done) {
+                                t._bake(this._worldRendererBaker);
+                                baked++;
+                                if (baked >= maxBakes) {
+                                    break theBaking;
+                                }
+                                if (deadline.timeRemaining() == 0) {
+                                    break theBaking;
+                                }
                             }
-                            if (deadline.timeRemaining() == 0) {
-                                break theBaking;
-                            }
+                            
                         }
-                        
                     }
                 }
             }
@@ -757,19 +770,17 @@ export class _Klocki {
     public _toggleUI() {
         this.showUI = !this.showUI;
     }
-    public _startGameSecond() {
-        this._modelRegistry = new _ModelRegistry(this);
-            
-        this._blockRegistry = new _BlockRegistry(this._textureManager, this._modelRegistry);
-        this._blockRegistry._registerBlocks(this._protocol);
-        this._blockRegistry._makeGlobalPalette(this._protocol >= 107);
+    public async _startGameSecond(): Promise<void> {
 
-        this._itemRegistry = new _ItemRegistry(this);
-        this._itemRegistry._registerItems();
+
 
         this._entityRenders = new _EntityRenders(this);
 
         this._audioManager = new _AudioManager(this);
+
+        await _Klocki._yield();
+        this._renderList = new _RenderList(this, 4, 1, 4);
+        await _Klocki._yield();
         const panner = this._audioManager._newPanner();
         // panner._setPosition(-58, 69, 7);
         // panner._setPosition(0, 80, 0);
@@ -821,11 +832,13 @@ export class _Klocki {
         }
         make8DaudioXD();
         */
-
+        /*
         const ri = this._randomInts = new Uint32Array(1024 * 16);
+        const range = Math.pow(2, 21);
         for (let i = 0; i < ri.length; ++i) {
-            ri[i] = Math.floor(Math.random() * Math.pow(2, 21));
+            ri[i] = Math.floor(Math.random() * range);
         }
+        */
 
         (<any>window).requestIdleCallback((deadline: any) => { this._runheavyTasks(deadline); }, { timeout: 500 });
         // this.myNetworkManager._sendPacket();
@@ -844,7 +857,82 @@ export class _Klocki {
 
         }
     }
-    private _startGame(): void {
+
+    public offlineJoinGame(): void {
+        const world = new _WorldClient(this, null);
+        this._theWorld = world;
+        const thePlayer = new _KlockiEntityPlayerSP(this);
+        thePlayer._eid = 0;
+        thePlayer._gameMode = 1;
+        thePlayer._isFlying = true;
+        world._thePlayer = thePlayer;
+        world._addEntity(thePlayer);
+
+    }
+    public offlineSpawnPlayer(eid: number, x: number, y: number, z: number, yaw: number, pitch: number) {
+        const world = this._theWorld;
+        if (world != null) {
+            const player = new _KlockiEntityPlayerMP(this);
+            player._eid = eid;
+            player._serverPosX = x;
+            player._serverPosY = y;
+            player._serverPosZ = z;
+
+            player._serverYaw = yaw;
+            player._serverPitch = pitch;
+
+            player._yaw = yaw;
+            player._pitch = pitch;
+
+            player._prevYaw = yaw;
+            player._prevPitch = pitch;
+
+            player._posX = x;
+            player._posY = y;
+            player._posZ = z;
+
+            player._lastTickPosX = x;
+            player._lastTickPosY = y;
+            player._lastTickPosZ = z;
+
+            player._prevPosX = x;
+            player._prevPosY = y;
+            player._prevPosZ = z;
+
+            world._addEntity(player);
+        }
+    }
+
+    public offlineTeleportEntity(eid: number, x: number, y: number, z: number, yaw: number, pitch: number) {
+        const world = this._theWorld;
+        if (world != null) {
+            const entity = world._getEntity(eid);
+            if (entity) {
+                entity._serverPosX = x;
+                entity._serverPosY = y;
+                entity._serverPosZ = z;
+
+                entity._serverYaw = yaw;
+                entity._serverPitch = pitch;
+
+                entity._setNewLocation(entity._serverPosX, entity._serverPosY, entity._serverPosZ, entity._serverYaw, entity._serverPitch, 3, false);
+            }
+        }
+    }
+
+    public offlineTeleport(x: number, y: number, z: number, yaw: number, pitch: number): void {
+        if (this._theWorld === null) {
+            return;
+        }
+        const thePlayer: _KlockiEntityPlayer = this._theWorld._thePlayer!;
+        thePlayer._posX = x;
+        thePlayer._posY = y;
+        thePlayer._posZ = z;
+        thePlayer._yaw = yaw;
+        thePlayer._pitch = pitch;
+    }
+
+    private async _startGame(): Promise<void> {
 
         this._controls = new _Controls(this);
 
@@ -852,8 +940,6 @@ export class _Klocki {
         this._shaderWorld = new _ShaderWorld(this);
         this._shaderMobs = new _ShaderMobs(this);
         this._shaderLines = new _ShaderLines(this);
-
-        this._renderList = new _RenderList(this, 4, 1, 4);
 
         this._textureManager = new _TextureManager(this);
         this._uiRenderer = new _UIRenderer(this);
@@ -864,6 +950,27 @@ export class _Klocki {
         this._worldRendererMobs = new _WorldRenderer(this, 32 * 1024 * 1024, false, true);
         this._worldRendererMobsHelper = new _WorldRenderer(this, 0.5 * 1024 * 1024, false, true);
 
+        this._modelRegistry = new _ModelRegistry(this);
+        this._blockRegistry = new _BlockRegistry(this._textureManager, this._modelRegistry);
+        this._itemRegistry = new _ItemRegistry(this);
+
+        await this._fetchAndLoadBlocks();
+        this._fetchAssetsIndex();
+        await _Klocki._yield();
+        await this._startGameSecond();
+
+        
+        
+    }
+    private async _fetchAndLoadBlocks(){
+        await this._fetchAssetsJsons();
+        await _Klocki._yield();
+        this._blockRegistry._registerBlocks(this._protocol);
+        this._blockRegistry._makeGlobalPalette(this._protocol >= 107);
+        this._itemRegistry._registerItems();
+    }
+
+    private _fetchAssetsIndex(){
         fetch(this._assetURI+"assets/indexes/" + this._assetsVersion + ".json").then(response => {
             return response.json();
         }).then(assetsJson => {
@@ -882,13 +989,63 @@ export class _Klocki {
                 return response.json();
             }).then(soundsJson => {
                 this._soundsJson = soundsJson;
-                this._startGameSecond();
             });
-
         });
     }
+
+    private async _fetchAssetsJsons(){
+        let jsonsName = "assets/jsons.msgpack.zlib";
+        let response = await fetch(this._assetURI+jsonsName);
+        if(!response.ok) return null;
+        let arrayBuffer = await response.arrayBuffer();
+        
+
+        if(arrayBuffer == null){
+            console.warn("no "+jsonsName+" found");
+        }else{
+            
+            try{
+                // yield because inflate takes a long time and yield works after 2 frames...
+                await _Klocki._yield();
+                const inflated: any = this._pako.inflate(arrayBuffer);
+                await _Klocki._yield();
+                if (inflated instanceof Uint8Array) {
+                    this._receiveAssetsJsons(inflated);
+                    return inflated;
+                } else {
+                    throw new Error(`Inflate error: ${inflated}`);
+                }
+            }catch(e){
+                console.warn("can't decompress msgpack: ", e);
+            }
+        }
+        return null;
+    }
+    private _receiveAssetsJsons(msgpacked: Uint8Array) {
+        this._assetsJsons = <any>decode(msgpacked);
+        //console.log("msgpacked:", this._assetsJsons);
+    }
+    public _getAssetJSON(assetPath: string){
+        return this._assetsJsons[assetPath];
+    }
+
+
     public setAssetURI(uri: string){
         this._assetURI = uri;
+    }
+    public static _yield(): Promise<void> {
+        return new Promise(function(resolve, reject) {
+            requestAnimationFrame(function(){
+                resolve();
+            });
+        });
+    }
+    public static _sleep(ms: number): Promise<void> {
+        return new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve();
+            }, ms);
+        });
     }
 
 }

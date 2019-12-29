@@ -2,10 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
-
+const obfuscate = false;
 
 const minimizer = [];
-if (false) {
+if (obfuscate) {
     minimizer.push(new TerserPlugin({
         sourceMap: true,
         terserOptions: {
@@ -46,6 +46,7 @@ module.exports = {
         ]
     },
     optimization: {
+        minimize: true,
         minimizer: minimizer,
     },
 };

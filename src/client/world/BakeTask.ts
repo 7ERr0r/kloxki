@@ -244,7 +244,7 @@ export class _BakeTask {
                         
                         if (texInfo == null) {
                             const textureName = model._resolveTexture(modelFace._texture);
-                            console.log("loading tex", textureName);
+                            //console.log("loading tex", textureName);
                             // this._renderLeaf._klocki._guiChat._appendMessage({"text":"loading "+textureName});
                             if (textureName != "") {
                                 texInfo = this._renderLeaf._klocki._textureManager._loadCached(`assets/` + _Klocki._forbiddenWord + `/textures/` + textureName + `.png`, true);

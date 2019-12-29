@@ -74,7 +74,7 @@ export class _TextureManager {
         if (texInfo !== void 0) {
             return texInfo;
         }
-        console.log("first time", url);
+        //console.log("first time", url);
         texInfo = this._loadTextureFromURL(url, null, null, fixedAlias);
         this._cachedTextures.set(url, texInfo);
 
@@ -170,8 +170,8 @@ export class _TextureManager {
 
     private _downloadTextureFromURL(url: string, precallback: Function | null, postcallback: Function | null, fixedAlias: boolean, textureInfo: _TextureInfo): void {
         const realURL = this._klocki._assetURI+url;
-        console.log("fetch?", realURL);
-        fetch(this._klocki._assetURI+url).then((v: Response) => {
+        //console.log("fetch?", realURL);
+        fetch(realURL).then((v: Response) => {
             if (!v.ok) {
                 throw new Error("texture fetch: "+v.statusText);
             }

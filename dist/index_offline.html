@@ -30,12 +30,19 @@
                 landing.innerHTML = "<h1>Kompilacja</h1>";
                 setTimeout(()=>{
                     landing.innerHTML = "<h1>Rezerwacja zasobów</h1>";
-                    window.klocki = new Klocki("klockicanvas", {});
+                    window.klocki = new Klocki("klockicanvas", {
+                        antialias: true,
+                        translucent: true,
+                    });
                     klocki.defaultArmThickness = 3;
+                    klocki.fov = 45;
+                    klocki.showUI = false;
                     setTimeout(async ()=>{
                         landing.innerHTML = "<h1>Uruchamianie</h1>";
                         await klocki.run();
-                        klocki.connectSocket(498, `wss://`+window.location.hostname+`:55565/ws`);
+                        klocki.offlineJoinGame();
+                        klocki.offlineTeleport(0, 64, 0, (22/180)*Math.PI, -Math.PI/15);
+                        klocki.offlineSpawnPlayer(69, -1, 65.5, 3, (210/180)*Math.PI, -Math.PI/10);
                         document.body.removeChild(landing);
                         
                     }, 0);

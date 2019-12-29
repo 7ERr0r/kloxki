@@ -393,7 +393,7 @@ export class _OriginRenderOcTree {
         const dx = (klocki._renderX - pos[0]) | 0;
         const dy = (klocki._renderY - pos[1]) | 0;
         const dz = (klocki._renderZ - pos[2]) | 0;
-        const distanceSq = (dx * dx + dy * dy + dz * dz) | 0;
+        const distanceSq = (dx * dx + dy * dy * 4 + dz * dz) | 0;
         const distanceChunk = (distanceSq >> 8) | 0;
         const secLen = this._klocki._bakeSectionsByDistanceSquared.length;
         if (distanceChunk >= 0 && distanceChunk < secLen) {
