@@ -7,11 +7,14 @@ export class _TraceGen {
         this._count = 0;
         this._state = new Float64Array(2);
         
-        if (d >= 0) {
-            this._state[0] = (Math.ceil(start) - start) / d;
+        if (d > 0) {
+            // todo float epsilon?
+            this._state[0] = (Math.ceil(start+0.00001) - start) / d;
         } else if (d < 0) {
             d = -d;
             this._state[0] = (start - Math.floor(start)) / d;
+        }else{
+            this._state[0] = 0;
         }
         this._state[1] = d;
     }
