@@ -29,11 +29,13 @@ export class _Controls {
     public _lastOrientB: number = 1337;
     public _lastOrientG: number = 1337;
     public _isMobile: boolean;
+    public _registededTouches: boolean;
 
     constructor(klocki: _Klocki) {
         this._klocki = klocki;
         this._pressed = new Map<string, boolean>();
         this._mouseLocked = false;
+        this._registededTouches = true;
         this._mouseMoves = 0;
         this._ongoingTouches = new Array<_SimpleTouch>();
 
@@ -64,8 +66,11 @@ export class _Controls {
                 // this._klocki._display._canvas.requestFullscreen();
 
             }
+            if(!this._registededTouches){
+                this._addTouchHandlers();
+            }
         });
-        this._addTouchHandlers();
+        
         canvas.addEventListener("mousemove", (e) => {
             
             if (this._mouseLocked) {
@@ -92,16 +97,20 @@ export class _Controls {
         }, false);
 
         canvas.addEventListener("wheel", (e) => {
-            const klocki = this._klocki;
-            const world = klocki._theWorld;
-            if (world !== null) {
-                const thePlayer = world._thePlayer!;
-                const wheelEvent = e;
-                let delta = wheelEvent.deltaY;
-                if (wheelEvent.deltaMode == 0) {
-                    delta /= 100;
+            if(this._mouseLocked){
+                e.preventDefault();
+                
+                const klocki = this._klocki;
+                const world = klocki._theWorld;
+                if (world !== null) {
+                    const thePlayer = world._thePlayer!;
+                    const wheelEvent = e;
+                    let delta = wheelEvent.deltaY;
+                    if (wheelEvent.deltaMode == 0) {
+                        delta /= 100;
+                    }
+                    thePlayer._scroll(delta);
                 }
-                thePlayer._scroll(delta);
             }
         }, false);
 
@@ -162,6 +171,9 @@ export class _Controls {
         if (was) {
             return;
         }
+        if(!this._mouseLocked){
+            return;
+        }
         if (key == 'f1') {
             this._klocki._toggleUI();
         }
@@ -201,6 +213,7 @@ export class _Controls {
     }
 
     public _handleTouchEnd(evt: TouchEvent) {
+
         evt.preventDefault();
         const touches = evt.changedTouches;
 
@@ -239,6 +252,7 @@ export class _Controls {
         return -1;
     }
     public _handleTouchMove(evt: TouchEvent) {
+
         evt.preventDefault();
         // _Klocki._log("touch move");
         const touches = evt.changedTouches;
@@ -285,6 +299,7 @@ export class _Controls {
         }
     }
     public _handleTouchStart(evt: TouchEvent) {
+
         evt.preventDefault();
         const touches = evt.changedTouches;
         // _Klocki._log("touch start");
@@ -303,6 +318,7 @@ export class _Controls {
         }
     }
     public _handleTouchCancel(evt: TouchEvent) {
+
         evt.preventDefault();
         const touches = evt.changedTouches;
 
@@ -360,12 +376,14 @@ export class _Controls {
     public _addTouchHandlers() {
         // _Klocki._log("registering touches");
         const canvas = this._klocki._display._canvas;
+        if(!this._registededTouches) {
+            this._registededTouches = true;
+            canvas.addEventListener("touchstart", (e: TouchEvent) => this._handleTouchStart(e), false);
+            canvas.addEventListener("touchend", (e: TouchEvent) => this._handleTouchEnd(e), false);
+            canvas.addEventListener("touchcancel", (e: TouchEvent) => this._handleTouchCancel(e), false);
+            canvas.addEventListener("touchmove", (e: TouchEvent) => this._handleTouchMove(e), false);
 
-        canvas.addEventListener("touchstart", (e: TouchEvent) => this._handleTouchStart(e), false);
-        canvas.addEventListener("touchend", (e: TouchEvent) => this._handleTouchEnd(e), false);
-        canvas.addEventListener("touchcancel", (e: TouchEvent) => this._handleTouchCancel(e), false);
-        canvas.addEventListener("touchmove", (e: TouchEvent) => this._handleTouchMove(e), false);
-
-        window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this._handleOrientation(e));
+            window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this._handleOrientation(e));
+        }
     }
 }
