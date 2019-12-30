@@ -158,6 +158,22 @@ export class _FontRenderer {
             return charId != -1 && !this._unicodeFlag ? this._addDefaultChar(charId, italic) : 4; // this.addUnicodeChar(c, italic);
         }
     }
+    public _charSize(c: number){
+        if(c === 32){
+            return 4;
+        }
+        c = this._getCharId(c);
+        return this._charIdSize(c);
+    }
+    public _charIdSize(charId: number){
+        atlasId = charId >> 8;
+        if (atlasId === 0) {
+            charSize = this._charWidth[charId];
+        }else{
+            charSize = 8;
+        }
+        return charSize;
+    }
     public _addDefaultChar(charId: number, italic: boolean) {
         charSize = 0;
         chari = 0;
@@ -381,8 +397,35 @@ export class _FontRenderer {
             return Math.floor(this._posX);
         }
     }
+    /**
+     * Draws from left side align
+     * @param text 
+     * @param x 
+     * @param y 
+     * @param color 0xFFFFFFFF
+     * @param dropShadow true
+     */
     public _drawString(text: string, x: number, y: number, color: number, dropShadow: boolean) {
+        return this._drawStringLeftRight(text, x, y, color, dropShadow, false);
+    }
+    /**
+     * Draws from right side align
+     * @param text 
+     * @param x 
+     * @param y 
+     * @param color 0xFFFFFFFF
+     * @param dropShadow true
+     */
+    public _drawStringRight(text: string, x: number, y: number, color: number, dropShadow: boolean) {
+        return this._drawStringLeftRight(text, x, y, color, dropShadow, true);
+    }
+    public _drawStringLeftRight(text: string, x: number, y: number, color: number, dropShadow: boolean, right: boolean) {
         // this.reset()
+        let preLen = this._calcTextLen(text);
+        if(right){
+            x -= preLen;
+        }
+
         let len;
         if (dropShadow) {
             len = this._renderString(text, x + 1, y + 1, color, true);
@@ -393,6 +436,41 @@ export class _FontRenderer {
 
         return len;
     }
+    public _calcTextLen(str: string){
+        let bold = false;
+        let textSize = 0;
+        for (let i = 0; i < str.length; i++) {
+            const c = str.charCodeAt(i);
+            if (c === 167 && i + 1 < str.length) {
+                // _Klocki._log("color")
+                const col = str.charAt(i + 1).toLowerCase().charCodeAt(0);
+
+                const num = col >= 48 && col <= 57; // 0 9
+                const af = col >= 97 && col <= 102;
+                if (num || af) {
+                    //let i1 = col;
+                    //if (num) { i1 -= 48; } // 0
+                    //if (af) { i1 -= 97 - 10; } // 'a'-10
+                    bold = false;
+
+                    
+                }else if (col === 108) {// l
+                    bold = true;
+                } else if (col === 114) {// r
+                    bold = false;
+                }
+                ++i;
+            }else{
+                const size = this._charSize(c);
+                textSize += size;
+                if(bold){
+                    textSize += 1;
+                }
+            }
+        }
+        return textSize;
+    }
+    
     public _readFontTexture(img: _GoImage) {
         this._readDefaultFontTexture(img._subImage(new _GoRect(0, 0, img._rect._dx(), img._rect._dy())), 16, 16);
     }
