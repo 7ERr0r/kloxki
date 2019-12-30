@@ -18,37 +18,38 @@ export class _ModelRegistry {
         if (guiChat) {
             guiChat._appendMessage({ text: "Loading model " + name });
         }
-        let url = this._klocki._assetURI+"assets/" + _Klocki._forbiddenWord + "/models/" + name + ".json";
-        //console.log("fetchModel", url)
+        const url = this._klocki._assetURI + "assets/" + _Klocki._forbiddenWord + "/models/" + name + ".json";
+        // console.log("fetchModel", url)
         try {
-        return fetch(url)
-            .then((response)=>{
+            return fetch(url)
+            .then((response) => {
                 if (!response.ok || response.status !== 200) {
                     return null;
                 }
-                //console.log("fetchedModel", url)
+                // console.log("fetchedModel", url)
 
                 return response.json();
             });
-        }catch(e){
+        } catch (e) {
             return null;
         }
             
     }
     public _loadModel(name: string): _BlockModel | null {
-        let mjson = this._klocki._getAssetJSON("models/"+name);
-        if(!mjson){
-            //console.warn("no model for "+name);
+        const mjson = this._klocki._getAssetJSON("models/" + name);
+        if (!mjson) {
+            // console.warn("no model for "+name);
             return null;
         }
         const loaded = _BlockModel._load(mjson);
-        //console.log(name, mjson, loaded)
+        // console.log(name, mjson, loaded)
         if (loaded._parent !== null) {
             const parentModel = this._getModel(loaded._parent);
-            if(parentModel != null){
+            if (parentModel != null) {
                 loaded._init(parentModel);
-            }else{
-                console.log("null parentModel?", name)
+            } else {
+                console.log("null parentModel?", name);
+
                 return null;
             }
         }

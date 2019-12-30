@@ -397,19 +397,19 @@ export class _OriginRenderOcTree {
         const distanceChunk = (distanceSq >> 8) | 0;
         const secLen = this._klocki._bakeSectionsByDistanceSquared.length;
         if (distanceChunk >= 0 && distanceChunk < secLen) {
-                const bakeSectionsArr = this._klocki._getBakeSections(distanceChunk);
-                const sectionsArr = this._klocki._getRenderSections(distanceChunk);
-                const indexLast = 1 + (<number>bakeSectionsArr[0]) | 0;
-                if (!!bake && indexLast < bakeSectionsArr.length) {
+            const bakeSectionsArr = this._klocki._getBakeSections(distanceChunk);
+            const sectionsArr = this._klocki._getRenderSections(distanceChunk);
+            const indexLast = 1 + (<number>bakeSectionsArr[0]) | 0;
+            if (!!bake && indexLast < bakeSectionsArr.length) {
                     bakeSectionsArr[indexLast] = this;
                     (<number>bakeSectionsArr[0])++;
                 }
                 
-                const index = (++(<number>sectionsArr[0])) | 0;
-                if (index < sectionsArr.length) {
+            const index = (++(<number>sectionsArr[0])) | 0;
+            if (index < sectionsArr.length) {
                     sectionsArr[index] = [this, this._drawCount, this._glBuffer];
                 }
-            }
+        }
         
     }
 

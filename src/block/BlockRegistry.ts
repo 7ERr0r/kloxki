@@ -66,10 +66,10 @@ export class _BlockRegistry {
             const b = this._blocksByNameOrder[i];
             try {
                 const model = this._modelRegistry._loadModel("block/" + b._name);
-                //console.log("loaded model "+b._name);
+                // console.log("loaded model "+b._name);
                 b._model = model;
-            }catch(e){
-                console.log("can't load model "+b._name, e)
+            } catch (e) {
+                console.log("can't load model " + b._name, e);
             }
         }
         // this._makeGlobalPalette();

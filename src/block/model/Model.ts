@@ -93,7 +93,6 @@ export class _BlockModel {
     public static _load(mjson: any): _BlockModel {
         const m = new _BlockModel();
 
-
         m._parent = typeof(mjson.parent) === 'string' ? mjson.parent : null;
         // m._selfTextures =
 

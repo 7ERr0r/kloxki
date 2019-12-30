@@ -79,7 +79,7 @@ export class _RenderItemFrame extends _RenderEntity {
             this._skinLoaded = true;
         }, false);
         */
-        //this._skinInfo = skinInfo;
+        // this._skinInfo = skinInfo;
     }
 
     public _render(entity: _KlockiEntityItemFrame) {

@@ -75,18 +75,16 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
             ];
             const limbBoxes = this._limbBoxes = new Array<_RenderBox>(8);
             for (let i = 0; i < 4; i++) {
-                let arms = i >= 2;
-                let thichness = arms?this._armThickness:4;
+                const arms = i >= 2;
+                const thichness = arms ? this._armThickness : 4;
 
                 const off = limbOffsets[i];
                 // i inside, o outside
                 const litex = tex._stdBox64(off[0] + 4, off[1] + 4, thichness, 12, 4);
                 const lotex = tex._stdBox64(off[2] + 4, off[3] + 4, thichness, 12, 4);
 
-                
-
-                limbBoxes[i * 2] = new _RenderBox(klocki, -(thichness/2) / 16, -12 / 16, -2 / 16, thichness / 16, 12 / 16, 4 / 16, litex);
-                limbBoxes[i * 2 + 1] = new _RenderBox(klocki, -(thichness+0.4)/2 / 16, -12.2 / 16, -2.2 / 16, (thichness+0.4) / 16, 12.4 / 16, 4.4 / 16, lotex);
+                limbBoxes[i * 2] = new _RenderBox(klocki, -(thichness / 2) / 16, -12 / 16, -2 / 16, thichness / 16, 12 / 16, 4 / 16, litex);
+                limbBoxes[i * 2 + 1] = new _RenderBox(klocki, -(thichness + 0.4) / 2 / 16, -12.2 / 16, -2.2 / 16, (thichness + 0.4) / 16, 12.4 / 16, 4.4 / 16, lotex);
 
             }
 
@@ -110,9 +108,8 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
             this._skinLoaded = true;
         }, false);
 
-
         const wingInfo: _TextureInfo = klocki._textureManager._loadTextureFromURL("assets/wings/wings3.png", null, (tex: _KlockiTexture) => {
-            let divisions = 32;
+            const divisions = 32;
             this._wingLeft = new _RenderLayerVoxels(klocki, divisions, 0, 0, 0, 1, 1 / divisions, 1, tex);
             this._wingRight = new _RenderLayerVoxels(klocki, divisions, 0, 0, 0, 1, 1 / divisions, 1, tex);
             this._wingLoaded = true;

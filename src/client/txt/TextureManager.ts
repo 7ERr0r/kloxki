@@ -37,7 +37,7 @@ export class _TextureManager {
         this._textureAllocator = new _TextureAllocator();
 
         this._atlasSize = 1024;
-        this._nAtlas = this._klocki._reducedMemory?1:32;
+        this._nAtlas = this._klocki._reducedMemory ? 1 : 32;
 
         this._defaultKlockiTexture = new _KlockiTexture(null, 0, new _GoRect(0, 0, 1, 1));
 
@@ -74,7 +74,7 @@ export class _TextureManager {
         if (texInfo !== void 0) {
             return texInfo;
         }
-        //console.log("first time", url);
+        // console.log("first time", url);
         texInfo = this._loadTextureFromURL(url, null, null, fixedAlias);
         this._cachedTextures.set(url, texInfo);
 
@@ -163,8 +163,8 @@ export class _TextureManager {
         // gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this._groupParamTexture);
         // gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this._groupParamsTexSize, this._groupParamsTexSize, gl.RGBA, gl.FLOAT, sliced, 0);
-        let height = 1+((this._groupParamsCount << 2) >> 8);
-        if(height > 256){
+        const height = 1 + ((this._groupParamsCount << 2) >> 8);
+        if (height > 256) {
             throw new Error("max height");
         }
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, height, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
@@ -173,11 +173,11 @@ export class _TextureManager {
     }
 
     private _downloadTextureFromURL(url: string, precallback: Function | null, postcallback: Function | null, fixedAlias: boolean, textureInfo: _TextureInfo): void {
-        const realURL = this._klocki._assetURI+url;
-        //console.log("fetch?", realURL);
+        const realURL = this._klocki._assetURI + url;
+        // console.log("fetch?", realURL);
         fetch(realURL).then((v: Response) => {
             if (!v.ok) {
-                throw new Error("texture fetch: "+v.statusText);
+                throw new Error("texture fetch: " + v.statusText);
             }
 
             return v.arrayBuffer();

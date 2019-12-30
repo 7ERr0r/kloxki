@@ -6,7 +6,6 @@ import { _WorldRenderer } from "../renderer/WorldRenderer";
 import { _TextureInfo } from "../txt/TextureInfo";
 import { _Klocki } from "../Klocki";
 
-
 export class _RenderLayerVoxels {
     public static _tempPoints: vec3[] = [vec3.create(), vec3.create(), vec3.create(), vec3.create(), vec3.create(), vec3.create(), vec3.create(), vec3.create()];
     public static _identity: mat4 = mat4.create();

@@ -50,8 +50,8 @@ export class _WorldClient {
             // thePlayer._tick();
 
             this._klocki._renderList._updatePositions(thePlayer._posX, thePlayer._posY, thePlayer._posZ);
-            if(this._playHandler != null){
-            this._playHandler._sendPosition(thePlayer._posX, thePlayer._posY, thePlayer._posZ, thePlayer._yaw, thePlayer._pitch, thePlayer._onGround);
+            if (this._playHandler != null) {
+                this._playHandler._sendPosition(thePlayer._posX, thePlayer._posY, thePlayer._posZ, thePlayer._yaw, thePlayer._pitch, thePlayer._onGround);
             }
         }
         

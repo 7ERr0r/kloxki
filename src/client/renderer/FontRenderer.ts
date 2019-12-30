@@ -60,7 +60,6 @@ export class _FontRenderer {
         this._texOffsetX = 0;
         this._texOffsetY = 0;
 
-
         this._charWidth = new Uint8Array(1024);
         this._colorCode = new Uint32Array(32);
         this._makeCharIdMap();
@@ -68,10 +67,9 @@ export class _FontRenderer {
 
         this._reset();
     }
-    public _ensureFontLoaded(){
-        if(this._fontTexture == null){
+    public _ensureFontLoaded() {
+        if (this._fontTexture == null) {
 
-        
             this._fontTexture = this._klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/font/ascii.png", (img: _GoImage) => this._readFontTexture(img), null, false);
         }
     }
@@ -88,7 +86,7 @@ export class _FontRenderer {
         this._cachedColor = 0xFFFFFFFF;
         this._alpha = 1;
 
-        if(this._fontTexture != null){ 
+        if (this._fontTexture != null) {
             this._texOffsetX = this._fontTexture._tex._subRect._min._x / this._klocki._textureManager._atlasSize;
             this._texOffsetY = this._fontTexture._tex._subRect._min._y / this._klocki._textureManager._atlasSize;
             this._texScale = this._fontTexture._tex._subRect._dx() / this._klocki._textureManager._atlasSize;

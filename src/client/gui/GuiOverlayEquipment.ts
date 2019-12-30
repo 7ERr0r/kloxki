@@ -12,8 +12,8 @@ export class _GuiOverlayEquipment extends _Gui {
         this._widgetsTexture = null;
 
     }
-    public _ensureTextureLoaded(){
-        if(this._widgetsTexture === null){
+    public _ensureTextureLoaded() {
+        if (this._widgetsTexture === null) {
             this._widgetsTexture = this._klocki._textureManager._loadCached("assets/" + _Klocki._forbiddenWord + "/textures/gui/widgets.png", false);
         }
     }

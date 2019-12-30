@@ -11,24 +11,24 @@ export class _Display {
     public _translucent: boolean;
 
     constructor(domID: string, attributes: any) {
-        if(attributes && attributes.resizeGetter instanceof Function){
-            this._resizeGetter = attributes.resizeGetter
-        }else{
-            this._resizeGetter = ()=>({ width: window.innerWidth, height: window.innerHeight })
+        if (attributes && attributes.resizeGetter instanceof Function) {
+            this._resizeGetter = attributes.resizeGetter;
+        } else {
+            this._resizeGetter = () => ({ width: window.innerWidth, height: window.innerHeight });
         }
         const canvas: HTMLElement | null = document.getElementById(domID);
         if (!canvas) {
-            throw new Error('#'+domID+' not found');
+            throw new Error('#' + domID + ' not found');
         }
         if (!(canvas instanceof HTMLCanvasElement)) {
-            throw new Error('#'+domID+' is not a canvas');
+            throw new Error('#' + domID + ' is not a canvas');
         }
         const glAttributes = { antialias: false, translucent: false };
-        if(attributes && typeof attributes.antialias !== "undefined"){
-            glAttributes.antialias = attributes.antialias
+        if (attributes && typeof attributes.antialias !== "undefined") {
+            glAttributes.antialias = attributes.antialias;
         }
-        if(attributes && typeof attributes.translucent !== "undefined"){
-            glAttributes.translucent = attributes.translucent
+        if (attributes && typeof attributes.translucent !== "undefined") {
+            glAttributes.translucent = attributes.translucent;
         }
         this._translucent = glAttributes.translucent;
         const webgl = canvas.getContext('webgl2', glAttributes) || canvas.getContext('experimental-webgl2', glAttributes);
@@ -47,7 +47,7 @@ export class _Display {
 
     }
     public _resize(): void {
-        let resizeInfo = this._resizeGetter();
+        const resizeInfo = this._resizeGetter();
         this._width = resizeInfo.width;
         this._height = resizeInfo.height;
 
@@ -70,7 +70,7 @@ export class _Display {
 
         const numQuads = 256 * 1024;
         const indices = new Uint32Array(6 * numQuads);
-        let j=0, k=0;
+        let j = 0, k = 0;
         for (let i = 0; i < numQuads; i++) {
             j = i * 6;
             k = i * 4;

@@ -240,7 +240,7 @@ export class _Controls {
     }
     public _handleTouchMove(evt: TouchEvent) {
         evt.preventDefault();
-        //console.log("touch move");
+        // console.log("touch move");
         const touches = evt.changedTouches;
 
         let thePlayer: _KlockiEntityPlayerSP | null = null;
@@ -287,7 +287,7 @@ export class _Controls {
     public _handleTouchStart(evt: TouchEvent) {
         evt.preventDefault();
         const touches = evt.changedTouches;
-        //console.log("touch start");
+        // console.log("touch start");
         // this._klocki._display._canvas.requestFullscreen();
 
         for (let i = 0; i < touches.length; i++) {
@@ -358,7 +358,7 @@ export class _Controls {
         }
     }
     public _addTouchHandlers() {
-        //console.log("registering touches");
+        // console.log("registering touches");
         const canvas = this._klocki._display._canvas;
 
         canvas.addEventListener("touchstart", (e: TouchEvent) => this._handleTouchStart(e), false);

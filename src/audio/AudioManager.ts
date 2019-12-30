@@ -70,7 +70,7 @@ export class _AudioManager {
             const resourceHash = resourceInfo.hash;
             const resourcePath = _Klocki._hashToPath(resourceHash);
 
-            const request = new Request(this._klocki._assetURI+resourcePath);
+            const request = new Request(this._klocki._assetURI + resourcePath);
 
             fetch(request).then(function (response) {
                 return response.arrayBuffer();
