@@ -37,7 +37,7 @@ export class _TextureManager {
         this._textureAllocator = new _TextureAllocator();
 
         this._atlasSize = 1024;
-        this._nAtlas = 32;
+        this._nAtlas = this._klocki._reducedMemory?1:32;
 
         this._defaultKlockiTexture = new _KlockiTexture(null, 0, new _GoRect(0, 0, 1, 1));
 
@@ -163,7 +163,11 @@ export class _TextureManager {
         // gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this._groupParamTexture);
         // gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this._groupParamsTexSize, this._groupParamsTexSize, gl.RGBA, gl.FLOAT, sliced, 0);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, this._groupParamsTexSize, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
+        let height = 1+((this._groupParamsCount << 2) >> 8);
+        if(height > 256){
+            throw new Error("max height");
+        }
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, height, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
         
         // gl.activeTexture(gl.TEXTURE0);
     }

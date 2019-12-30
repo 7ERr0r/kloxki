@@ -55,10 +55,11 @@ export class _RenderPlayer extends _RenderEntity {
         entity._legLeftOBox!._renderAt(wr, _RenderPlayer._legLeftMatrix);
 
         let iTime = entity._idleTime;
-        iTime += this._klocki._timer._deltaTime * 0.02;
+        iTime += this._klocki._timer._deltaTime * 0.9;
         if (iTime > Math.PI * 2) {
             iTime -= Math.PI * 2;
         }
+        entity._idleTime = iTime;
 
         mat4.translate(_RenderPlayer._armRightMatrix, _RenderPlayer._positionMatrix, [-(4+thickness/2) / 16, 12 / 16 + 12 / 16, 0]);
         mat4.rotateZ(_RenderPlayer._armRightMatrix, _RenderPlayer._armRightMatrix, (Math.cos(iTime) * 0.06) - 0.06);

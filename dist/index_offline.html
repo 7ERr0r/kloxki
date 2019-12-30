@@ -31,9 +31,10 @@
                 setTimeout(()=>{
                     landing.innerHTML = "<h1>Rezerwacja zasobów</h1>";
                     window.klocki = new Klocki("klockicanvas", {
-                        antialias: true,
-                        translucent: true,
+                        antialias: false,
                         reducedMemory: true,
+                        clearColor: [1, 1, 1],
+                        translucent: true,
                     });
                     klocki.defaultArmThickness = 3;
                     klocki.fov = 45;

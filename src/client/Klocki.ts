@@ -130,10 +130,15 @@ export class _Klocki {
     public _targetBlock: number[] | null;
     public _made8Daudio: boolean = false;
     public _reducedMemory: boolean;
+    public _clearColor: number[];
 
     
     constructor(domID: string, optionals: any) {
         const reduced: boolean = !!optionals.reducedMemory;
+        this._clearColor = [0.6, 0.7, 1];
+        if(optionals.clearColor){
+            this._clearColor = optionals.clearColor;
+        }
         this._reducedMemory = reduced;
         this._gameSettings = new _GameSettings();
         this._gameSettings._loadOptions();
@@ -509,8 +514,8 @@ export class _Klocki {
         
         // const attachmentPoint = gl.COLOR_ATTACHMENT0;
        // gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, this._blurTexture, 0);
-
-        gl.clearColor(0.6, 0.7, 1, this._display._translucent?0:1);
+        const cc = this._clearColor;
+        gl.clearColor(cc[0], cc[1], cc[2], this._display._translucent?0:1);
         gl.clearDepth(1);
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
@@ -835,7 +840,7 @@ export class _Klocki {
         const audioCtx = this._audioManager._audioCtx;
         const source = audioCtx.createBufferSource();
 
-        const request = new Request('kuku.webm');
+        const request = new Request(this._assetURI+'kuku.webm');
 
         const panner = this._audioManager._newPanner();
         panner._setPosition(x, y, z);

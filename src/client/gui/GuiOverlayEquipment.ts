@@ -5,16 +5,22 @@ import { _KlockiTexture } from "../txt/KlockiTexture";
 import { _Gui } from "./Gui";
 
 export class _GuiOverlayEquipment extends _Gui {
-    public _widgetsTexture: _TextureInfo;
+    public _widgetsTexture: _TextureInfo | null;
 
     constructor(klocki: _Klocki) {
         super(klocki);
-        this._widgetsTexture = this._klocki._textureManager._loadCached("assets/" + _Klocki._forbiddenWord + "/textures/gui/widgets.png", false);
+        this._widgetsTexture = null;
 
+    }
+    public _ensureTextureLoaded(){
+        if(this._widgetsTexture === null){
+            this._widgetsTexture = this._klocki._textureManager._loadCached("assets/" + _Klocki._forbiddenWord + "/textures/gui/widgets.png", false);
+        }
     }
 
     public _render(): void {
-        if (this._widgetsTexture._promise == null) {
+        this._ensureTextureLoaded();
+        if (this._widgetsTexture!._promise == null) {
 
             this._centeredHotbarTex(182, 22, 0, 0, 0);
             const world = this._klocki._theWorld;
@@ -46,7 +52,7 @@ export class _GuiOverlayEquipment extends _Gui {
         const cx = (sx >> 1) + offsetx;
         const uir = this._klocki._uiRenderer;
 
-        const tex = this._widgetsTexture;
+        const tex = this._widgetsTexture!;
         const tox = tex._texOffsetX + tex._texScaleX * (texoffx / 256);
         const toy = tex._texOffsetY + tex._texScaleY * (texoffy / 256);
 

@@ -43,11 +43,12 @@ export class _FontRenderer {
     public _red: number = 1;
     public _blue: number = 1;
     public _green: number = 1;
-    public _fontTexture: _TextureInfo;
+    public _fontTexture: _TextureInfo | null;
 
     constructor(klocki: _Klocki) {
         this._klocki = klocki;
         this._uiRenderer = klocki._uiRenderer;
+        this._fontTexture = null;
         // this.vao = gl.createVertexArray()
         // gl.bindVertexArray(this.vao)
         this._guiScale = 2;
@@ -59,7 +60,6 @@ export class _FontRenderer {
         this._texOffsetX = 0;
         this._texOffsetY = 0;
 
-        this._fontTexture = this._klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/font/ascii.png", (img: _GoImage) => this._readFontTexture(img), null, false);
 
         this._charWidth = new Uint8Array(1024);
         this._colorCode = new Uint32Array(32);
@@ -68,6 +68,14 @@ export class _FontRenderer {
 
         this._reset();
     }
+    public _ensureFontLoaded(){
+        if(this._fontTexture == null){
+
+        
+            this._fontTexture = this._klocki._textureManager._loadTextureFromURL("assets/" + _Klocki._forbiddenWord + "/textures/font/ascii.png", (img: _GoImage) => this._readFontTexture(img), null, false);
+        }
+    }
+
     public _reset() {
 
         this._posX = 1;
@@ -80,9 +88,11 @@ export class _FontRenderer {
         this._cachedColor = 0xFFFFFFFF;
         this._alpha = 1;
 
-        this._texOffsetX = this._fontTexture._tex._subRect._min._x / this._klocki._textureManager._atlasSize;
-        this._texOffsetY = this._fontTexture._tex._subRect._min._y / this._klocki._textureManager._atlasSize;
-        this._texScale = this._fontTexture._tex._subRect._dx() / this._klocki._textureManager._atlasSize;
+        if(this._fontTexture != null){ 
+            this._texOffsetX = this._fontTexture._tex._subRect._min._x / this._klocki._textureManager._atlasSize;
+            this._texOffsetY = this._fontTexture._tex._subRect._min._y / this._klocki._textureManager._atlasSize;
+            this._texScale = this._fontTexture._tex._subRect._dx() / this._klocki._textureManager._atlasSize;
+        }
     }
 
     public _makeColorCode() {
@@ -227,6 +237,7 @@ export class _FontRenderer {
     }
 
     public _renderStringAtPos(str: string, dropShadow: boolean) {
+        this._ensureFontLoaded();
         for (let i = 0; i < str.length; i++) {
             const c = str.charCodeAt(i);
 
