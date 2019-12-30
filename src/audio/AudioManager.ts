@@ -63,7 +63,7 @@ export class _AudioManager {
         const r = Math.floor(Math.random() * soundPaths.length);
         const soundPath = soundPaths[r];
         const resourceId = _Klocki._forbiddenWord + "/sounds/" + soundPath + ".ogg";
-        console.log("playing " + resourceId);
+        _Klocki._log("playing " + resourceId);
         const resourceInfo = this._klocki._assetsJson.objects[resourceId];
 
         if (resourceInfo) {

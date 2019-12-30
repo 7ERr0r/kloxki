@@ -87,9 +87,9 @@ export class _RenderItemFrame extends _RenderEntity {
             return;
         }
         super._render(entity);
-        // console.log("render cree");
+        // _Klocki._log("render cree");
         // const playerScale = 0.9375;
-        // console.log("rendering player");
+        // _Klocki._log("rendering player");
         // const partial = this._klocki._getPartialTicks();
         // const matEntity = _RenderEntityLiving._positionMatrix;
         // mat4.scale(matEntity, matEntity, [playerScale, playerScale, playerScale]);

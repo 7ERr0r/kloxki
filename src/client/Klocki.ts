@@ -392,7 +392,7 @@ export class _Klocki {
                 if (sections != null) {
                     const count = sections[0];
                     if (count > 0) {
-                        // console.log("baking", count, "sections at distanceSq", secsIndex)
+                        // _Klocki._log("baking", count, "sections at distanceSq", secsIndex)
                     }
                     for (let i = 1; i <= count; i++) {
                         const t = (<_OriginRenderOcTree>sections[i])._bakeTask;
@@ -475,7 +475,7 @@ export class _Klocki {
         const toDelete = this._reuseGlBuffers[this._reuseGlBuffersIndexRemover];
         for (let i = 0; i < toDelete.length; i++) {
             gl.deleteBuffer(toDelete[i]);
-            // console.log("deleteing");
+            // _Klocki._log("deleteing");
         }
         this._reuseGlBuffers[this._reuseGlBuffersIndexRemover] = [];
         if (++this._reuseGlBuffersIndexRemover >= this._reuseGlBuffers.length) {
@@ -972,7 +972,7 @@ export class _Klocki {
             const y = by >> 4;
             const z = bz >> 4;
             let w = world._getSectionWatcher(x, y, z);
-            // console.log("block change", bx,by,bz,packet._blockID!);
+            // _Klocki._log("block change", bx,by,bz,packet._blockID!);
             let section = w._section;
             if (!w._section) {
                 section = new _ChunkSection(x, y, z, new _Uint32BlockStorage(y, false, new Uint32Array(4096)));
@@ -1126,7 +1126,10 @@ export class _Klocki {
     }
     private _receiveAssetsJsons(msgpacked: Uint8Array) {
         this._assetsJsons = <any>decode(msgpacked);
-        // console.log("msgpacked:", this._assetsJsons);
+        // _Klocki._log("msgpacked:", this._assetsJsons);
+    }
+    public static _log(...args: any[]) {
+        console.log("[Klocki]", ...args);
     }
 
 }

@@ -84,7 +84,7 @@ var toString = Object.prototype.toString;
  *
  * if (inflate.err) { throw new Error(inflate.err); }
  *
- * console.log(inflate.result);
+ * _Klocki._log(inflate.result);
  * ```
  **/
 function Inflate(options) {
@@ -324,7 +324,7 @@ Inflate.prototype.onEnd = function (status) {
  * try {
  *   output = pako.inflate(input);
  * } catch (err)
- *   console.log(err);
+ *   _Klocki._log(err);
  * }
  * ```
  **/

@@ -26,7 +26,7 @@
             var imported = document.createElement('script');
             imported.src = 'main.js?v='+((new Date).getTime());
             imported.addEventListener("load", ()=>{
-                console.log("loaded main klocki");
+                _Klocki._log("loaded main klocki");
                 landing.innerHTML = "<h1>Kompilacja</h1>";
                 setTimeout(()=>{
                     landing.innerHTML = "<h1>Rezerwacja zasobów</h1>";

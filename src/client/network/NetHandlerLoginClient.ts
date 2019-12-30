@@ -13,11 +13,11 @@ export class _NetHandlerLoginClient implements _INetHandler {
     }
 
     public _handleDisconnect(packet: _SPacketDisconnect): void {
-        console.log(`Disconnected: ${packet._reason}`);
+        _Klocki._log(`Disconnected: ${packet._reason}`);
         alert(`Disconnected: ${packet._reason}`);
     }
     public _handleLoginSuccess(packet: _SPacketLoginSuccess): void {
-        console.log(`Logged as ${packet._name} with UUID ${packet._uuid}`);
+        _Klocki._log(`Logged as ${packet._name} with UUID ${packet._uuid}`);
         if (this._klocki._networkManager) {
             this._klocki._networkManager._packetListener = new _NetHandlerPlayClient(this._klocki);
         }

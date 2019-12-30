@@ -72,7 +72,7 @@ export class _NetworkManager {
         }
     }
     public _onError(event: ErrorEvent): void {
-        console.log(event);
+        _Klocki._log(event);
     }
     public _onPacket(buf: Uint8Array): void {
         const p: _PacketBuffer = new _PacketBuffer(buf.buffer, buf.byteOffset, buf.byteLength);
@@ -87,10 +87,10 @@ export class _NetworkManager {
                     }
                     packet._processPacket(this._packetListener);
                 } else {
-                    // console.log(`missing packet id ${id} = 0x`+id.toString(16));
+                    // _Klocki._log(`missing packet id ${id} = 0x`+id.toString(16));
                 }
             } catch (e) {
-                console.log(`err in`, id, "= 0x" + id.toString(16), e);
+                _Klocki._log(`err in`, id, "= 0x" + id.toString(16), e);
             }
         } else {
             console.warn(`unhandled packet ${id} = 0x` + id.toString(16));
@@ -108,7 +108,7 @@ export class _NetworkManager {
             const buf = data;
             this._onPacket(buf);
         } else {
-            console.log(`received message: ${event.data}`);
+            _Klocki._log(`received message: ${event.data}`);
         }
     }
     public _requestPacketsFromWorker() {

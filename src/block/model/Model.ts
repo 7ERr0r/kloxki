@@ -101,7 +101,7 @@ export class _BlockModel {
             if (texs.hasOwnProperty(texKey)) {
 
                 const texVal = texs[texKey];
-                // console.log("tex", texKey, texVal);
+                // _Klocki._log("tex", texKey, texVal);
                 if (texKey.charAt(0) === '#') {
                     texKey = texKey.substring(1);
                 }

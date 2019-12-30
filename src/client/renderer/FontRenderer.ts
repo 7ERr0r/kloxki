@@ -167,7 +167,7 @@ export class _FontRenderer {
         charOffsety = 0;
 
         atlasId = charId >> 8;
-        // console.log(charId)
+        // _Klocki._log(charId)
         if (atlasId === 0) {
             charSize = this._charWidth[charId];
             chari = (charId & 0x0F) * 8;
@@ -231,7 +231,7 @@ export class _FontRenderer {
     }
     public _setColor(r: number, g: number, b: number, a: number): void {
         this._cachedColor = (a << 24) | (b << 16) | (g << 8) | r;
-        // console.log("setColor", r,b,g,a, this.cachedColor)
+        // _Klocki._log("setColor", r,b,g,a, this.cachedColor)
     }
 
     public _renderStringAtPos(str: string, dropShadow: boolean) {
@@ -240,7 +240,7 @@ export class _FontRenderer {
             const c = str.charCodeAt(i);
 
             if (c === 167 && i + 1 < str.length) {
-                // console.log("color")
+                // _Klocki._log("color")
                 const col = str.charAt(i + 1).toLowerCase().charCodeAt(0);
 
                 const num = col >= 48 && col <= 57; // 0 9
@@ -321,7 +321,7 @@ export class _FontRenderer {
                     this._posX -= f1;
                     this._posY -= f1;
                 }
-                // console.log("adding", c, this.posX, this.posY)
+                // _Klocki._log("adding", c, this.posX, this.posY)
                 let f = this._addChar(c, this._italicStyle);
 
                 if (flag) {
@@ -399,7 +399,7 @@ export class _FontRenderer {
     public _readDefaultFontTexture(img: _GoImage, gw: number, gh: number) {
         const sw = img._rect._dx() / gw;
         const sh = img._rect._dy() / gh;
-        // console.logconsole.log(img)
+        // _Klocki._log_Klocki._log(img)
         for (let i = 0; i <= 255; i++) {
             const cx = (i & 0xF) * sw;
             const cy = (i >> 4) * sh;
@@ -410,7 +410,7 @@ export class _FontRenderer {
         let startx = 0;
         let endx = 0;
         let start = true;
-        // console.log(charIdOrder[charId], img.rect.dx(), img)
+        // _Klocki._log(charIdOrder[charId], img.rect.dx(), img)
         xloop:
         for (let x = img._rect._min._x; x < img._rect._max._x; x++) {
             for (let y = img._rect._min._y; y < img._rect._max._y; y++) {
@@ -418,7 +418,7 @@ export class _FontRenderer {
                 const a = img._pixels[offset + 3];
                 if (start && a != 0) {
                     startx = x;
-                    // console.log("startx", x, a, offset)
+                    // _Klocki._log("startx", x, a, offset)
                     start = false;
                     continue xloop;
                 } else if (!start && a != 0) {

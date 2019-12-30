@@ -1,3 +1,5 @@
+import { _Klocki } from "../client/Klocki";
+
 export class _Timer {
     public _ticksPerSecond: number;
     public _timeNow: number;
@@ -25,7 +27,7 @@ export class _Timer {
         this._deltaTicks = this._deltaTimeQuantized * this._ticksPerSecond;
 
         if (Math.abs(this._deltaTicks) > 5 * this._ticksPerSecond) {
-            console.log("Can't keep up! Skipping", this._deltaTicks, "ticks");
+            _Klocki._log("Can't keep up! Skipping", this._deltaTicks, "ticks");
             this._deltaTime = 0;
             this._deltaTicks = 0;
             this._timeNowQuantized = this._timeNow;

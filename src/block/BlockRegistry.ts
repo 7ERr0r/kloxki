@@ -12,6 +12,7 @@ import { _ModelRegistry } from "./model/ModelRegistry";
 import { _BlocksHelper } from "./BlocksHelper";
 import { _DyeColor } from "./DyeColor";
 import { _Effects } from "./Effects";
+import { _Klocki } from "../client/Klocki";
 
 export class _BlockRegistry {
     public _blocksByLegacyId: _LegacyBlockDataMap[];
@@ -66,10 +67,10 @@ export class _BlockRegistry {
             const b = this._blocksByNameOrder[i];
             try {
                 const model = this._modelRegistry._loadModel("block/" + b._name);
-                // console.log("loaded model "+b._name);
+                // _Klocki._log("loaded model "+b._name);
                 b._model = model;
             } catch (e) {
-                console.log("can't load model " + b._name, e);
+                _Klocki._log("can't load model " + b._name, e);
             }
         }
         // this._makeGlobalPalette();

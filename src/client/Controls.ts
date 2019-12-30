@@ -76,7 +76,7 @@ export class _Controls {
                     const world = klocki._theWorld;
                     if (world !== null) {
                         const thePlayer = world._thePlayer!;
-                        // console.log(e.movementX, e.movementY, e.clientX, e.clientY, locked);
+                        // _Klocki._log(e.movementX, e.movementY, e.clientX, e.clientY, locked);
                         if (klocki._smoothCam || klocki._zoomed) {
                             klocki._yawSmoothSpeed += e.movementX / 400;
                             klocki._pitchSmoothSpeed += e.movementY / 400;
@@ -158,7 +158,7 @@ export class _Controls {
 
         const was = this._pressed.get(key);
         this._pressed.set(key, true);
-        // console.log("pressed", key)
+        // _Klocki._log("pressed", key)
         if (was) {
             return;
         }
@@ -193,7 +193,7 @@ export class _Controls {
     public _keyup(e: KeyboardEvent) {
         const key = e.key.toLowerCase();
         this._pressed.set(key, false);
-        // console.log("unpressed", key)
+        // _Klocki._log("unpressed", key)
 
     }
     public isPressed(key: string) {
@@ -224,7 +224,7 @@ export class _Controls {
                 }
                 this._ongoingTouches.splice(idx, 1);
             } else {
-                // console.log("can't figure out which touch to end");
+                // _Klocki._log("can't figure out which touch to end");
             }
         }
     }
@@ -240,7 +240,7 @@ export class _Controls {
     }
     public _handleTouchMove(evt: TouchEvent) {
         evt.preventDefault();
-        // console.log("touch move");
+        // _Klocki._log("touch move");
         const touches = evt.changedTouches;
 
         let thePlayer: _KlockiEntityPlayerSP | null = null;
@@ -280,14 +280,14 @@ export class _Controls {
                 this._ongoingTouches.splice(idx, 1, touch);
 
             } else {
-                // console.log("can't figure out which touch to continue");
+                // _Klocki._log("can't figure out which touch to continue");
             }
         }
     }
     public _handleTouchStart(evt: TouchEvent) {
         evt.preventDefault();
         const touches = evt.changedTouches;
-        // console.log("touch start");
+        // _Klocki._log("touch start");
         // this._klocki._display._canvas.requestFullscreen();
 
         for (let i = 0; i < touches.length; i++) {
@@ -320,7 +320,7 @@ export class _Controls {
             thePlayer = this._klocki._theWorld._thePlayer;
         }
 
-        // console.log("orient")
+        // _Klocki._log("orient")
         if (thePlayer) {
             if (evt.absolute) {
                 thePlayer._yaw += (evt.alpha / 180) * Math.PI;
@@ -358,7 +358,7 @@ export class _Controls {
         }
     }
     public _addTouchHandlers() {
-        // console.log("registering touches");
+        // _Klocki._log("registering touches");
         const canvas = this._klocki._display._canvas;
 
         canvas.addEventListener("touchstart", (e: TouchEvent) => this._handleTouchStart(e), false);

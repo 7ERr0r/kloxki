@@ -112,7 +112,7 @@ var _Z_DEFLATED  = 8;
  *
  * if (deflate.err) { throw new Error(deflate.err); }
  *
- * console.log(deflate.result);
+ * _Klocki._log(deflate.result);
  * ```
  **/
 function Deflate(options) {
@@ -308,7 +308,7 @@ Deflate.prototype.onEnd = function (status) {
  * var pako = require('pako')
  *   , data = Uint8Array([1,2,3,4,5,6,7,8,9]);
  *
- * console.log(pako.deflate(data));
+ * _Klocki._log(pako.deflate(data));
  * ```
  **/
 function deflate(input, options) {

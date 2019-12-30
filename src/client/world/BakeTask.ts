@@ -225,7 +225,7 @@ export class _BakeTask {
         let reducedTexOffsetX = 0;
         let reducedTexOffsetY = 0;
         if (model == null) {
-            // console.log("no model in rendermodel", block._name)
+            // _Klocki._log("no model in rendermodel", block._name)
         } else {
             let texOffsetX = 0, texOffsetY = 0, texScaleX = 0, texScaleY = 0;
             let from: number[] = _BakeTask._initXYZ;
@@ -244,7 +244,7 @@ export class _BakeTask {
                         
                         if (texInfo == null) {
                             const textureName = model._resolveTexture(modelFace._texture);
-                            // console.log("loading tex", textureName);
+                            // _Klocki._log("loading tex", textureName);
                             // this._renderLeaf._klocki._guiChat._appendMessage({"text":"loading "+textureName});
                             if (textureName != "") {
                                 texInfo = this._renderLeaf._klocki._textureManager._loadCached(`assets/` + _Klocki._forbiddenWord + `/textures/` + textureName + `.png`, true);
@@ -254,7 +254,7 @@ export class _BakeTask {
                         if (texInfo != null) {
                             if (texInfo._promise != null) {
                                 // this._stillDirty = true;
-                                // console.log("still loading");
+                                // _Klocki._log("still loading");
                                 texInfo._promise.then(() => {
                                     this._renderLeaf._markDirty();
                                     // this._renderLeaf._klocki._guiChat._appendMessage({"text":"callback "+textureName});

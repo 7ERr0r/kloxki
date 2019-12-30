@@ -7,6 +7,6 @@ export class _ChatLine {
     constructor(jsonChat: any) {
         this._jsonChat = jsonChat;
         this._formattedText = _ChatUtils._toLegacyTextFromChat(jsonChat);
-        // console.log("formatted:", this._formattedText);
+        // _Klocki._log("formatted:", this._formattedText);
     }
 }

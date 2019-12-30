@@ -69,7 +69,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
         this._inPacketArr[reg._CLIENT_CHAT] = _SPacketChat;
         this._inPacketArr[reg._CLIENT_PLAYER_POSITION_AND_LOOK] = _SPacketPlayerPosLook;
         this._inPacketArr[reg._CLIENT_SPAWN_PLAYER] = _SPacketSpawnPlayer;
-        // console.log("chat is ", reg._CLIENT_CHAT)
+        // _Klocki._log("chat is ", reg._CLIENT_CHAT)
         this._inPacketArr[reg._CLIENT_ENTITY_RELATIVE_MOVE] = _SPacketEntityRelativeMove;
         this._inPacketArr[reg._CLIENT_ENTITY_LOOK_AND_RELATIVE_MOVE] = _SPacketEntityLookRelativeMove;
         this._inPacketArr[reg._CLIENT_ENTITY_LOOK] = _SPacketEntityLook;
@@ -94,11 +94,11 @@ export class _NetHandlerPlayClient implements _INetHandler {
 
     }
     public _handleKeepAlive(packet: _SPacketKeepAlive): void {
-        console.log(`keep alive: ${packet._keepAliveID}`);
+        _Klocki._log(`keep alive: ${packet._keepAliveID}`);
         this._netManager._sendPacket(new _CPacketKeepAlive(packet._keepAliveID!));
     }
     public _handleJoinGame(packet: _SPacketJoinGame): void {
-        console.log(`joined the game:`, packet);
+        _Klocki._log(`joined the game:`, packet);
         const world = new _WorldClient(this._klocki, this);
         this._klocki._theWorld = world;
         const thePlayer = new _KlockiEntityPlayerSP(this._klocki);
@@ -118,8 +118,8 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleChat(packet: _SPacketChat): void {
         const jsonChat = JSON.parse(<string>packet._chatComponent);
         const plainText = _ChatUtils._toLegacyTextFromChat(jsonChat);
-        console.log("rawChat:", packet._chatComponent);
-        console.log(`CHAT: ${_ChatColor._stripColor(plainText)}`);
+        _Klocki._log("rawChat:", packet._chatComponent);
+        _Klocki._log(`CHAT: ${_ChatColor._stripColor(plainText)}`);
 
         this._klocki._guiChat._appendMessage(jsonChat);
     }
@@ -167,7 +167,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
             thePlayer._pitch = (packet._pitch! / 180) * Math.PI;
         }
 
-        console.log(v);
+        _Klocki._log(v);
         if (this._protocol >= 107) {
             this._netManager._sendPacket(new _CPacketTeleportConfirm(packet._teleportId!));
         }
@@ -176,7 +176,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
         if (!this._world) {
             return;
         }
-        // console.log(`Received one chunk at pos ${packet._chunkX}x${packet._chunkZ}`);
+        // _Klocki._log(`Received one chunk at pos ${packet._chunkX}x${packet._chunkZ}`);
         const primaryMask = packet._primaryBitMask!;
 
         this._world._setUglyChunkLoaded(packet._chunkX!, packet._chunkZ!);
@@ -219,7 +219,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
 
             this._world!._setUglyChunkLoaded(x, z);
             // const len = packet._chunkData![i].length;
-            // console.log(`Received chunk in bulk at pos ${x}x${z} with ${len} bytes`);
+            // _Klocki._log(`Received chunk in bulk at pos ${x}x${z} with ${len} bytes`);
 
             const primaryMask = packet._primaryBitMask![i];
             let offset = 0;
@@ -259,7 +259,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleSpawnPlayer(packet: _SPacketSpawnPlayer) {
         const world = this._world;
         if (world != null) {
-            console.log("spawning player eid", packet._eid);
+            _Klocki._log("spawning player eid", packet._eid);
 
             const player = new _KlockiEntityPlayerMP(this._klocki);
             player._eid = packet._eid!;
@@ -295,7 +295,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleSpawnMob(packet: _SPacketSpawnMob) {
         const world = this._world;
         if (world != null) {
-            // console.log("spawning mob eid", packet._eid, " type ", packet._mobType);
+            // _Klocki._log("spawning mob eid", packet._eid, " type ", packet._mobType);
 
             let entity: _KlockiEntityLiving | null = null;
             let creeperType = 50;
@@ -339,7 +339,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleSpawnObject(packet: _SPacketSpawnObject) {
         const world = this._world;
         if (world != null) {
-            // console.log("spawning mob eid", packet._eid, " type ", packet._mobType);
+            // _Klocki._log("spawning mob eid", packet._eid, " type ", packet._mobType);
 
             let entity: _KlockiEntityBase | null = null;
             let itemFrameType = 50;
@@ -383,7 +383,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleEntityRelativeMove(packet: _SPacketEntityRelativeMove) {
         const world = this._world;
         if (world != null) {
-            // console.log("relative move eid", packet._eid);
+            // _Klocki._log("relative move eid", packet._eid);
             const entity = world._getEntity(packet._eid!);
             if (entity) {
                 entity._serverPosX += packet._serverx!;
@@ -397,7 +397,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleEntityLookRelativeMove(packet: _SPacketEntityLookRelativeMove) {
         const world = this._world;
         if (world != null) {
-            // console.log("relative look move eid", packet._eid);
+            // _Klocki._log("relative look move eid", packet._eid);
             const entity = world._getEntity(packet._eid!);
             if (entity) {
                 entity._serverPosX += packet._serverx!;
@@ -414,7 +414,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleEntityLook(packet: _SPacketEntityLook) {
         const world = this._world;
         if (world != null) {
-            // console.log("look eid", packet._eid);
+            // _Klocki._log("look eid", packet._eid);
             const entity = world._getEntity(packet._eid!);
             if (entity) {
                 entity._serverYaw = packet._yaw!;
@@ -427,7 +427,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleEntityTeleport(packet: _SPacketEntityTeleport) {
         const world = this._world;
         if (world != null) {
-            // console.log("teleport eid", packet._eid);
+            // _Klocki._log("teleport eid", packet._eid);
             const entity = world._getEntity(packet._eid!);
             if (entity) {
                 entity._serverPosX = packet._serverx!;
@@ -444,7 +444,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
     public _handleEntityDestroy(packet: _SPacketEntityDestroy) {
         const world = this._world;
         if (world != null) {
-            // console.log("relative move eid", packet._eid);
+            // _Klocki._log("relative move eid", packet._eid);
             for (let i = 0; i < packet._count!; i++) {
                 const eid = packet._eids![i];
                 const entity = world._getEntity(eid);
@@ -463,7 +463,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
             // player._inventory.
 
             if (packet._windowId == 0) {
-                console.log("window main inv: " + packet._windowType);
+                _Klocki._log("window main inv: " + packet._windowType);
 
                 for (let i = 0; i < packet._numSlots!; i++) {
                     void(player);
@@ -479,7 +479,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
             const player = world._thePlayer!;
             // player._inventory.
             void(player);
-            console.log("window items " + packet._windowId + " " + packet._count);
+            _Klocki._log("window items " + packet._windowId + " " + packet._count);
             if (packet._windowId == 0) {
                 const inv = player._currentWindow;
                 for (let i = 0; i < packet._count!; i++) {
@@ -495,7 +495,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
             const player = world._thePlayer!;
             // player._inventory.
             void(player);
-            console.log("set slot " + packet._windowId + " " + packet._slotId);
+            _Klocki._log("set slot " + packet._windowId + " " + packet._slotId);
             if (packet._windowId == 0) {
                 const inv = player._currentWindow;
                 
@@ -516,7 +516,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
             const z = bz >> 4;
             // const section = world._getSection(x,y,z);
             let w = world._getSectionWatcher(x, y, z);
-            // console.log("block change", bx,by,bz,packet._blockID!);
+            // _Klocki._log("block change", bx,by,bz,packet._blockID!);
             let section = w._section;
             if (!w._section) {
                 section = new _ChunkSection(x, y, z, new _Uint32BlockStorage(y, false, new Uint32Array(4096)));
@@ -576,7 +576,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
                 const z = bz >> 4;
                 // const section = world._getSection(x,y,z);
                 let w = world._getSectionWatcher(x, y, z);
-                // console.log("multi block change", bx,by,bz, blockID);
+                // _Klocki._log("multi block change", bx,by,bz, blockID);
                 let section = w._section;
                 if (!w._section) {
                     section = new _ChunkSection(x, y, z, new _Uint32BlockStorage(y, false, new Uint32Array(4096)));
@@ -622,7 +622,7 @@ export class _NetHandlerPlayClient implements _INetHandler {
     }
     public _handleChunkData107(packet: _SPacketChunkData107) {
 
-        // console.log(`Received one new chunk at pos ${packet._chunkX}x${packet._chunkZ}`, packet._heightmaps);
+        // _Klocki._log(`Received one new chunk at pos ${packet._chunkX}x${packet._chunkZ}`, packet._heightmaps);
 
         const world = this._world;
         if (!world) {

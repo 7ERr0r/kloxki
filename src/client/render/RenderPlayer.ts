@@ -19,14 +19,14 @@ export class _RenderPlayer extends _RenderEntity {
     public _render(entity: _KlockiEntityPlayer) {
         super._render(entity);
         const playerScale = 0.9375;
-        // console.log("rendering player");
+        // _Klocki._log("rendering player");
         const partial = this._klocki._getPartialTicks();
         const matEntity = _RenderEntity._positionMatrix;
         const thickness = entity._armThickness;
         mat4.scale(matEntity, matEntity, [playerScale, playerScale, playerScale]);
 
         // if(Math.floor(Math.random()*100) == 0){
-        // console.log(matEntity);
+        // _Klocki._log(matEntity);
         // }
         mat4.translate(_RenderPlayer._headMatrix, _RenderPlayer._positionMatrix, [0, 12 / 16 + 12 / 16, 0]);
         mat4.translate(_RenderPlayer._chestMatrix, _RenderPlayer._positionMatrix, [0, 12 / 16 + 6 / 16, 0]);

@@ -147,7 +147,7 @@ export class _OriginRenderOcTree {
                 const wz = this._origin._worldchunkz + this._fromoriginz;
                 this._section = world._getSectionWatcher(wx, wy, wz);
                 this._section._addWatcher(this);
-                // console.log("adding watcher", wx, wy, wz)
+                // _Klocki._log("adding watcher", wx, wy, wz)
 
                 if (this._section._section != null) {
                     this._aliveChunks = 1;
@@ -217,7 +217,7 @@ export class _OriginRenderOcTree {
 
         }
         this._joined = false;
-        // console.log("marking dirty", this._sizex, "at", this._fromoriginx, this._fromoriginy, this._fromoriginz);
+        // _Klocki._log("marking dirty", this._sizex, "at", this._fromoriginx, this._fromoriginy, this._fromoriginz);
 
         const parent = this._parent;
         if (parent != null) {
@@ -459,7 +459,7 @@ export class _OriginRenderOcTree {
 
         const gl = this._klocki._display._gl;
         if (sumLength > 0) {
-            // console.log("sumlen: " + sumLength);
+            // _Klocki._log("sumlen: " + sumLength);
             const stride = this._klocki._worldRendererBaker._stride;
             //
             gl.bindBuffer(gl.ARRAY_BUFFER, this._getBuffer());
@@ -511,7 +511,7 @@ export class _OriginRenderOcTree {
         const gl = this._klocki._display._gl;
 
         if (this._joined && this._drawCount > 0) {
-            // console.log("sumlen: " + sumLength);
+            // _Klocki._log("sumlen: " + sumLength);
             const stride = this._klocki._worldRendererBaker._stride;
             //
             gl.bindBuffer(gl.COPY_READ_BUFFER, this._getBuffer());

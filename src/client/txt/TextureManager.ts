@@ -74,7 +74,7 @@ export class _TextureManager {
         if (texInfo !== void 0) {
             return texInfo;
         }
-        // console.log("first time", url);
+        // _Klocki._log("first time", url);
         texInfo = this._loadTextureFromURL(url, null, null, fixedAlias);
         this._cachedTextures.set(url, texInfo);
 
@@ -174,7 +174,7 @@ export class _TextureManager {
 
     private _downloadTextureFromURL(url: string, precallback: Function | null, postcallback: Function | null, fixedAlias: boolean, textureInfo: _TextureInfo): void {
         const realURL = this._klocki._assetURI + url;
-        // console.log("fetch?", realURL);
+        // _Klocki._log("fetch?", realURL);
         fetch(realURL).then((v: Response) => {
             if (!v.ok) {
                 throw new Error("texture fetch: " + v.statusText);
@@ -247,7 +247,7 @@ export class _TextureManager {
         const mipmapLevel: number = 0;
         const srcFormat: number = gl.RGBA;
         const srcType: number = gl.UNSIGNED_BYTE;
-        // console.log("atlasId: ", klockiTexture._atlasId);
+        // _Klocki._log("atlasId: ", klockiTexture._atlasId);
         gl.texSubImage3D(gl.TEXTURE_2D_ARRAY, mipmapLevel, r._min._x, r._min._y, klockiTexture._atlasId, uploadedImg._rect._dx(), uploadedImg._rect._dy(), 1, srcFormat, srcType, uploadedImg._pixels);
     }
 

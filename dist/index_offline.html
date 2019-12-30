@@ -26,7 +26,7 @@
             var imported = document.createElement('script');
             imported.src = 'main.js?v='+((new Date).getTime());
             imported.addEventListener("load", ()=>{
-                console.log("loaded main klocki");
+                _Klocki._log("loaded main klocki");
                 landing.innerHTML = "<h1>Kompilacja</h1>";
                 setTimeout(()=>{
                     landing.innerHTML = "<h1>Rezerwacja zasobów</h1>";
@@ -47,7 +47,7 @@
                         const oy = 70;
                         const oz = 3;
                         klocki.offlineTeleport(ox, oy, oz, (23/180)*Math.PI, -Math.PI/15);
-                        klocki.offlineSpawnPlayer(69, ox-1, oy+1.5, oz+3, (215/180)*Math.PI, Math.PI/12);
+                        klocki.offlineSpawnPlayer(69, ox-1, oy+1.5, oz+3, (235/180)*Math.PI, Math.PI/12);
 
                         function c(typ1, typ2, ax, ay, az, bx, by, bz){
                             for(let x = ax; x<=bx; x++){

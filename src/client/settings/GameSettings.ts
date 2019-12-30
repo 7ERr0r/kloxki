@@ -1,3 +1,5 @@
+import { _Klocki } from "../Klocki";
+
 export class _GameSettings {
     public mouseSensitivity: number = 0.5;
     public invertMouse: boolean = false;
@@ -11,7 +13,7 @@ export class _GameSettings {
         if (settings) {
             Object.assign(this, settings);
         } else {
-            console.log("Settings not found");
+            //_Klocki._log("Settings not found");
         }
     }
 

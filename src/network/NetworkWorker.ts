@@ -78,7 +78,7 @@ export class _NetworkWorker {
         } else {
             if (u._readVarInt() === 0x03) { // change threshold
                 this._threshold = u._readVarInt();
-                console.log("compression set:", this._threshold);
+                _NetworkWorker._log("compression set:", this._threshold);
                 this._playing = true;
 
                 return;
@@ -166,21 +166,21 @@ export class _NetworkWorker {
     private _writePacket(packet: ArrayBuffer): void {
         let entirePacket: Uint8Array;
         if (this._threshold < 0) {
-            // console.log("no compression")
+            // _NetworkWorker._log("no compression")
             entirePacket = new Uint8Array(this._outPacketBuffer, 0, 1 + packet.byteLength);
             entirePacket[0] = 1;
             entirePacket.set(new Uint8Array(packet), 1);
 
             // this._self.postMessage([packet], [packet]);
         } else if (packet.byteLength < this._threshold) {
-            // console.log("not needed compression")
+            // _NetworkWorker._log("not needed compression")
             entirePacket = new Uint8Array(this._outPacketBuffer, 0, 1 + 1 + packet.byteLength);
             entirePacket[0] = 1;
             entirePacket[1] = 0;
             entirePacket.set(new Uint8Array(packet), 2);
             
         } else {
-            // console.log("enabled compression")
+            // _NetworkWorker._log("enabled compression")
             const compressed: Uint8Array = this._pako.deflate(packet);
             const p: _PacketBuffer = new _PacketBuffer(this._outPacketBuffer);
             p._writeVarInt(1);
@@ -199,5 +199,8 @@ export class _NetworkWorker {
         const entirePacket: Uint8Array = new Uint8Array(this._outPacketBuffer, 0, p._getWriterIndex());
             
         this._ws.send(entirePacket);
+    }
+    public static _log(...args: any[]) {
+        console.log("[KNet]", ...args);
     }
 }

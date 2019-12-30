@@ -66,7 +66,7 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
 
     public _tickLiving() {
         if (this._newPosIterations > 0) {
-            // console.log("newpos iter")
+            // _Klocki._log("newpos iter")
             const nextX = this._posX + (this._newPosX - this._posX) / this._newPosIterations;
             const nextY = this._posY + (this._newPosY - this._posY) / this._newPosIterations;
             const nextZ = this._posZ + (this._newPosZ - this._posZ) / this._newPosIterations;
@@ -242,7 +242,7 @@ export class _KlockiEntityLiving extends _KlockiEntityBase {
                 this._motionY *= 0.98;
                 this._motionX *= slipperiness;
                 this._motionZ *= slipperiness;
-                // console.log(this.motionX, this.motionY, this.motionZ, slipperiness)
+                // _Klocki._log(this.motionX, this.motionY, this.motionZ, slipperiness)
             }
 
         }
