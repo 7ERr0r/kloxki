@@ -219,46 +219,45 @@ export class _WorldClient {
         const aGen = new _TraceGen(s[0], d[0]);
         const bGen = new _TraceGen(s[1], d[1]);
         const cGen = new _TraceGen(s[2], d[2]);
-	       let nextNA = aGen._next();
-	       let nextNB = bGen._next();
-	       let nextNC = cGen._next();
+        let nextNA = aGen._next();
+        let nextNB = bGen._next();
+        let nextNC = cGen._next();
 
         let x = Math.floor(s[0]);
         let y = Math.floor(s[1]);
         let z = Math.floor(s[2]);
-	       while (1) {
-           if (!cb(x, y, z)) {
-               return [x, y, z];
-           }
-           let nextN = 0;
-           if (nextNA <= nextNB) {
-               if (nextNA <= nextNC) {
-                   nextN = nextNA;
-                   nextNA = aGen._next();
-                   x += Math.sign(d[0]);
-               } else {
-                   nextN = nextNC;
-                   nextNC = cGen._next();
-                   z += Math.sign(d[2]);
-               }
-           } else {
-               if (nextNB <= nextNC) {
-                   nextN = nextNB;
-                   nextNB = bGen._next();
-                   y += Math.sign(d[1]);
-               } else {
-                   nextN = nextNC;
-                   nextNC = cGen._next();
-                   z += Math.sign(d[2]);
-               }
-           }
-           if (nextN > max) {
-               break;
-                
-           }
-       }
+        while (1) {
+            if (!cb(x, y, z)) {
+                return [x, y, z];
+            }
+            let nextN = 0;
+            if (nextNA <= nextNB) {
+                if (nextNA <= nextNC) {
+                    nextN = nextNA;
+                    nextNA = aGen._next();
+                    x += Math.sign(d[0]);
+                } else {
+                    nextN = nextNC;
+                    nextNC = cGen._next();
+                    z += Math.sign(d[2]);
+                }
+            } else {
+                if (nextNB <= nextNC) {
+                    nextN = nextNB;
+                    nextNB = bGen._next();
+                    y += Math.sign(d[1]);
+                } else {
+                    nextN = nextNC;
+                    nextNC = cGen._next();
+                    z += Math.sign(d[2]);
+                }
+            }
+            if (nextN > max) {
+                break;
 
-	       return null;
+            }
+        }
+        return null;
     }
 
 }
