@@ -819,7 +819,7 @@ export class _Klocki {
             const buf = this._display._gl.createBuffer()!;
             this._glBuffersEntities[i] = buf;
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-            gl.bufferData(gl.ARRAY_BUFFER, 1024 * 1024 * (this._reducedMemory ? 2 : 32), gl.DYNAMIC_DRAW);
+            gl.bufferData(gl.ARRAY_BUFFER, 1024 * 1024 * (this._reducedMemory ? 2 : 16), gl.DYNAMIC_DRAW);
         }
         // blur texture postprocess here?
         // this._blurTexture = gl.createTexture()!;
@@ -1048,10 +1048,10 @@ export class _Klocki {
         this._textureManager = new _TextureManager(this);
         this._uiRenderer = new _UIRenderer(this);
         this._fontRenderer = new _FontRenderer(this);
-        this._worldRenderer = new _WorldRenderer(this, (this._reducedMemory ? 1 / 8 : 2) * 1024 * 1024, false, false);
+        this._worldRenderer = new _WorldRenderer(this, (this._reducedMemory ? 1 / 8 : 1) * 1024 * 1024, false, false);
         this._lineRenderer = new _LineRenderer(this);
         this._worldRendererBaker = new _WorldRenderer(this, (this._reducedMemory ? 1 / 8 : 4) * 1024 * 1024, false, false);
-        this._worldRendererMobs = new _WorldRenderer(this, (this._reducedMemory ? 1 : 32) * 1024 * 1024, false, true);
+        this._worldRendererMobs = new _WorldRenderer(this, (this._reducedMemory ? 1 : 4) * 1024 * 1024, false, true);
         this._worldRendererMobsHelper = new _WorldRenderer(this, (this._reducedMemory ? 1 / 64 : 0.5) * 1024 * 1024, false, true);
 
         this._modelRegistry = new _ModelRegistry(this);

@@ -35,7 +35,7 @@ export class _Controls {
         this._klocki = klocki;
         this._pressed = new Map<string, boolean>();
         this._mouseLocked = false;
-        this._registededTouches = true;
+        this._registededTouches = false;
         this._mouseMoves = 0;
         this._ongoingTouches = new Array<_SimpleTouch>();
 
@@ -254,7 +254,7 @@ export class _Controls {
     public _handleTouchMove(evt: TouchEvent) {
 
         evt.preventDefault();
-        _Klocki._log("touch move");
+        //_Klocki._log("touch move");
         const touches = evt.changedTouches;
 
         let thePlayer: _KlockiEntityPlayerSP | null = null;
@@ -302,7 +302,7 @@ export class _Controls {
 
         evt.preventDefault();
         const touches = evt.changedTouches;
-        _Klocki._log("touch start");
+        //_Klocki._log("touch start");
         // this._klocki._display._canvas.requestFullscreen();
 
         for (let i = 0; i < touches.length; i++) {

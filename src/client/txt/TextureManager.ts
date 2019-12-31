@@ -37,7 +37,7 @@ export class _TextureManager {
         this._textureAllocator = new _TextureAllocator();
 
         this._atlasSize = 1024;
-        this._nAtlas = this._klocki._reducedMemory ? 1 : 32;
+        this._nAtlas = this._klocki._reducedMemory ? 1 : 4;
 
         this._defaultKlockiTexture = new _KlockiTexture(null, 0, new _GoRect(0, 0, 1, 1));
 
