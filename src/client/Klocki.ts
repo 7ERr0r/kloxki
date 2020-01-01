@@ -149,12 +149,13 @@ export class _Klocki {
         this.showUI = true;
         this.defaultArmThickness = 4;
         this._smoothCam = false;
-        this._debugInfo = false;
+        this._debugInfo = !reduced;
         this._yawSmoothSpeed = 0;
         this._pitchSmoothSpeed = 0;
         this._zoomed = false;
         this._glBuffersEntitiesIndex = 0;
-        this._glBuffersEntitiesCount = 1;
+        // very important for mobile
+        this._glBuffersEntitiesCount = 2;
         this._sectionLookingAt = null;
         this._renderX = 0;
         this._renderY = 65;

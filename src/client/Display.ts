@@ -80,7 +80,7 @@ export class _Display {
         const indexBuffer = gl.createBuffer();
         this._indexBuffer = indexBuffer!;
 
-        const numQuads = 256 * 1024;
+        const numQuads = 32 * 1024;
         const indices = new Uint32Array(6 * numQuads);
         let j = 0, k = 0;
         for (let i = 0; i < numQuads; i++) {

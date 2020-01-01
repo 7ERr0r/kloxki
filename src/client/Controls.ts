@@ -9,12 +9,14 @@ class _SimpleTouch {
     public _pageY: number;
     public _isMovement: boolean;
     public _timeStart: number;
+    public _jumper: boolean;
     constructor(id: number, pageX: number, pageY: number) {
         this._identifier = id;
         this._pageX = pageX;
         this._pageY = pageY;
         this._isMovement = false;
         this._timeStart = -1;
+        this._jumper = false;
     }
 }
 
@@ -30,6 +32,7 @@ export class _Controls {
     public _lastOrientG: number = 1337;
     public _isMobile: boolean;
     public _registededTouches: boolean;
+    public _lastMovementTouchEnd: number;
 
     constructor(klocki: _Klocki) {
         this._klocki = klocki;
@@ -38,6 +41,7 @@ export class _Controls {
         this._registededTouches = false;
         this._mouseMoves = 0;
         this._ongoingTouches = new Array<_SimpleTouch>();
+        this._lastMovementTouchEnd = 0;
 
         let check = false;
         (function(a) {if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) { check = true; }})(navigator.userAgent || navigator.vendor || (<any>window).opera);
@@ -96,9 +100,10 @@ export class _Controls {
             }
         }, false);
 
-        canvas.addEventListener("wheel", (e) => {
+        window.addEventListener("wheel", (e) => {
             if(this._mouseLocked){
                 e.preventDefault();
+                e.stopPropagation();
                 
                 const klocki = this._klocki;
                 const world = klocki._theWorld;
@@ -226,14 +231,22 @@ export class _Controls {
 
             if (idx >= 0) {
                 const touch = this._ongoingTouches[idx];
-                const now = (new Date).getTime();
+                const now = Date.now();
                 const diff = now - touch._timeStart;
                 if (thePlayer && touch._isMovement) {
                     thePlayer._touchMoveForward = 0;
                     thePlayer._touchMoveStrafe = 0;
+                    
                 }
-                if (thePlayer && diff < 150) {
+                if (thePlayer && diff < 200) {
+                    if(touch._jumper){
+                        thePlayer._isFlying = !thePlayer._isFlying;
+                    }
+
                     thePlayer._jumping = true;
+                    
+                    this._lastMovementTouchEnd = now;
+                    
                 }
                 this._ongoingTouches.splice(idx, 1);
             } else {
@@ -311,7 +324,20 @@ export class _Controls {
             const ry = touch._pageY / window.innerHeight;
 
             touch._isMovement = rx < 0.3 && ry > 0.5;
-            touch._timeStart = (new Date).getTime();
+            touch._timeStart = Date.now();
+            //touch._jumper = false;
+
+            if(Math.abs(touch._timeStart - this._lastMovementTouchEnd) < 300){
+                let thePlayer: _KlockiEntityPlayerSP | null = null;
+                if (this._klocki._theWorld) {
+                    thePlayer = this._klocki._theWorld._thePlayer;
+                    if(thePlayer != null){
+                        touch._jumper = true;
+                        
+                    }
+                }
+                
+            }
 
             this._ongoingTouches.push(touch);
 
@@ -331,6 +357,8 @@ export class _Controls {
         if (!isNumber(evt.alpha)) {
             return;
         }
+        
+
         let thePlayer: _KlockiEntityPlayerSP | null = null;
         if (this._klocki._theWorld) {
             thePlayer = this._klocki._theWorld._thePlayer;
@@ -342,13 +370,14 @@ export class _Controls {
                 thePlayer._yaw += (evt.alpha / 180) * Math.PI;
                 thePlayer._pitch += (evt.gamma! / 180) * Math.PI;
             } else {
-                
+                const [alpha, beta, gamma] = this._screenTransformed(evt.alpha, evt.beta!, evt.gamma!);
                 if (this._lastOrientA == 1337) {
                     
                 } else {
-                    let da = evt.alpha - this._lastOrientA;
+                    
+                    let da = alpha - this._lastOrientA;
                     // const db = evt.beta!-this._lastOrientB;
-                    let dg = evt.gamma! - this._lastOrientG;
+                    let dg = gamma - this._lastOrientG;
 
                     if (dg > 90) {
                         dg -= 180;
@@ -366,9 +395,9 @@ export class _Controls {
 
                     thePlayer._pitch += (dg / 180) * Math.PI;
                 }
-                this._lastOrientA = evt.alpha;
-                this._lastOrientB = evt.beta!;
-                this._lastOrientG = evt.gamma!;
+                this._lastOrientA = alpha;
+                this._lastOrientB = beta;
+                this._lastOrientG = gamma;
                 
             }
         }
@@ -385,5 +414,25 @@ export class _Controls {
 
             window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this._handleOrientation(e));
         }
+    }
+    public _screenTransformed(alpha: number, beta: number, gamma: number): number[] {
+        const orientation = (screen.orientation || {}).type;
+
+        if (orientation === "landscape-primary") {
+            return [alpha, beta, gamma];
+        } else if (orientation === "landscape-secondary") {
+            //console.log("Mmmh... the screen is upside down!");
+            return [alpha, beta, -gamma];
+        } else if (orientation === "portrait-primary") {
+            return [0, 0, 0];
+        } else if( orientation === "portrait-secondary") {
+            //console.log("Mmmh... you should rotate your device to landscape");
+            return [0, 0, 0];
+        } else if (orientation === undefined) {
+            //console.log("The orientation API isn't supported in this browser :(");
+            
+        }
+        return [alpha, beta, gamma];
+
     }
 }
