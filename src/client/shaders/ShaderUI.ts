@@ -9,16 +9,19 @@ export class _ShaderUI extends _Shader {
 
     constructor(klocki: _Klocki) {
         super();
-        const vsSource = `#version 300 es
-  in vec4 aVertexPosition;
-  in vec2 aTextureCoord;
-  in float aTextureAtlas;
-  in vec4 aColor;
+        let ink = klocki._display._inKeyword;
+        const outk = klocki._display._outKeyword;
+        const mainSamplerk = klocki._display._mainSamplerKeyword;
+        const vsSource = klocki._display._glslPrefix+`
+        ${ink} vec4 aVertexPosition;
+        ${ink} vec2 aTextureCoord;
+        ${ink} float aTextureAtlas;
+        ${ink} vec4 aColor;
 
   uniform mat4 uUiMatrix;
 
-  out lowp vec4 vertexColor;
-  out highp vec3 vTextureCoord;
+  ${outk} lowp vec4 vertexColor;
+  ${outk} highp vec3 vTextureCoord;
 
   void main(void) {
     gl_Position = uUiMatrix * aVertexPosition;
@@ -26,20 +29,22 @@ export class _ShaderUI extends _Shader {
     vTextureCoord = vec3(aTextureCoord, aTextureAtlas);
   }
 `;
-        const fsSource = `#version 300 es
+ink = klocki._display._inVaryingKeyword;
+        const fsSource = klocki._display._glslPrefix+`
 precision mediump float;
 
-  in highp vec3 vTextureCoord;
-  in lowp vec4 vertexColor;
+${ink} highp vec3 vTextureCoord;
+${ink} lowp vec4 vertexColor;
 
-  uniform mediump sampler2DArray uSampler;
+  uniform mediump ${mainSamplerk} uSampler;
 
-  out vec4 fragColor;
+  ${klocki._display._version2?"out vec4 fragColor;":""} 
   void main(void) {
-    fragColor = texture(uSampler, vTextureCoord) * vertexColor;
-    if(fragColor.a < 0.1){
+    vec4 tmpColor = ${klocki._display._version1?"texture2D(uSampler, vec2(vTextureCoord))":"texture(uSampler, vTextureCoord)"} * vertexColor;
+    if(tmpColor.a < 0.1){
       discard;
     }
+    ${klocki._display._version2?"fragColor":"gl_FragColor"} = tmpColor;
   }
 `;
         const gl = klocki._display._gl;

@@ -537,7 +537,7 @@ export class _Klocki {
         gl.frontFace(gl.CW);
         gl.depthFunc(gl.LEQUAL);
 
-        gl.bindVertexArray(this._mainVao);
+        this._display._bindVertexArray(this._mainVao);
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -814,7 +814,9 @@ export class _Klocki {
         this._guiOverlayEquipment = new _GuiOverlayEquipment(this);
 
         const gl = this._display._gl;
-        this._mainVao = gl.createVertexArray()!;
+        
+        this._mainVao = this._display._createVertexArray()!;
+        
         this._glBuffersEntities = new Array(this._glBuffersEntitiesCount);
         for (let i = 0; i < this._glBuffersEntities.length; i++) {
             const buf = this._display._gl.createBuffer()!;

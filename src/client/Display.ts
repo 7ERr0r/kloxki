@@ -1,6 +1,6 @@
 export class _Display {
     public _canvas: HTMLCanvasElement;
-    public _gl: WebGL2RenderingContext;
+    public _gl: WebGL2RenderingContext | WebGLRenderingContext;
     public _domWidth: number = 256;
     public _domHeight: number = 256;
     public _width: number = 0;
@@ -12,7 +12,14 @@ export class _Display {
     public _resizeGetter: Function;
     public _translucent: boolean;
     public _pixelDensityMultiplier: number;
-
+    public _version2: boolean;
+    public _version1: boolean;
+    private _vertexArrayExt: OES_vertex_array_object | undefined;
+    public readonly _glslPrefix: string;
+    public readonly _inKeyword: string;
+    public readonly _outKeyword: string;
+    public readonly _inVaryingKeyword: string;
+    public readonly _mainSamplerKeyword: string;
 
     constructor(domID: string, attributes: any) {
         this._pixelDensityMultiplier = 1;
@@ -36,13 +43,42 @@ export class _Display {
             glAttributes.translucent = attributes.translucent;
         }
         this._translucent = glAttributes.translucent;
-        const webgl = canvas.getContext('webgl2', glAttributes) || canvas.getContext('experimental-webgl2', glAttributes);
-        if (!(webgl instanceof WebGL2RenderingContext)) {
-            console.warn('WebGL2 is not supported in your browser');
-            throw new Error('WebGL2 not supported');
+        const context = canvas.getContext('webgl2', glAttributes) || canvas.getContext('experimental-webgl2', glAttributes) || canvas.getContext('webgl', glAttributes);
+        this._version2 = context instanceof WebGL2RenderingContext;
+        this._version1 = context instanceof WebGLRenderingContext;
+        if (!(this._version1 || this._version2)) {
+            console.warn('WebGL is not supported in your browser');
+            throw new Error('WebGL not supported');
         }
-        this._gl = webgl;
+        const gl = <WebGL2RenderingContext | WebGLRenderingContext>context;
+        this._gl = gl;
         this._canvas = canvas;
+
+
+        if(this._version1){
+              this._vertexArrayExt = (
+              gl.getExtension('OES_vertex_array_object') ||
+              gl.getExtension('MOZ_OES_vertex_array_object') ||
+              gl.getExtension('WEBKIT_OES_vertex_array_object')
+            );
+            if(!this._vertexArrayExt){
+                throw new Error('No WebGL1 vertex_array_object');
+            }
+        }
+
+        if(this._version1){
+            this._glslPrefix = "";
+            this._inKeyword = "attribute";
+            this._outKeyword = "varying";
+            this._inVaryingKeyword = "varying";
+            this._mainSamplerKeyword = "sampler2D";
+        }else{
+            this._glslPrefix = "#version 300 es";
+            this._inKeyword = "in";
+            this._inVaryingKeyword = "in";
+            this._outKeyword = "out";
+            this._mainSamplerKeyword = "sampler2DArray";
+        }
 
         this._pixelDensityMultiplier = Math.max(this._pixelDensityMultiplier, this._calcHighDensity());
         this._pixelDensityMultiplier = Math.max(this._pixelDensityMultiplier, this._calcRetina());
@@ -54,6 +90,8 @@ export class _Display {
         this._generateIndices();
 
     }
+
+
     public _resize(): void {
         const resizeInfo = this._resizeGetter();
         this._domWidth = resizeInfo.width;
@@ -107,5 +145,20 @@ export class _Display {
     public _calcRetina() {
         let val = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx), only screen and (min-resolution: 75.6dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min--moz-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)').matches)) || (window.devicePixelRatio && window.devicePixelRatio >= 2)) && /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
         return val?2:1;
+    }
+
+    public _createVertexArray(): WebGLVertexArrayObject | WebGLVertexArrayObjectOES | null {
+        if(this._version1){
+            return this._vertexArrayExt!.createVertexArrayOES();
+        }else{
+            return (<WebGL2RenderingContext>this._gl).createVertexArray();
+        }
+    }
+    public _bindVertexArray(arr: WebGLVertexArrayObject | WebGLVertexArrayObjectOES) {
+        if(this._version1){
+            this._vertexArrayExt!.bindVertexArrayOES(arr);
+        }else{
+            (<WebGL2RenderingContext>this._gl).bindVertexArray(arr);
+        }
     }
 }

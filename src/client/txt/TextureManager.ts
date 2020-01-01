@@ -26,7 +26,7 @@ export class _TextureManager {
         this._klocki = klocki;
         this._cachedTextures = new Map<string, _TextureInfo>();
 
-        const gl: WebGL2RenderingContext = this._klocki._display._gl;
+        const gl = this._klocki._display._gl;
         const mainTex: WebGLTexture | null = gl.createTexture();
         if (!mainTex) {
             throw new Error("can't create main texture");
@@ -42,13 +42,16 @@ export class _TextureManager {
         this._defaultKlockiTexture = new _KlockiTexture(null, 0, new _GoRect(0, 0, 1, 1));
 
         const mipLevelCount: number = 1;
-        gl.bindTexture(gl.TEXTURE_2D_ARRAY, this._mainTexture);
-        gl.texStorage3D(gl.TEXTURE_2D_ARRAY, mipLevelCount, gl.RGBA8, this._atlasSize, this._atlasSize, this._nAtlas);
-        gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        // gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        if(gl instanceof WebGL2RenderingContext){
+            gl.bindTexture(gl.TEXTURE_2D_ARRAY, this._mainTexture);
+            gl.texStorage3D(gl.TEXTURE_2D_ARRAY, mipLevelCount, gl.RGBA8, this._atlasSize, this._atlasSize, this._nAtlas);
+            gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            // gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            
+        }
         for (let i: number = 0; i < this._nAtlas; i++) {
             this._textureAllocator._provide(new _KlockiTexture(null, i, new _GoRect(0, 0, this._atlasSize, this._atlasSize)));
         }
@@ -136,8 +139,9 @@ export class _TextureManager {
         gl.bindTexture(gl.TEXTURE_2D, this._groupParamTexture);
         // const size = this._boxParamsTexSize;
         // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._boxParamsTexSize, this._boxParamsTexSize, 0, gl.RGBA, gl.FLOAT, 0);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, this._groupParamsTexSize, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
-        
+        if(gl instanceof WebGL2RenderingContext){
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, this._groupParamsTexSize, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
+        }
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -167,7 +171,9 @@ export class _TextureManager {
         }
         // maybe texImage blocks on resize
         // gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this._groupParamsTexSize, this._groupParamsTexSize, gl.RGBA, gl.FLOAT, sliced, 0);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, height, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
+        if(gl instanceof WebGL2RenderingContext){
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, height, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
+        }
 
     }
 
@@ -204,7 +210,10 @@ export class _TextureManager {
     }
 
     private _loadTextureFromParsedImage(textureInfo: _TextureInfo, pixels: Uint8Array, precallback: Function | null, postcallback: Function | null, fixedAlias: boolean, w: number, h: number): void {
-        const gl: WebGL2RenderingContext = this._klocki._display._gl;
+        const gl = this._klocki._display._gl;
+        if(!(gl instanceof WebGL2RenderingContext)){
+            return;
+        }
         gl.bindTexture(gl.TEXTURE_2D_ARRAY, this._mainTexture);
         let aliasWidth: number = w;
         if (fixedAlias) {

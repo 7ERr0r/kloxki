@@ -11,28 +11,31 @@ export class _ShaderWorld extends _Shader {
     public _offsetx: number = 0.1337;
     public _offsety: number = 0.1337;
     public _offsetz: number = 0.1337;
-    public _gl: WebGL2RenderingContext;
+    public _gl: WebGL2RenderingContext | WebGLRenderingContext;
     public _zero: Float32Array;
 
     constructor(klocki: _Klocki) {
         super();
         this._klocki = klocki;
+        let ink = klocki._display._inKeyword;
+        const outk = klocki._display._outKeyword;
+        const mainSamplerk = klocki._display._mainSamplerKeyword;
         this._zero = new Float32Array(4);
-        const vsSource = `#version 300 es
+        const vsSource = klocki._display._glslPrefix+`
     //precision lowp float;
 
-    in vec4 aVertexPosition;
-    in vec2 aTextureCoord;
-    in int aTextureAtlas;
-    in vec4 aColor;
+    ${ink} vec4 aVertexPosition;
+    ${ink} vec2 aTextureCoord;
+    ${klocki._display._version2?"in int aTextureAtlas;":"attribute float aTextureAtlas;"} 
+    ${ink} vec4 aColor;
     
   
     uniform mat4 uProjectionMatrix;
     uniform vec4 uOffset;
     uniform float screenSize;
   
-    out lowp vec4 vertexColor;
-    out lowp vec3 vTextureCoord;
+    ${outk} lowp vec4 vertexColor;
+    ${outk} lowp vec3 vTextureCoord;
   
     void main(void) {
       vec4 pos = aVertexPosition;
@@ -46,27 +49,26 @@ export class _ShaderWorld extends _Shader {
       //gl_PointSize = screenSize/screenPos.z;
     }
   `;
-        const fsSource = `#version 300 es
+  ink = klocki._display._inVaryingKeyword;
+        const fsSource = klocki._display._glslPrefix+`
   precision lowp float;
   
-    in lowp vec3 vTextureCoord;
-    in lowp vec4 vertexColor;
+    ${ink} lowp vec3 vTextureCoord;
+    ${ink} lowp vec4 vertexColor;
   
-    uniform lowp sampler2DArray uSampler;
+    uniform lowp ${mainSamplerk} uSampler;
   
-    out vec4 fragColor;
-
-
-
+    ${klocki._display._version2?"out vec4 fragColor;":""} 
 
 
     void main(void) {
       //fragColor = texture(uSampler, vTextureCoord+vec3(gl_PointCoord*0.015625, 0)) * vertexColor;
-      fragColor = texture(uSampler, vTextureCoord) * vertexColor;
+      vec4 tmpColor = ${klocki._display._version1?"texture2D(uSampler, vec2(vTextureCoord))":"texture(uSampler, vTextureCoord)"} * vertexColor;
 
-      if(fragColor.a < 0.1){
+      if(tmpColor.a < 0.1){
         discard;
       }
+      ${klocki._display._version2?"fragColor":"gl_FragColor"} = tmpColor;
     }
   `;
         const gl = klocki._display._gl;

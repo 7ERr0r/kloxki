@@ -457,7 +457,7 @@ export class _OriginRenderOcTree {
 
         const sumLength = this._calcJoinedSize();
 
-        const gl = this._klocki._display._gl;
+        const gl = <WebGL2RenderingContext>this._klocki._display._gl;
         if (sumLength > 0) {
             // _Klocki._log("sumlen: " + sumLength);
             const stride = this._klocki._worldRendererBaker._stride;
@@ -508,7 +508,7 @@ export class _OriginRenderOcTree {
         
     }
     public _splitBuffers() {
-        const gl = this._klocki._display._gl;
+        const gl = <WebGL2RenderingContext>this._klocki._display._gl;
 
         if (this._joined && this._drawCount > 0) {
             // _Klocki._log("sumlen: " + sumLength);

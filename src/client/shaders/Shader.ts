@@ -1,6 +1,6 @@
 
 export class _Shader {
-    public _loadShader(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader {
+    public _loadShader(gl: WebGL2RenderingContext | WebGLRenderingContext, type: number, source: string): WebGLShader {
         const shader = gl.createShader(type);
         if (!shader) {
             throw new Error("can't create shader");
@@ -16,6 +16,8 @@ export class _Shader {
         // see if it compiled successfully
 
         if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            
+            console.log(source);
             console.warn('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
             gl.deleteShader(shader);
             throw new Error("can't compile shader");
@@ -24,7 +26,7 @@ export class _Shader {
         return shader;
     }
 
-    public _initShaderProgram(gl: WebGL2RenderingContext, vsSource: string, fsSource: string): WebGLProgram {
+    public _initShaderProgram(gl: WebGL2RenderingContext | WebGLRenderingContext, vsSource: string, fsSource: string): WebGLProgram {
         const vertexShader = this._loadShader(gl, gl.VERTEX_SHADER, vsSource);
         const fragmentShader = this._loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 

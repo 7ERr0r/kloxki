@@ -231,7 +231,7 @@ export class _WorldRenderer {
                 const type = gl.SHORT;
                 // const normalize = false
                 const offset = 10;
-                gl.vertexAttribIPointer(
+                (<WebGL2RenderingContext>gl).vertexAttribIPointer(
                     shaderWorld._attribLocations._textureAtlas,
                     numComponents,
                     type,
@@ -242,7 +242,7 @@ export class _WorldRenderer {
                 const type = gl.INT;
                 // const normalize = false
                 const offset = 20;
-                gl.vertexAttribIPointer(
+                (<WebGL2RenderingContext>gl).vertexAttribIPointer(
                     shaderWorld._attribLocations._textureAtlas,
                     numComponents,
                     type,
@@ -298,7 +298,7 @@ export class _WorldRenderer {
                     const numComponents = 1;
                     const type = gl.INT;
                     const offset = 28;
-                    gl.vertexAttribIPointer(
+                    (<WebGL2RenderingContext>gl).vertexAttribIPointer(
                         shaderWorld._attribLocations._groupMatrixID,
                         numComponents,
                         type,

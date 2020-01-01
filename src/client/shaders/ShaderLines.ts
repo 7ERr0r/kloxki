@@ -9,28 +9,32 @@ export class _ShaderLines extends _Shader {
 
     constructor(klocki: _Klocki) {
         super();
-        const vsSource = `#version 300 es
-  in vec4 aVertexPosition;
-  in vec4 aColor;
+        let ink = klocki._display._inKeyword;
+        const outk = klocki._display._outKeyword;
+        const vsSource = klocki._display._glslPrefix+`
+  ${ink} vec4 aVertexPosition;
+  ${ink} vec4 aColor;
 
   uniform mat4 uProjectionMatrix;
 
-  out lowp vec4 vertexColor;
+  ${outk} lowp vec4 vertexColor;
 
   void main(void) {
     gl_Position = uProjectionMatrix * aVertexPosition;
     vertexColor = aColor;
   }
 `;
-        const fsSource = `#version 300 es
+    ink = klocki._display._inVaryingKeyword;
+        const fsSource = klocki._display._glslPrefix+`
 precision mediump float;
 
-  in lowp vec4 vertexColor;
+${ink} lowp vec4 vertexColor;
 
 
-  out vec4 fragColor;
+${klocki._display._version2?"out vec4 fragColor;":""} 
   void main(void) {
-    fragColor = vertexColor;
+    
+    ${klocki._display._version2?"fragColor":"gl_FragColor"} = vertexColor;
   }
 `;
         const gl = klocki._display._gl;
