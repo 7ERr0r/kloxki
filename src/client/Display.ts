@@ -38,7 +38,7 @@ export class _Display {
         this._translucent = glAttributes.translucent;
         const webgl = canvas.getContext('webgl2', glAttributes) || canvas.getContext('experimental-webgl2', glAttributes);
         if (!(webgl instanceof WebGL2RenderingContext)) {
-            alert('WebGL2 is not supported in your browser');
+            console.warn('WebGL2 is not supported in your browser');
             throw new Error('WebGL2 not supported');
         }
         this._gl = webgl;

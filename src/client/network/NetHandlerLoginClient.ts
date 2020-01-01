@@ -14,7 +14,7 @@ export class _NetHandlerLoginClient implements _INetHandler {
 
     public _handleDisconnect(packet: _SPacketDisconnect): void {
         _Klocki._log(`Disconnected: ${packet._reason}`);
-        alert(`Disconnected: ${packet._reason}`);
+        console.warn(`Disconnected: ${packet._reason}`);
     }
     public _handleLoginSuccess(packet: _SPacketLoginSuccess): void {
         _Klocki._log(`Logged as ${packet._name} with UUID ${packet._uuid}`);

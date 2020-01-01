@@ -16,7 +16,7 @@ export class _Shader {
         // see if it compiled successfully
 
         if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
+            console.warn('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
             gl.deleteShader(shader);
             throw new Error("can't compile shader");
         }
@@ -37,7 +37,7 @@ export class _Shader {
         gl.linkProgram(shaderProgram);
 
         if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-            alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
+            console.warn('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
             throw new Error("can't link shader program");
         }
 

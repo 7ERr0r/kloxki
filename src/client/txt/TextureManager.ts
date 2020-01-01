@@ -160,11 +160,13 @@ export class _TextureManager {
         const gl = this._klocki._display._gl;
 
         gl.bindTexture(gl.TEXTURE_2D, this._groupParamTexture);
-        // gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this._groupParamsTexSize, this._groupParamsTexSize, gl.RGBA, gl.FLOAT, sliced, 0);
-        const height = 256;//1 + ((this._groupParamsCount << 2) >> 8);
+        
+        const height = 1 + ((this._groupParamsCount << 2) >> 8);
         if (height > 256) {
             throw new Error("max height");
         }
+        // maybe texImage blocks on resize
+        // gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this._groupParamsTexSize, this._groupParamsTexSize, gl.RGBA, gl.FLOAT, sliced, 0);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, height, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
 
     }
