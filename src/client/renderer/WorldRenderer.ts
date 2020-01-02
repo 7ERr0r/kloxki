@@ -23,7 +23,7 @@ export class _WorldRenderer {
     public _u8: Uint8Array;
     public _useShort: boolean;
     public _useMatID: boolean;
-    
+
     public _matMany: (matID: number, num: number) => void;
 
     constructor(klocki: _Klocki, size: number, useShort: boolean, useMatID: boolean) {
@@ -247,7 +247,6 @@ export class _WorldRenderer {
                 if (this._useShort) {
                     const numComponents = 1;
                     const type = gl.SHORT;
-                    // const normalize = false
                     const offset = 10;
                     (<WebGL2RenderingContext>gl).vertexAttribIPointer(
                         shaderWorld._attribLocations._textureAtlas,
@@ -258,7 +257,6 @@ export class _WorldRenderer {
                 } else {
                     const numComponents = 1;
                     const type = gl.INT;
-                    // const normalize = false
                     const offset = 20;
                     (<WebGL2RenderingContext>gl).vertexAttribIPointer(
                         shaderWorld._attribLocations._textureAtlas,
@@ -270,7 +268,6 @@ export class _WorldRenderer {
             }else{
                 const numComponents = 1;
                     const type = gl.FLOAT;
-                    // const normalize = false
                     const offset = 20;
                     const normalize = false;
                     (<WebGL2RenderingContext>gl).vertexAttribPointer(
