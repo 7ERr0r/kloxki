@@ -378,7 +378,7 @@ export class _OriginRenderOcTree {
                     child._preRender(shaderWorld);
                 }
             }
-            if (visibility == 1) {
+            if (!this._klocki._display._version1 && visibility == 1) {
                 if (!this._dirty && sizex >= 2 && sizex <= 2) {
                     if (this._calcJoinedSize() > 0 && this._klocki._canJoinNextRegion()) {
                         this._joinBuffers();
@@ -586,8 +586,8 @@ export class _OriginRenderOcTree {
         shaderWorld._updateOffset(off);
         // gl.drawArrays(gl.TRIANGLES, 0, this._drawCount);
         if (true) {
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer);
-            gl.drawElements(gl.TRIANGLES, this._drawCount * (6 / 4), gl.UNSIGNED_INT, 0);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer16);
+            gl.drawElements(gl.TRIANGLES, this._drawCount * (6 / 4), gl.UNSIGNED_SHORT, 0);
         } else {
             gl.drawArrays(gl.POINTS, 0, this._drawCount);
         }

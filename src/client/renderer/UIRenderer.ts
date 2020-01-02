@@ -156,8 +156,8 @@ export class _UIRenderer {
 
         // gl.drawArrays(gl.TRIANGLES, 0, this._count);
 
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer);
-        gl.drawElements(gl.TRIANGLES, this._count * (6 / 4), gl.UNSIGNED_INT, 0);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer16);
+        gl.drawElements(gl.TRIANGLES, this._count * (6 / 4), gl.UNSIGNED_SHORT, 0);
 
     }
 

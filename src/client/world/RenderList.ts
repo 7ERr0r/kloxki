@@ -65,7 +65,7 @@ export class _RenderList {
 
         const secs = this._klocki._sectionsByDistanceSquared;
         const gl = this._klocki._display._gl;
-        const indexBuf = this._klocki._display._indexBuffer;
+        const indexBuf = this._klocki._display._indexBuffer16;
         const baker = this._klocki._worldRendererBaker;
         for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
             const sections = secs[secsIndex];
@@ -85,7 +85,7 @@ export class _RenderList {
                         // gl.drawArrays(gl.TRIANGLES, 0, this._drawCount);
                     
                         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuf);
-                        gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_INT, 0);
+                        gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_SHORT, 0);
                     }
                 }
             }

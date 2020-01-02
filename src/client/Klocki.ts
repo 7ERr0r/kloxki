@@ -686,10 +686,10 @@ export class _Klocki {
         if (this._theWorld !== null) {
             
             this._theWorld._renderEntities();
-
             this._textureManager._uploadGroupParamTex();
-            this._worldRendererMobs._endAndUpload(this._shaderMobs, this._glBuffersEntities[this._glBuffersEntitiesIndex]);
 
+            this._worldRendererMobs._endAndUpload(this._shaderMobs, this._glBuffersEntities[this._glBuffersEntitiesIndex]);
+            
             // this._worldRendererMobs._endAndUploadSetSize(this._shaderMobs, buf, true);
 
             if (++this._glBuffersEntitiesIndex >= this._glBuffersEntitiesCount) {

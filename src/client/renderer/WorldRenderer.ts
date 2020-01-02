@@ -23,6 +23,8 @@ export class _WorldRenderer {
     public _u8: Uint8Array;
     public _useShort: boolean;
     public _useMatID: boolean;
+    
+    public _matMany: (matID: number, num: number) => void;
 
     constructor(klocki: _Klocki, size: number, useShort: boolean, useMatID: boolean) {
         this._klocki = klocki;
@@ -44,6 +46,31 @@ export class _WorldRenderer {
         this._stride2 = this._stride >> 1;
         this._stride4 = this._stride >> 2;
         this._reset();
+
+        if(this._klocki._display._version2){ 
+            // this function gotta be fast, so no if inside
+            this._matMany = (matID: number, num: number) => {
+                const b = this._u32;
+                const stride4 = this._stride4;
+                let i = this._count * stride4 + 7;
+                const end = i + stride4 * num;
+                for (; i < end; i += stride4) {
+                    b[i] = matID;
+                }
+                this._count += num;
+            }
+        }else{
+            this._matMany = (matID: number, num: number) => {
+                const b = this._f32; // can't use int attribute
+                const stride4 = this._stride4;
+                let i = this._count * stride4 + 7;
+                const end = i + stride4 * num;
+                for (; i < end; i += stride4) {
+                    b[i] = matID;
+                }
+                this._count += num;
+            }
+        }
 
     }
     public _reset() {
@@ -127,17 +154,7 @@ export class _WorldRenderer {
         
         return this;
     }
-    public _matMany(matID: number, num: number) {
-
-        const b = this._u32;
-        const stride4 = this._stride4;
-        let i = this._count * stride4 + 7;
-        const end = i + stride4 * num;
-        for (; i < end; i += stride4) {
-            b[i] = matID;
-        }
-        this._count += num;
-    }
+    
     public _endVertex() {
         this._count++;
     }
@@ -226,28 +243,43 @@ export class _WorldRenderer {
                 stride,
                 offset);
                 */
-            if (this._useShort) {
+            if(this._klocki._display._version2){
+                if (this._useShort) {
+                    const numComponents = 1;
+                    const type = gl.SHORT;
+                    // const normalize = false
+                    const offset = 10;
+                    (<WebGL2RenderingContext>gl).vertexAttribIPointer(
+                        shaderWorld._attribLocations._textureAtlas,
+                        numComponents,
+                        type,
+                        stride,
+                        offset);
+                } else {
+                    const numComponents = 1;
+                    const type = gl.INT;
+                    // const normalize = false
+                    const offset = 20;
+                    (<WebGL2RenderingContext>gl).vertexAttribIPointer(
+                        shaderWorld._attribLocations._textureAtlas,
+                        numComponents,
+                        type,
+                        stride,
+                        offset);
+                }
+            }else{
                 const numComponents = 1;
-                const type = gl.SHORT;
-                // const normalize = false
-                const offset = 10;
-                (<WebGL2RenderingContext>gl).vertexAttribIPointer(
-                    shaderWorld._attribLocations._textureAtlas,
-                    numComponents,
-                    type,
-                    stride,
-                    offset);
-            } else {
-                const numComponents = 1;
-                const type = gl.INT;
-                // const normalize = false
-                const offset = 20;
-                (<WebGL2RenderingContext>gl).vertexAttribIPointer(
-                    shaderWorld._attribLocations._textureAtlas,
-                    numComponents,
-                    type,
-                    stride,
-                    offset);
+                    const type = gl.FLOAT;
+                    // const normalize = false
+                    const offset = 20;
+                    const normalize = false;
+                    (<WebGL2RenderingContext>gl).vertexAttribPointer(
+                        shaderWorld._attribLocations._textureAtlas,
+                        numComponents,
+                        type,
+                        normalize,
+                        stride,
+                        offset);
             }
             if (this._first) { gl.enableVertexAttribArray(shaderWorld._attribLocations._textureAtlas); }
         }
@@ -295,15 +327,29 @@ export class _WorldRenderer {
                 if (this._useShort) {
                     
                 } else {
-                    const numComponents = 1;
-                    const type = gl.INT;
-                    const offset = 28;
-                    (<WebGL2RenderingContext>gl).vertexAttribIPointer(
-                        shaderWorld._attribLocations._groupMatrixID,
-                        numComponents,
-                        type,
-                        stride,
-                        offset);
+                    if(this._klocki._display._version2){
+                        const numComponents = 1;
+                        const type = gl.INT;
+                        const offset = 28;
+                        (<WebGL2RenderingContext>gl).vertexAttribIPointer(
+                            shaderWorld._attribLocations._groupMatrixID,
+                            numComponents,
+                            type,
+                            stride,
+                            offset);
+                    }else{
+                        const numComponents = 1;
+                        const type = gl.FLOAT;
+                        const offset = 28;
+                        const normalize = false;
+                        (<WebGL2RenderingContext>gl).vertexAttribPointer(
+                            shaderWorld._attribLocations._groupMatrixID,
+                            numComponents,
+                            type,
+                            normalize,
+                            stride,
+                            offset);
+                    }
                 }
                 if (this._first) { gl.enableVertexAttribArray(shaderWorld._attribLocations._groupMatrixID); }
             }
@@ -359,8 +405,8 @@ export class _WorldRenderer {
 
         if (count > 0) {
             if (true) {
-                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer);
-                gl.drawElements(gl.TRIANGLES, count * (6 / 4), gl.UNSIGNED_INT, 0);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer16);
+                gl.drawElements(gl.TRIANGLES, count * (6 / 4), gl.UNSIGNED_SHORT, 0);
             } else {
                 gl.drawArrays(gl.TRIANGLES, 0, count);
             }
