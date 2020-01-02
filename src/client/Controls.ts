@@ -86,12 +86,18 @@ export class _Controls {
                     if (world !== null) {
                         const thePlayer = world._thePlayer!;
                         // _Klocki._log(e.movementX, e.movementY, e.clientX, e.clientY, locked);
+                        const dyaw = e.movementX / 400;
+                        const dpitch = e.movementY / 400;
                         if (klocki._smoothCam || klocki._zoomed) {
-                            klocki._yawSmoothSpeed += e.movementX / 400;
-                            klocki._pitchSmoothSpeed += e.movementY / 400;
+                            klocki._yawSmoothSpeed += dyaw;
+                            klocki._pitchSmoothSpeed += dpitch;
                         } else {
-                            thePlayer._yaw += e.movementX / 400;
-                            thePlayer._pitch += e.movementY / 400;
+
+                            thePlayer._yaw += dyaw;
+                            thePlayer._pitch += dpitch;
+
+                            thePlayer._prevYaw += dyaw;
+                            thePlayer._prevPitch += dpitch;
                         }
                         thePlayer._fixPitch();
                         this._mouseMoves++;
