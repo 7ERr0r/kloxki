@@ -9,11 +9,11 @@ export class _TraceGen {
         
         if (d > 0) {
             // todo float epsilon?
-            this._state[0] = (Math.ceil(start+0.00001) - start) / d;
+            this._state[0] = (Math.ceil(start + 0.00001) - start) / d;
         } else if (d < 0) {
             d = -d;
             this._state[0] = (start - Math.floor(start)) / d;
-        }else{
+        } else {
             this._state[0] = 0;
         }
         this._state[1] = d;
@@ -24,6 +24,7 @@ export class _TraceGen {
         if (this._state[1] == 0) {
             return Infinity;
         }
+
         return this._state[0] + (this._count - 1) / this._state[1];
     }
 }

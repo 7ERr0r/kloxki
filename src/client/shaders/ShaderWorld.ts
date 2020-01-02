@@ -21,12 +21,12 @@ export class _ShaderWorld extends _Shader {
         const outk = klocki._display._outKeyword;
         const mainSamplerk = klocki._display._mainSamplerKeyword;
         this._zero = new Float32Array(4);
-        const vsSource = klocki._display._glslPrefix+`
+        const vsSource = klocki._display._glslPrefix + `
     //precision lowp float;
 
     ${ink} vec4 aVertexPosition;
     ${ink} vec2 aTextureCoord;
-    ${klocki._display._version2?"in int aTextureAtlas;":"attribute float aTextureAtlas;"} 
+    ${klocki._display._version2 ? "in int aTextureAtlas;" : "attribute float aTextureAtlas;"}
     ${ink} vec4 aColor;
     
   
@@ -49,8 +49,8 @@ export class _ShaderWorld extends _Shader {
       //gl_PointSize = screenSize/screenPos.z;
     }
   `;
-  ink = klocki._display._inVaryingKeyword;
-        const fsSource = klocki._display._glslPrefix+`
+        ink = klocki._display._inVaryingKeyword;
+        const fsSource = klocki._display._glslPrefix + `
   precision lowp float;
   
     ${ink} lowp vec3 vTextureCoord;
@@ -58,17 +58,17 @@ export class _ShaderWorld extends _Shader {
   
     uniform lowp ${mainSamplerk} uSampler;
   
-    ${klocki._display._version2?"out vec4 fragColor;":""} 
+    ${klocki._display._version2 ? "out vec4 fragColor;" : ""}
 
 
     void main(void) {
       //fragColor = texture(uSampler, vTextureCoord+vec3(gl_PointCoord*0.015625, 0)) * vertexColor;
-      vec4 tmpColor = ${klocki._display._version1?"texture2D(uSampler, vec2(vTextureCoord))":"texture(uSampler, vTextureCoord)"} * vertexColor;
+      vec4 tmpColor = ${klocki._display._version1 ? "texture2D(uSampler, vec2(vTextureCoord))" : "texture(uSampler, vTextureCoord)"} * vertexColor;
 
       if(tmpColor.a < 0.1){
         discard;
       }
-      ${klocki._display._version2?"fragColor":"gl_FragColor"} = tmpColor;
+      ${klocki._display._version2 ? "fragColor" : "gl_FragColor"} = tmpColor;
     }
   `;
         const gl = klocki._display._gl;

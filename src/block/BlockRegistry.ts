@@ -1,18 +1,18 @@
 import { _TextureManager } from "../client/txt/TextureManager";
+import { _Klocki } from "../client/Klocki";
 
+import { _Block } from "./Block";
 import { _SoundType } from "./SoundType";
-import { _MaterialColor } from "./MaterialColor";
 import { _AcaciaTree, _AirBlock,  _AttachedStemBlock, _BambooBlock, _BambooSaplingBlock, _BannerBlock, _BarrelBlock, _BarrierBlock, _BeaconBlock, _BedBlock, _BeetrootBlock, _BellBlock, _BirchTree,  _BlastFurnaceBlock, _BlockAnvil, _BlockCarpet,  _BlockDaylightDetector, _BlockDropper, _BlockHopper, _BlockPackedIce, _BlockPistonExtension, _BlockRedstone, _BlockRedstoneComparator,  _BlockShearableDoublePlant, _BlockTallFlower, _BlockWeb, _BookshelfBlock, _BreakableBlock, _BrewingStandBlock as _BrewingStandBlock, _BubbleColumnBlock, _CactusBlock, _CakeBlock,  _CampfireBlock,  _CarrotBlock, _CartographyTableBlock, _CarvedPumpkinBlock, _CauldronBlock as _CauldronBlock, _ChestBlock, _ChorusFlowerBlock, _ChorusPlantBlock, _ClayBlock, _CocoaBlock as _CocoaBlock, _CommandBlockBlock, _ComposterBlock, _ConcretePowderBlock,  _ConduitBlock, _CoralBlock, _CoralFanBlock, _CoralPlantBlock, _CoralWallFanBlock, _CropsBlock, _DarkOakTree, _DeadBushBlock, _DeadCoralFanBlock, _DeadCoralPlantBlock, _DeadCoralWallFanBlock, _DetectorRailBlock, _DispenserBlock, _DoorBlock, _DragonEggBlock as _DragonEggBlock, _EmptyDropsBlock, _EnchantmentTableBlock as _EnchantmentTableBlock, _EnderChestBlock as _EnderChestBlock, _EndGatewayBlock, _EndPortalBlock as _EndPortalBlock, _EndPortalFrameBlock as _EndPortalFrameBlock,  _EndRodBlock, _FarmlandBlock, _FenceBlock,  _FenceGateBlock, _FernBushBlock, _FireBlock, _FletchingTableBlock, _FlowerBlock, _FlowerPotBlock,  _FlowingFluidBlock, _Fluids, _FrostedIceBlock, _FurnaceBlock, _GlassBlock, _GlassPaneBlock, _GlazedTerracottaBlock, _GlowstoneBlock, _GrassBlock, _GrassBushBlock, _GrassPathBlock, _GravelBlock, _GrindstoneBlock, _HayBlock, _HugeMushroomBlock, _IceBlock, _JigsawBlock, _JukeboxBlock, _JungleTree, _KelpBlock, _KelpTopBlock, _LadderBlock, _LanternBlock, _LeavesBlock, _LecternBlock, _LeverBlock, _LilyPadBlock as _LilyPadBlock, _LogBlock, _LoomBlock, _MagmaBlock, _MelonBlock, _MobSpawnerBlock, _MovingPistonBlock, _MushroomBlock, _MyceliumBlock, _NetherWartBlock as _NetherWartBlock, _NoteBlock, _OakTree, _ObserverBlock, _OreBlock, _PaneBlock, _PistonBlock, _PlayerSkullBlock, _PlayerWallSkullBlock, _PortalBlock as _NetherPortalBlock, _PotatoBlock, _PoweredRailBlock, _PressurePlateBlock, _PressureSensitivity, _PumpkinBlock, _RailBlock, _RedstoneDiodeBlock, _RedstoneLampBlock as _RedstoneLampBlock, _RedstoneOreBlock, _RedstoneTorchBlock, _RedstoneWireBlock, _RepeaterBlock, _RotatedPillarBlock, _SandBlock, _SaplingBlock, _ScaffoldingBlock, _SeaGrassBlock, _SeaLanternBlock, _SeaPickleBlock, _ShulkerBoxBlock, _SilverfishBlock, _SkullBlock, _SlabBlock, _SlimeBlock, _SmithingTableBlock, _SmokerBlock, _SnowBlock, _SnowLayerBlock, _SnowyDirtBlock, _SoulSandBlock, _SpongeBlock, _SpruceTree, _StainedGlassBlock, _StainedGlassPaneBlock, _StairsBlock, _StandingSignBlock, _StemBlock, _StoneBlock, _StoneButtonBlock, _StonecutterBlock, _StructureBlock, _StructureVoidBlock, _SugarCaneBlock, _SweetBerryBushBlock, _TallSeaGrassBlock, _TNTBlock, _TorchBlock, _TrapDoorBlock, _TrappedChestBlock, _TripWireBlock as _TripWireBlock, _TripWireHookBlock as _TripWireHookBlock, _TurtleEggBlock, _VineBlock, _WallBannerBlock, _WallBlock, _WallRedstoneTorchBlock, _WallSignBlock, _WallSkullBlock, _WallTorchBlock, _WeightedPressurePlateBlock, _WetSpongeBlock, _WitherRoseBlock, _WitherSkullBlock, _WitherWallSkullBlock, _WoodButtonBlock, _WorkbenchBlock } from "./Blocks";
 import { _Material } from "./Material";
 import { _BlockProperties } from "./BlockProperties";
 import { _LegacyBlockDataMap } from "./LegacyBlockDataMap";
-import { _Block } from "./Block";
+import { _MaterialColor } from "./MaterialColor";
 import { _BlockModel } from "./model/Model";
 import { _ModelRegistry } from "./model/ModelRegistry";
 import { _BlocksHelper } from "./BlocksHelper";
 import { _DyeColor } from "./DyeColor";
 import { _Effects } from "./Effects";
-import { _Klocki } from "../client/Klocki";
 
 export class _BlockRegistry {
     public _blocksByLegacyId: _LegacyBlockDataMap[];

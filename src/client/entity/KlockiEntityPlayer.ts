@@ -135,7 +135,7 @@ export class _KlockiEntityPlayer extends _KlockiEntityLiving {
     }
     public _render() {
         if (!this._skinLoaded) {
-            //_Klocki._log("skin not loaded");
+            // _Klocki._log("skin not loaded");
 
             return;
         }

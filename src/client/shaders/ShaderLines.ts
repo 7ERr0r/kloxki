@@ -11,7 +11,7 @@ export class _ShaderLines extends _Shader {
         super();
         let ink = klocki._display._inKeyword;
         const outk = klocki._display._outKeyword;
-        const vsSource = klocki._display._glslPrefix+`
+        const vsSource = klocki._display._glslPrefix + `
   ${ink} vec4 aVertexPosition;
   ${ink} vec4 aColor;
 
@@ -24,17 +24,17 @@ export class _ShaderLines extends _Shader {
     vertexColor = aColor;
   }
 `;
-    ink = klocki._display._inVaryingKeyword;
-        const fsSource = klocki._display._glslPrefix+`
+        ink = klocki._display._inVaryingKeyword;
+        const fsSource = klocki._display._glslPrefix + `
 precision mediump float;
 
 ${ink} lowp vec4 vertexColor;
 
 
-${klocki._display._version2?"out vec4 fragColor;":""} 
+${klocki._display._version2 ? "out vec4 fragColor;" : ""}
   void main(void) {
     
-    ${klocki._display._version2?"fragColor":"gl_FragColor"} = vertexColor;
+    ${klocki._display._version2 ? "fragColor" : "gl_FragColor"} = vertexColor;
   }
 `;
         const gl = klocki._display._gl;

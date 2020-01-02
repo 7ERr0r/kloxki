@@ -33,6 +33,9 @@ export class _NetworkWorker {
             this._onWsOpen(event);
         };
     }
+    public static _log(...args: any[]) {
+        console.log("[KNet]", ...args);
+    }
     /**
      * add to queue
      * @param packet
@@ -199,8 +202,5 @@ export class _NetworkWorker {
         const entirePacket: Uint8Array = new Uint8Array(this._outPacketBuffer, 0, p._getWriterIndex());
             
         this._ws.send(entirePacket);
-    }
-    public static _log(...args: any[]) {
-        console.log("[KNet]", ...args);
     }
 }

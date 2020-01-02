@@ -22,7 +22,7 @@ export class _ModelRegistry {
         // _Klocki._log("fetchModel", url)
         try {
             return fetch(url)
-            .then((response) => {
+                .then((response) => {
                 if (!response.ok || response.status !== 200) {
                     return null;
                 }

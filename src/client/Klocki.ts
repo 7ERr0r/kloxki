@@ -239,6 +239,9 @@ export class _Klocki {
             }, ms);
         });
     }
+    public static _log(...args: any[]) {
+        console.log("[Klocki]", ...args);
+    }
     public _getBakeSections(distanceSq: number) {
         const bakeSec = this._bakeSectionsByDistanceSquared;
         let sections = bakeSec[distanceSq];
@@ -748,10 +751,10 @@ export class _Klocki {
                 fr._drawString("\xa7eZ:" + Math.round(thePlayer._posZ * 10) / 10, 1, 51, 0xFFFFFFFF, true);
                 fr._drawString("\xa7eVRAM:" + Math.round((_OriginRenderOcTree._usedVideoMemory / (1024 * 1024)) * 10) / 10, 1, 61, 0xFFFFFFFF, true);
                 // fr._
-                fr._drawStringRight("\xa7eBlock:" + debugBlock, this._display._guiWidth-1, 1, 0xFFFFFFFF, true);
-                fr._drawStringRight("\xa7e" + debugBlock2, this._display._guiWidth-1 , 11, 0xFFFFFFFF, true);
-                fr._drawStringRight("\xa7e" + debugBlock3, this._display._guiWidth-1, 21, 0xFFFFFFFF, true);
-                fr._drawStringRight("\xa7echunks: " + this._theWorld._loadedUglyLimitedHeightChunks.size, this._display._guiWidth-1, 41, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7eBlock:" + debugBlock, this._display._guiWidth - 1, 1, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7e" + debugBlock2, this._display._guiWidth - 1 , 11, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7e" + debugBlock3, this._display._guiWidth - 1, 21, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7echunks: " + this._theWorld._loadedUglyLimitedHeightChunks.size, this._display._guiWidth - 1, 41, 0xFFFFFFFF, true);
                 
             }
         }
@@ -1130,9 +1133,6 @@ export class _Klocki {
     private _receiveAssetsJsons(msgpacked: Uint8Array) {
         this._assetsJsons = <any>decode(msgpacked);
         // _Klocki._log("msgpacked:", this._assetsJsons);
-    }
-    public static _log(...args: any[]) {
-        console.log("[Klocki]", ...args);
     }
 
 }

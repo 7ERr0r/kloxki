@@ -47,7 +47,7 @@ export class _WorldRenderer {
         this._stride4 = this._stride >> 2;
         this._reset();
 
-        if(this._klocki._display._version2){ 
+        if (this._klocki._display._version2) {
             // this function gotta be fast, so no if inside
             this._matMany = (matID: number, num: number) => {
                 const b = this._u32;
@@ -58,8 +58,8 @@ export class _WorldRenderer {
                     b[i] = matID;
                 }
                 this._count += num;
-            }
-        }else{
+            };
+        } else {
             this._matMany = (matID: number, num: number) => {
                 const b = this._f32; // can't use int attribute
                 const stride4 = this._stride4;
@@ -69,7 +69,7 @@ export class _WorldRenderer {
                     b[i] = matID;
                 }
                 this._count += num;
-            }
+            };
         }
 
     }
@@ -243,7 +243,7 @@ export class _WorldRenderer {
                 stride,
                 offset);
                 */
-            if(this._klocki._display._version2){
+            if (this._klocki._display._version2) {
                 if (this._useShort) {
                     const numComponents = 1;
                     const type = gl.SHORT;
@@ -265,12 +265,12 @@ export class _WorldRenderer {
                         stride,
                         offset);
                 }
-            }else{
+            } else {
                 const numComponents = 1;
-                    const type = gl.FLOAT;
-                    const offset = 20;
-                    const normalize = false;
-                    (<WebGL2RenderingContext>gl).vertexAttribPointer(
+                const type = gl.FLOAT;
+                const offset = 20;
+                const normalize = false;
+                (<WebGL2RenderingContext>gl).vertexAttribPointer(
                         shaderWorld._attribLocations._textureAtlas,
                         numComponents,
                         type,
@@ -324,7 +324,7 @@ export class _WorldRenderer {
                 if (this._useShort) {
                     
                 } else {
-                    if(this._klocki._display._version2){
+                    if (this._klocki._display._version2) {
                         const numComponents = 1;
                         const type = gl.INT;
                         const offset = 28;
@@ -334,7 +334,7 @@ export class _WorldRenderer {
                             type,
                             stride,
                             offset);
-                    }else{
+                    } else {
                         const numComponents = 1;
                         const type = gl.FLOAT;
                         const offset = 28;

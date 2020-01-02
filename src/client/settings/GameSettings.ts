@@ -13,7 +13,7 @@ export class _GameSettings {
         if (settings) {
             Object.assign(this, settings);
         } else {
-            //_Klocki._log("Settings not found");
+            // _Klocki._log("Settings not found");
         }
     }
 

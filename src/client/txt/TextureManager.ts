@@ -42,7 +42,7 @@ export class _TextureManager {
         this._defaultKlockiTexture = new _KlockiTexture(null, 0, new _GoRect(0, 0, 1, 1));
 
         const mipLevelCount: number = 1;
-        if(gl instanceof WebGL2RenderingContext){
+        if (gl instanceof WebGL2RenderingContext) {
             gl.bindTexture(gl.TEXTURE_2D_ARRAY, this._mainTexture);
             gl.texStorage3D(gl.TEXTURE_2D_ARRAY, mipLevelCount, gl.RGBA8, this._atlasSize, this._atlasSize, this._nAtlas);
             gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -51,15 +51,15 @@ export class _TextureManager {
             gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
             gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
             
-        }else if(gl instanceof WebGLRenderingContext){
+        } else if (gl instanceof WebGLRenderingContext) {
             gl.bindTexture(gl.TEXTURE_2D, this._mainTexture);
-            const tmp = new Uint8Array(4*this._atlasSize*this._atlasSize);
+            const tmp = new Uint8Array(4 * this._atlasSize * this._atlasSize);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this._atlasSize, this._atlasSize, 0, gl.RGBA, gl.UNSIGNED_BYTE, tmp);
-            //gl.texStorage(gl.TEXTURE_2D, mipLevelCount, gl.RGBA8, this._atlasSize, this._atlasSize, this._nAtlas);
+            // gl.texStorage(gl.TEXTURE_2D, mipLevelCount, gl.RGBA8, this._atlasSize, this._atlasSize, this._nAtlas);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);   
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         }
         for (let i: number = 0; i < this._nAtlas; i++) {
             this._textureAllocator._provide(new _KlockiTexture(null, i, new _GoRect(0, 0, this._atlasSize, this._atlasSize)));
@@ -148,9 +148,9 @@ export class _TextureManager {
         gl.bindTexture(gl.TEXTURE_2D, this._groupParamTexture);
         // const size = this._boxParamsTexSize;
         // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._boxParamsTexSize, this._boxParamsTexSize, 0, gl.RGBA, gl.FLOAT, 0);
-        if(gl instanceof WebGL2RenderingContext){
+        if (gl instanceof WebGL2RenderingContext) {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, this._groupParamsTexSize, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
-        }else{
+        } else {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this._groupParamsTexSize, this._groupParamsTexSize, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf);
         }
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -182,9 +182,9 @@ export class _TextureManager {
         }
         // maybe texImage blocks on resize
         // gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, this._groupParamsTexSize, this._groupParamsTexSize, gl.RGBA, gl.FLOAT, sliced, 0);
-        if(gl instanceof WebGL2RenderingContext){
+        if (gl instanceof WebGL2RenderingContext) {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, this._groupParamsTexSize, height, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf, 0);
-        }else{
+        } else {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this._groupParamsTexSize, height, 0, gl.RGBA, gl.FLOAT, this._groupParamsBuf);
         }
         gl.activeTexture(gl.TEXTURE0);
@@ -224,9 +224,9 @@ export class _TextureManager {
 
     private _loadTextureFromParsedImage(textureInfo: _TextureInfo, pixels: Uint8Array, precallback: Function | null, postcallback: Function | null, fixedAlias: boolean, w: number, h: number): void {
         const gl = this._klocki._display._gl;
-        if(this._klocki._display._version2){
+        if (this._klocki._display._version2) {
             gl.bindTexture((<WebGL2RenderingContext>gl).TEXTURE_2D_ARRAY, this._mainTexture);
-        }else{
+        } else {
             gl.bindTexture((<WebGL2RenderingContext>gl).TEXTURE_2D, this._mainTexture);
         }
         let aliasWidth: number = w;
@@ -270,10 +270,10 @@ export class _TextureManager {
         const srcFormat: number = gl.RGBA;
         const srcType: number = gl.UNSIGNED_BYTE;
         // _Klocki._log("atlasId: ", klockiTexture._atlasId);
-        if(this._klocki._display._version2){
+        if (this._klocki._display._version2) {
             const gl2 = <WebGL2RenderingContext>gl;
             gl2.texSubImage3D(gl2.TEXTURE_2D_ARRAY, mipmapLevel, r._min._x, r._min._y, klockiTexture._atlasId, uploadedImg._rect._dx(), uploadedImg._rect._dy(), 1, srcFormat, srcType, uploadedImg._pixels);
-        }else{
+        } else {
             gl.texSubImage2D(gl.TEXTURE_2D, mipmapLevel, r._min._x, r._min._y,  uploadedImg._rect._dx(), uploadedImg._rect._dy(), srcFormat, srcType, uploadedImg._pixels);
         }
     }

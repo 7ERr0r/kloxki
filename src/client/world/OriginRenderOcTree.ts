@@ -401,14 +401,14 @@ export class _OriginRenderOcTree {
             const sectionsArr = this._klocki._getRenderSections(distanceChunk);
             const indexLast = 1 + (<number>bakeSectionsArr[0]) | 0;
             if (!!bake && indexLast < bakeSectionsArr.length) {
-                    bakeSectionsArr[indexLast] = this;
-                    (<number>bakeSectionsArr[0])++;
-                }
+                bakeSectionsArr[indexLast] = this;
+                (<number>bakeSectionsArr[0])++;
+            }
                 
             const index = (++(<number>sectionsArr[0])) | 0;
             if (index < sectionsArr.length) {
-                    sectionsArr[index] = [this, this._drawCount, this._glBuffer];
-                }
+                sectionsArr[index] = [this, this._drawCount, this._glBuffer];
+            }
         }
         
     }

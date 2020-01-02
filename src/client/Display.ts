@@ -15,14 +15,13 @@ export class _Display {
     public _pixelDensityMultiplier: number;
     public _version2: boolean;
     public _version1: boolean;
-    private _vertexArrayExt: OES_vertex_array_object | undefined;
-    private _textureFloatExt: OES_texture_float | undefined | null;
     public readonly _glslPrefix: string;
     public readonly _inKeyword: string;
     public readonly _outKeyword: string;
     public readonly _inVaryingKeyword: string;
     public readonly _mainSamplerKeyword: string;
-
+    private readonly _vertexArrayExt: OES_vertex_array_object | undefined;
+    private readonly _textureFloatExt: OES_texture_float | undefined | null;
 
     constructor(domID: string, attributes: any) {
         this._pixelDensityMultiplier = 1;
@@ -57,29 +56,28 @@ export class _Display {
         this._gl = gl;
         this._canvas = canvas;
 
-
-        if(this._version1){
-              this._vertexArrayExt = (
+        if (this._version1) {
+            this._vertexArrayExt = (
               gl.getExtension('OES_vertex_array_object') ||
               gl.getExtension('MOZ_OES_vertex_array_object') ||
               gl.getExtension('WEBKIT_OES_vertex_array_object')
             );
-            if(!this._vertexArrayExt){
-                throw new Error('No WebGL1 vertex_array_object');
-            }
+            if (!this._vertexArrayExt) {
+                  throw new Error('No WebGL1 vertex_array_object');
+              }
             this._textureFloatExt = gl.getExtension('OES_texture_float');
-            if(!this._textureFloatExt){
-                throw new Error('No WebGL1 texture_float');
-            }
+            if (!this._textureFloatExt) {
+                  throw new Error('No WebGL1 texture_float');
+              }
         }
 
-        if(this._version1){
+        if (this._version1) {
             this._glslPrefix = "";
             this._inKeyword = "attribute";
             this._outKeyword = "varying";
             this._inVaryingKeyword = "varying";
             this._mainSamplerKeyword = "sampler2D";
-        }else{
+        } else {
             this._glslPrefix = "#version 300 es";
             this._inKeyword = "in";
             this._inVaryingKeyword = "in";
@@ -90,14 +88,12 @@ export class _Display {
         this._pixelDensityMultiplier = Math.max(this._pixelDensityMultiplier, this._calcHighDensity());
         this._pixelDensityMultiplier = Math.max(this._pixelDensityMultiplier, this._calcRetina());
         
-
         this._resize();
         window.addEventListener("resize", (ev: Event) => this._resize());
 
         this._generateIndices16();
 
     }
-
 
     public _resize(): void {
         const resizeInfo = this._resizeGetter();
@@ -113,7 +109,6 @@ export class _Display {
         this._guiWidth = this._width / this._guiScale;
         this._guiHeight = this._height / this._guiScale;
 
-
         this._canvas.width = this._width;
         this._canvas.height = this._height;
 
@@ -123,7 +118,6 @@ export class _Display {
     public _generateIndices32() {
         const gl = this._gl;
 
-        
         const indexBuffer32 = gl.createBuffer();
         this._indexBuffer32 = indexBuffer32!;
 
@@ -149,7 +143,6 @@ export class _Display {
     public _generateIndices16() {
         const gl = this._gl;
 
-        
         const indexBuffer16 = gl.createBuffer();
         this._indexBuffer16 = indexBuffer16!;
 
@@ -173,26 +166,28 @@ export class _Display {
 
     }
     public _calcHighDensity() {
-        let val = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
-        return val?2:1;
+        const val = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
+
+        return val ? 2 : 1;
     }
     
     public _calcRetina() {
-        let val = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx), only screen and (min-resolution: 75.6dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min--moz-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)').matches)) || (window.devicePixelRatio && window.devicePixelRatio >= 2)) && /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
-        return val?2:1;
+        const val = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx), only screen and (min-resolution: 75.6dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min--moz-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)').matches)) || (window.devicePixelRatio && window.devicePixelRatio >= 2)) && /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+
+        return val ? 2 : 1;
     }
 
     public _createVertexArray(): WebGLVertexArrayObject | WebGLVertexArrayObjectOES | null {
-        if(this._version1){
+        if (this._version1) {
             return this._vertexArrayExt!.createVertexArrayOES();
-        }else{
+        } else {
             return (<WebGL2RenderingContext>this._gl).createVertexArray();
         }
     }
     public _bindVertexArray(arr: WebGLVertexArrayObject | WebGLVertexArrayObjectOES) {
-        if(this._version1){
+        if (this._version1) {
             this._vertexArrayExt!.bindVertexArrayOES(arr);
-        }else{
+        } else {
             (<WebGL2RenderingContext>this._gl).bindVertexArray(arr);
         }
     }

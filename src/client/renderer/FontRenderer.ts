@@ -158,20 +158,22 @@ export class _FontRenderer {
             return charId != -1 && !this._unicodeFlag ? this._addDefaultChar(charId, italic) : 4; // this.addUnicodeChar(c, italic);
         }
     }
-    public _charSize(c: number){
-        if(c === 32){
+    public _charSize(c: number) {
+        if (c === 32) {
             return 4;
         }
         c = this._getCharId(c);
+
         return this._charIdSize(c);
     }
-    public _charIdSize(charId: number){
+    public _charIdSize(charId: number) {
         atlasId = charId >> 8;
         if (atlasId === 0) {
             charSize = this._charWidth[charId];
-        }else{
+        } else {
             charSize = 8;
         }
+
         return charSize;
     }
     public _addDefaultChar(charId: number, italic: boolean) {
@@ -399,9 +401,9 @@ export class _FontRenderer {
     }
     /**
      * Draws from left side align
-     * @param text 
-     * @param x 
-     * @param y 
+     * @param text
+     * @param x
+     * @param y
      * @param color 0xFFFFFFFF
      * @param dropShadow true
      */
@@ -410,9 +412,9 @@ export class _FontRenderer {
     }
     /**
      * Draws from right side align
-     * @param text 
-     * @param x 
-     * @param y 
+     * @param text
+     * @param x
+     * @param y
      * @param color 0xFFFFFFFF
      * @param dropShadow true
      */
@@ -421,8 +423,8 @@ export class _FontRenderer {
     }
     public _drawStringLeftRight(text: string, x: number, y: number, color: number, dropShadow: boolean, right: boolean) {
         // this.reset()
-        let preLen = this._calcTextLen(text);
-        if(right){
+        const preLen = this._calcTextLen(text);
+        if (right) {
             x -= preLen;
         }
 
@@ -436,7 +438,7 @@ export class _FontRenderer {
 
         return len;
     }
-    public _calcTextLen(str: string){
+    public _calcTextLen(str: string) {
         let bold = false;
         let textSize = 0;
         for (let i = 0; i < str.length; i++) {
@@ -448,26 +450,26 @@ export class _FontRenderer {
                 const num = col >= 48 && col <= 57; // 0 9
                 const af = col >= 97 && col <= 102;
                 if (num || af) {
-                    //let i1 = col;
-                    //if (num) { i1 -= 48; } // 0
-                    //if (af) { i1 -= 97 - 10; } // 'a'-10
+                    // let i1 = col;
+                    // if (num) { i1 -= 48; } // 0
+                    // if (af) { i1 -= 97 - 10; } // 'a'-10
                     bold = false;
 
-                    
-                }else if (col === 108) {// l
+                } else if (col === 108) {// l
                     bold = true;
                 } else if (col === 114) {// r
                     bold = false;
                 }
                 ++i;
-            }else{
+            } else {
                 const size = this._charSize(c);
                 textSize += size;
-                if(bold){
+                if (bold) {
                     textSize += 1;
                 }
             }
         }
+
         return textSize;
     }
     
