@@ -33,12 +33,14 @@ export class _Controls {
     public _isMobile: boolean;
     public _registededTouches: boolean;
     public _lastMovementTouchEnd: number;
+    public _lockOnNextEvent: boolean;
 
     constructor(klocki: _Klocki) {
         this._klocki = klocki;
         this._pressed = new Map<string, boolean>();
         this._mouseLocked = false;
         this._registededTouches = false;
+        this._lockOnNextEvent = false;
         this._mouseMoves = 0;
         this._ongoingTouches = new Array<_SimpleTouch>();
         this._lastMovementTouchEnd = 0;
@@ -101,6 +103,10 @@ export class _Controls {
                         this._mouseMoves++;
                     }
                 }
+            }else{
+                if(this._lockOnNextEvent){
+                    this._onLockNextEventFulfilled();
+                }
             }
         }, false);
 
@@ -120,6 +126,10 @@ export class _Controls {
                     }
                     thePlayer._scroll(delta);
                 }
+            }else{
+                if(this._lockOnNextEvent){
+                    this._onLockNextEventFulfilled();
+                }
             }
         }, false);
 
@@ -128,6 +138,7 @@ export class _Controls {
                 e.preventDefault();
                 e.returnValue = "Do you really want to leave?";
                 this._klocki._guiChat._appendMessage({ text: "Press F11 to prevent CTRL+W", color: "green" });
+                this._unpressAll();
 
                 return "Do you really want to leave?";
                 
@@ -140,6 +151,16 @@ export class _Controls {
     public static _copyTouch(touch: Touch) {
         return new _SimpleTouch(touch.identifier, touch.pageX, touch.pageY);
     }
+
+    public _unpressAll(){
+        this._pressed = new Map<string, boolean>();
+    }
+
+    public _onLockNextEventFulfilled(){
+        this._lockOnNextEvent = false;
+        this._requestLock();
+    }
+
     public _requestLock() {
         const canvas = this._klocki._display._canvas;
         canvas.requestPointerLock = canvas.requestPointerLock ||
@@ -147,6 +168,14 @@ export class _Controls {
 
         canvas.requestPointerLock();
     }
+
+    public _exitLock(){
+        this._mouseLocked = false;
+        document.exitPointerLock = document.exitPointerLock ||
+            (<any>document).mozExitPointerLock;
+        document.exitPointerLock();
+    }
+
     public _isLocked() {
         return document.pointerLockElement === this._klocki._display._canvas || (<any>document).mozPointerLockElement === this._klocki._display._canvas;
     }
@@ -158,14 +187,31 @@ export class _Controls {
         }
     }
     public _keydown(e: KeyboardEvent) {
+        const key = e.key.toLowerCase();
+
+        // preventions
         if (this._mouseLocked) {
             if (e.ctrlKey || e.key == ' ' || e.key === "F1" || e.key === "F3" || e.key === "F5" || e.key === "F8" || e.key == "Tab" || e.key == "Control" || e.key == "Shift") {
                 e.preventDefault();
                 e.stopPropagation();
             }
         }
+        let inGame = this._mouseLocked;
+        // going back to game
+        if(!this._mouseLocked){
+            if(this._lockOnNextEvent){
+                if(key == 't'){
+                    this._lockOnNextEvent = false;
+                    inGame = true; // handle only current chat open key
+                }else{
+                    if(e.key != 'Escape'){
+                        this._onLockNextEventFulfilled();
+                    }
+                }
+            }
+        }
 
-        const key = e.key.toLowerCase();
+        
 
         if (e.ctrlKey && (key == 'w' || key == 's')) {
             e.preventDefault();
@@ -174,39 +220,47 @@ export class _Controls {
 
         const was = this._pressed.get(key);
         this._pressed.set(key, true);
-        // _Klocki._log("pressed", key)
+        //_Klocki._log("pressed", e.key)
         if (was) {
             return;
         }
-        if (!this._mouseLocked) {
-            return;
-        }
-        if (key == 'f1') {
-            this._klocki._toggleUI();
-        }
-        if (key == 'f3') {
-            this._klocki._toggleDebugInfo();
-        }
-        if (key == 'f5') {
-            this._klocki._cyclePersonView();
-        }
-        if (key == 'f8') {
-            this._klocki._toggleSmoothCam();
-        }
-
-        if (key == 'c') {
-            this._klocki._yawSmoothSpeed = 0;
-            this._klocki._pitchSmoothSpeed = 0;
-        }
-        if (key == 'a' && this._pressed.get('f3')) {
-            const world = this._klocki._theWorld;
-            if (world) {
-                world._sections.forEach((v, k) => {
-                    v._notify();
-                });
+        if (inGame) {
+            if (key == 'f1') {
+                this._klocki._toggleUI();
+            }
+            if (key == 'f3') {
+                this._klocki._toggleDebugInfo();
+            }
+            if (key == 'f5') {
+                this._klocki._cyclePersonView();
+            }
+            if (key == 'f8') {
+                this._klocki._toggleSmoothCam();
+            }
+            if(key == 't'){
+                this._klocki._toggleChatInput();
+                e.preventDefault();
+                e.stopPropagation();
+            }
+    
+            if (key == 'c') {
+                this._klocki._yawSmoothSpeed = 0;
+                this._klocki._pitchSmoothSpeed = 0;
+            }
+            if (key == 'a' && this._pressed.get('f3')) {
+                const world = this._klocki._theWorld;
+                if (world) {
+                    world._sections.forEach((v, k) => {
+                        v._notify();
+                    });
+                }
+            }
+        }else{
+            if(key == 'escape'){
+                this._klocki._hideChatInput();
             }
         }
-
+        
         return true;
     }
     public _keyup(e: KeyboardEvent) {

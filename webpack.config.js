@@ -2,14 +2,16 @@ const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
-const obfuscate = false;
+const obfuscate = true;
 
 const minimizer = [];
 if (obfuscate) {
     minimizer.push(new TerserPlugin({
         sourceMap: true,
         terserOptions: {
-            ecma: 5,
+            ecma: 2017,
+            toplevel: true,
+            module: true,
             mangle: {
                 toplevel: true,
                 properties: {

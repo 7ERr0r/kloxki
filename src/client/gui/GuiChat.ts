@@ -32,7 +32,7 @@ export class _GuiChat extends _Gui {
             const line = this._visibleMessages._peek(dequeIndex);
 
             if (line) {
-                fr._drawString(line._formattedText, 2, -offset + this._klocki._display._guiHeight - 18 - linei * 9, 0xFFFFFFFF, true);
+                fr._drawString(line._formattedText, 2, -offset + this._klocki._display._guiHeight - 28 - linei * 9, 0xFFFFFFFF, true);
             }
         }
     }

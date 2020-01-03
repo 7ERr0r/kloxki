@@ -44,8 +44,11 @@ import { _ChunkSection } from "./world/ChunkSection";
 import { _KlockiEntityPlayerSP } from "./entity/KlockiEntityPlayerSP";
 import { _KlockiEntityPlayer } from "./entity/KlockiEntityPlayer";
 import { _KlockiEntityPlayerMP } from "./entity/KlockiEntityPlayerMP";
+import { _GuiChatInput } from "./gui/GuiChatInput";
+import { _NetHandlerPlayClient } from "./network/NetHandlerPlayClient";
 
 export class _Klocki {
+
     public static _utilVec3 = vec3.create();
     public static _utilVec4 = vec4.create();
     public static _forbiddenWord = "mine" + "craft";
@@ -69,6 +72,7 @@ export class _Klocki {
     public _shaderLines!: _ShaderLines;
     public _fpsDeque: _Deque<number>;
     public _guiChat!: _GuiChat;
+    public _guiChatInput!: _GuiChatInput;
     public _guiOverlayEquipment!: _GuiOverlayEquipment;
     public _renderList!: _RenderList;
     public _blockRegistry!: _BlockRegistry;
@@ -130,6 +134,7 @@ export class _Klocki {
     private readonly _pako: any = require('../pako');
 
     private readonly _isGamePaused: boolean = false;
+
 
     constructor(domID: string, optionals: any) {
         const reduced: boolean = !!optionals.reducedMemory;
@@ -287,8 +292,8 @@ export class _Klocki {
             const thePlayer = world._thePlayer!;
             this._lastStartedJumping = this._startedJumping;
             this._lastJumping = this._jumping;
-
-            this._jumping = this._controls._pressed.get(' ') == true;
+            const locked = this._controls._mouseLocked;
+            this._jumping = locked && this._controls._pressed.get(' ') == true;
             this._startedJumping = this._jumping && !this._lastJumping;
 
             if (!this._lastStartedJumping && this._startedJumping) {
@@ -306,27 +311,30 @@ export class _Klocki {
             thePlayer._movementForward = 0;
             thePlayer._movementStrafe = 0;
 
-            if (this._controls._pressed.get('w')) {
-                thePlayer._movementForward += 1;
-            }
-            if (this._controls._pressed.get('s')) {
-                thePlayer._movementForward -= 1;
-            }
-            if (this._controls._pressed.get(' ')) {
-                thePlayer._jumping = true;
-            }
+            if(locked){
+                if (this._controls._pressed.get('w')) {
+                    thePlayer._movementForward += 1;
+                }
+                if (this._controls._pressed.get('s')) {
+                    thePlayer._movementForward -= 1;
+                }
+                if (this._controls._pressed.get(' ')) {
+                    thePlayer._jumping = true;
+                }
 
-            if (this._controls._pressed.get('a')) {
-                thePlayer._movementStrafe += 1;
+                if (this._controls._pressed.get('a')) {
+                    thePlayer._movementStrafe += 1;
+                }
+                if (this._controls._pressed.get('d')) {
+                    thePlayer._movementStrafe -= 1;
+                }
             }
-            if (this._controls._pressed.get('d')) {
-                thePlayer._movementStrafe -= 1;
-            }
-            this._zoomed = this._controls._pressed.get('c') == true;
+            this._zoomed = locked && this._controls._pressed.get('c') == true;
             
-            thePlayer._setSprinting(this._controls._pressed.get('shift') == true);
+            //thePlayer._setSprinting(this._controls._pressed.get('shift') == true);
+            thePlayer._setSprinting(locked && this._controls._pressed.get('control') == true);
 
-            const sneak = this._controls._pressed.get('tab') === true;
+            const sneak = locked && this._controls._pressed.get('shift') === true;
             thePlayer._setSneaking(sneak);
 
             thePlayer._movementForward += thePlayer._touchMoveForward;
@@ -437,11 +445,7 @@ export class _Klocki {
         
     }
 
-    public send(msg: string): void {
-        if (this._networkManager) {
-            this._networkManager._sendPacket(new _CPacketChatMessage(msg));
-        }
-    }
+    
     public _makeBlurTex() {
         // tODO maybe motion blur postprocessing
         
@@ -755,6 +759,7 @@ export class _Klocki {
                 fr._drawStringRight("\xa7e" + debugBlock2, this._display._guiWidth - 1 , 11, 0xFFFFFFFF, true);
                 fr._drawStringRight("\xa7e" + debugBlock3, this._display._guiWidth - 1, 21, 0xFFFFFFFF, true);
                 fr._drawStringRight("\xa7echunks: " + this._theWorld._loadedUglyLimitedHeightChunks.size, this._display._guiWidth - 1, 41, 0xFFFFFFFF, true);
+                fr._drawStringRight(this._display._version2?"\xa7eWebGL2":"\xa7cWebGL1", this._display._guiWidth - 1, 51, 0xFFFFFFFF, true);
                 
             }
         }
@@ -797,6 +802,15 @@ export class _Klocki {
     public _toggleDebugInfo() {
         this._debugInfo = !this._debugInfo;
     }
+    public _toggleChatInput() {
+        this._controls._exitLock();
+        this._guiChatInput._requestKeyboard();
+    }
+    public _hideChatInput() {
+        this._guiChatInput._hide();
+        
+    }
+
     public _toggleUI() {
         this.showUI = !this.showUI;
     }
@@ -814,6 +828,7 @@ export class _Klocki {
         // track.connect(panner._panner).connect(this._audioManager._audioCtx.destination);
 
         this._guiChat = new _GuiChat(this);
+        this._guiChatInput = new _GuiChatInput(this);
         this._guiOverlayEquipment = new _GuiOverlayEquipment(this);
 
         const gl = this._display._gl;
@@ -1133,6 +1148,19 @@ export class _Klocki {
     private _receiveAssetsJsons(msgpacked: Uint8Array) {
         this._assetsJsons = <any>decode(msgpacked);
         // _Klocki._log("msgpacked:", this._assetsJsons);
+    }
+
+    public sendChat(msg: string): void {
+        this._sendChat(msg);
+    }
+    public _sendChat(msg: string): void {
+        const net = this._networkManager;
+        if (net !== null) {
+            const listener = net._packetListener;
+            if(listener !== null && listener instanceof _NetHandlerPlayClient){
+                listener._sendChat(msg);
+            }
+        }
     }
 
 }
