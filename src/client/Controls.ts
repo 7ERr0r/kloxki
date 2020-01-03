@@ -103,8 +103,8 @@ export class _Controls {
                         this._mouseMoves++;
                     }
                 }
-            }else{
-                if(this._lockOnNextEvent){
+            } else {
+                if (this._lockOnNextEvent) {
                     this._onLockNextEventFulfilled();
                 }
             }
@@ -126,8 +126,8 @@ export class _Controls {
                     }
                     thePlayer._scroll(delta);
                 }
-            }else{
-                if(this._lockOnNextEvent){
+            } else {
+                if (this._lockOnNextEvent) {
                     this._onLockNextEventFulfilled();
                 }
             }
@@ -152,11 +152,11 @@ export class _Controls {
         return new _SimpleTouch(touch.identifier, touch.pageX, touch.pageY);
     }
 
-    public _unpressAll(){
+    public _unpressAll() {
         this._pressed = new Map<string, boolean>();
     }
 
-    public _onLockNextEventFulfilled(){
+    public _onLockNextEventFulfilled() {
         this._lockOnNextEvent = false;
         this._requestLock();
     }
@@ -169,7 +169,7 @@ export class _Controls {
         canvas.requestPointerLock();
     }
 
-    public _exitLock(){
+    public _exitLock() {
         this._mouseLocked = false;
         document.exitPointerLock = document.exitPointerLock ||
             (<any>document).mozExitPointerLock;
@@ -198,20 +198,18 @@ export class _Controls {
         }
         let inGame = this._mouseLocked;
         // going back to game
-        if(!this._mouseLocked){
-            if(this._lockOnNextEvent){
-                if(key == 't'){
+        if (!this._mouseLocked) {
+            if (this._lockOnNextEvent) {
+                if (key == 't') {
                     this._lockOnNextEvent = false;
                     inGame = true; // handle only current chat open key
-                }else{
-                    if(e.key != 'Escape'){
+                } else {
+                    if (e.key != 'Escape') {
                         this._onLockNextEventFulfilled();
                     }
                 }
             }
         }
-
-        
 
         if (e.ctrlKey && (key == 'w' || key == 's')) {
             e.preventDefault();
@@ -220,7 +218,7 @@ export class _Controls {
 
         const was = this._pressed.get(key);
         this._pressed.set(key, true);
-        //_Klocki._log("pressed", e.key)
+        // _Klocki._log("pressed", e.key)
         if (was) {
             return;
         }
@@ -237,7 +235,7 @@ export class _Controls {
             if (key == 'f8') {
                 this._klocki._toggleSmoothCam();
             }
-            if(key == 't'){
+            if (key == 't') {
                 this._klocki._toggleChatInput();
                 e.preventDefault();
                 e.stopPropagation();
@@ -255,8 +253,8 @@ export class _Controls {
                     });
                 }
             }
-        }else{
-            if(key == 'escape'){
+        } else {
+            if (key == 'escape') {
                 this._klocki._hideChatInput();
             }
         }

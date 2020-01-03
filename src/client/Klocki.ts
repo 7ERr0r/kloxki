@@ -135,7 +135,6 @@ export class _Klocki {
 
     private readonly _isGamePaused: boolean = false;
 
-
     constructor(domID: string, optionals: any) {
         const reduced: boolean = !!optionals.reducedMemory;
         this._clearColor = [0.6, 0.7, 1];
@@ -311,7 +310,7 @@ export class _Klocki {
             thePlayer._movementForward = 0;
             thePlayer._movementStrafe = 0;
 
-            if(locked){
+            if (locked) {
                 if (this._controls._pressed.get('w')) {
                     thePlayer._movementForward += 1;
                 }
@@ -331,7 +330,7 @@ export class _Klocki {
             }
             this._zoomed = locked && this._controls._pressed.get('c') == true;
             
-            //thePlayer._setSprinting(this._controls._pressed.get('shift') == true);
+            // thePlayer._setSprinting(this._controls._pressed.get('shift') == true);
             thePlayer._setSprinting(locked && this._controls._pressed.get('control') == true);
 
             const sneak = locked && this._controls._pressed.get('shift') === true;
@@ -445,7 +444,6 @@ export class _Klocki {
         
     }
 
-    
     public _makeBlurTex() {
         // tODO maybe motion blur postprocessing
         
@@ -759,7 +757,7 @@ export class _Klocki {
                 fr._drawStringRight("\xa7e" + debugBlock2, this._display._guiWidth - 1 , 11, 0xFFFFFFFF, true);
                 fr._drawStringRight("\xa7e" + debugBlock3, this._display._guiWidth - 1, 21, 0xFFFFFFFF, true);
                 fr._drawStringRight("\xa7echunks: " + this._theWorld._loadedUglyLimitedHeightChunks.size, this._display._guiWidth - 1, 41, 0xFFFFFFFF, true);
-                fr._drawStringRight(this._display._version2?"\xa7eWebGL2":"\xa7cWebGL1", this._display._guiWidth - 1, 51, 0xFFFFFFFF, true);
+                fr._drawStringRight(this._display._version2 ? "\xa7eWebGL2" : "\xa7cWebGL1", this._display._guiWidth - 1, 51, 0xFFFFFFFF, true);
                 
             }
         }
@@ -1057,6 +1055,19 @@ export class _Klocki {
         }
     }
 
+    public sendChat(msg: string): void {
+        this._sendChat(msg);
+    }
+    public _sendChat(msg: string): void {
+        const net = this._networkManager;
+        if (net !== null) {
+            const listener = net._packetListener;
+            if (listener !== null && listener instanceof _NetHandlerPlayClient) {
+                listener._sendChat(msg);
+            }
+        }
+    }
+
     private async _startGame(): Promise<void> {
 
         this._controls = new _Controls(this);
@@ -1148,19 +1159,6 @@ export class _Klocki {
     private _receiveAssetsJsons(msgpacked: Uint8Array) {
         this._assetsJsons = <any>decode(msgpacked);
         // _Klocki._log("msgpacked:", this._assetsJsons);
-    }
-
-    public sendChat(msg: string): void {
-        this._sendChat(msg);
-    }
-    public _sendChat(msg: string): void {
-        const net = this._networkManager;
-        if (net !== null) {
-            const listener = net._packetListener;
-            if(listener !== null && listener instanceof _NetHandlerPlayClient){
-                listener._sendChat(msg);
-            }
-        }
     }
 
 }

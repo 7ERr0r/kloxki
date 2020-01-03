@@ -63,12 +63,12 @@ export class _Display {
               gl.getExtension('WEBKIT_OES_vertex_array_object')
             );
             if (!this._vertexArrayExt) {
-                  throw new Error('No WebGL1 vertex_array_object');
-              }
+                throw new Error('No WebGL1 vertex_array_object');
+            }
             this._textureFloatExt = gl.getExtension('OES_texture_float');
             if (!this._textureFloatExt) {
-                  throw new Error('No WebGL1 texture_float');
-              }
+                throw new Error('No WebGL1 texture_float');
+            }
         }
 
         if (this._version1) {

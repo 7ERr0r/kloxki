@@ -23,13 +23,13 @@ export class _ModelRegistry {
         try {
             return fetch(url)
                 .then((response) => {
-                if (!response.ok || response.status !== 200) {
+                    if (!response.ok || response.status !== 200) {
                     return null;
                 }
                 // _Klocki._log("fetchedModel", url)
 
-                return response.json();
-            });
+                    return response.json();
+                });
         } catch (e) {
             return null;
         }

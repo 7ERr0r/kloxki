@@ -49,7 +49,6 @@ import { _SPacketSpawnObject } from "../../network/play/server/SPacketSpawnObjec
 
 export class _NetHandlerPlayClient implements _INetHandler {
 
-
     public _klocki: _Klocki;
     public _netManager: _NetworkManager;
     public _protocol: number;

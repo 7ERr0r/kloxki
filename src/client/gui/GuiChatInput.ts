@@ -9,27 +9,25 @@ export class _GuiChatInput extends _Gui {
     public _shown: boolean;
     public _fakeForm: HTMLFormElement | null;
 
-
-
     constructor(klocki: _Klocki) {
         super(klocki);
         this._fakeInput = null;
         this._fakeForm = null;
         this._shown = false;
 
-
     }
 
-    public _requestKeyboard(){
+    public _requestKeyboard() {
 
         let fakeInput = this._fakeInput;
-        if(fakeInput != null){
+        if (fakeInput != null) {
             this._show();
             fakeInput.focus();
             fakeInput.click();
+
             return;
         }
-        //let target = document.getElementsByTagName("input")[0];
+        // let target = document.getElementsByTagName("input")[0];
         const fakeForm = document.createElement("form");
         this._fakeForm = fakeForm;
         fakeForm.addEventListener("submit", e => this._onSubmit(e));
@@ -70,28 +68,27 @@ export class _GuiChatInput extends _Gui {
         this._klocki._controls._lockOnNextEvent = true;
 
     }
-    public _onFocusOut(e: FocusEvent){
+    public _onFocusOut(e: FocusEvent) {
         this._hide();
     }
-    public _show(){
-        if(!this._shown){
+    public _show() {
+        if (!this._shown) {
             this._shown = true;
-            if(this._fakeInput != null){
+            if (this._fakeInput != null) {
                 this._fakeInput.style.visibility = "visible";
             }
         }
     }
-    public _hide(){
-        if(this._shown){
+    public _hide() {
+        if (this._shown) {
             this._shown = false;
-            if(this._fakeInput != null){
+            if (this._fakeInput != null) {
                 this._fakeInput.style.visibility = "hidden";
             }
         }
     }
     public _render(): void {
-        //const fr = this._klocki._fontRenderer;
-        
+        // const fr = this._klocki._fontRenderer;
         
     }
     public _tick(): void {
