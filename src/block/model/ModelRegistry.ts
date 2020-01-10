@@ -13,28 +13,6 @@ export class _ModelRegistry {
         this._nameModelMap = new Map();
         this._namePromiseMap = new Map();
     }
-    public _fetchModel(name: string): Promise<any> | null {
-        const guiChat = this._klocki._guiChat;
-        if (guiChat) {
-            guiChat._appendMessage({ text: "Loading model " + name });
-        }
-        const url = this._klocki._assetURI + "assets/" + _Klocki._forbiddenWord + "/models/" + name + ".json";
-        // _Klocki._log("fetchModel", url)
-        try {
-            return fetch(url)
-                .then((response) => {
-                    if (!response.ok || response.status !== 200) {
-                    return null;
-                }
-                // _Klocki._log("fetchedModel", url)
-
-                    return response.json();
-                });
-        } catch (e) {
-            return null;
-        }
-            
-    }
     public _loadModel(name: string): _BlockModel | null {
         const mjson = this._klocki._getAssetJSON("models/" + name);
         if (!mjson) {

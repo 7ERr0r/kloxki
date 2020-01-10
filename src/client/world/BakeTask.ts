@@ -76,16 +76,16 @@ export class _BakeTask {
     private static readonly _initUV = [0, 0];
     private static readonly _initXYZ = [0, 0, 0];
     public _renderLeaf: _OriginRenderOcTree;
-    public _section: _ChunkSection;
+    public _chunkSection: _ChunkSection;
     public _bakeId: number;
     public _sections: (_ChunkSection | null)[];
     public _registry: _BlockRegistry;
     public _stillDirty: boolean;
     public _done: boolean;
 
-    constructor(renderLeaf: _OriginRenderOcTree, section: _ChunkSection) {
+    constructor(renderLeaf: _OriginRenderOcTree, chunkSection: _ChunkSection) {
         this._renderLeaf = renderLeaf;
-        this._section = section;
+        this._chunkSection = chunkSection;
         this._bakeId = _BakeTask._bakeIdCounter++;
         this._sections = new Array<_ChunkSection | null>(4 * 4 * 4);
         this._registry = this._renderLeaf._klocki._blockRegistry;
@@ -121,9 +121,9 @@ export class _BakeTask {
         this._renderLeaf._unmarkDirty();
         wr._reset();
 
-        const sx = this._section._posX;
-        const sy = this._section._posY;
-        const sz = this._section._posZ;
+        const sx = this._chunkSection._posX;
+        const sy = this._chunkSection._posY;
+        const sz = this._chunkSection._posZ;
 
         const ox = this._renderLeaf._fromoriginx * 16;
         const oy = this._renderLeaf._fromoriginy * 16;

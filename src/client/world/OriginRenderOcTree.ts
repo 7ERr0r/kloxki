@@ -104,6 +104,12 @@ export class _OriginRenderOcTree {
 
         return buf;
     }
+    /**
+     * Called only on top-level nodes (roots)
+     * @param x 
+     * @param y 
+     * @param z 
+     */
     public _setPosition(x: number, y: number, z: number): boolean {
         const offsetarr = this._offsetarr!;
         if (offsetarr[0] != x || offsetarr[1] != y || offsetarr[2] != z) {
@@ -129,6 +135,9 @@ export class _OriginRenderOcTree {
 
         return false;
     }
+    /**
+     * Called on nodes and leafs
+     */
     public _updatePos() {
         this._joined = false;
         this._dirty = false;
@@ -165,6 +174,9 @@ export class _OriginRenderOcTree {
             }
         }
     }
+    /**
+     * Heuristic calculation
+     */
     public _calcAliveChunks() {
         let alive = 0;
         const children = this._children;
@@ -197,10 +209,10 @@ export class _OriginRenderOcTree {
         } else {
             const w = this._section;
             if (w !== null) {
-                const section = w._section;
-                if (section !== null) {
+                const chunkSection = w._section;
+                if (chunkSection !== null) {
                     if (!this._baking) {
-                        this._bakeTask = new _BakeTask(this, section);
+                        this._bakeTask = new _BakeTask(this, chunkSection);
                         this._klocki._scheduleBaking(this._bakeTask);
                         this._baking = true;
                         
@@ -294,13 +306,6 @@ export class _OriginRenderOcTree {
         }
         const sizex = this._sizex;
         if (sizex == 1) {
-            /*
-            if(this.renderChunk == null){
-                this.renderChunk = new RenderChunk(0, (this.origin.x+16*this.ox), (this.origin.y+16*this.oy), (this.origin.z+16*this.oz), this.origin, this)
-            }
-            this.renderChunk.renderChunk(mainWr, programInfo)
-            */
-            // tODO
 
             if (this._bakeTask != null || this._drawCount > 0) {
                 const off = this._origin._offsetarr!;
@@ -310,52 +315,23 @@ export class _OriginRenderOcTree {
                 pos[2] = off[2] + this._fromoriginz * 16 + 8;
                 const visible = this._klocki._frustum._testSphereTouches(pos, -13.86);
                 if (visible) {
-                    // gl.bindVertexArray(this.vao)
-
-                    /*const gl = this._klocki._display._gl;
-                    gl.bindBuffer(gl.ARRAY_BUFFER, this._getBuffer());
-                    // this._klocki._worldRenderer._first = true;
-                    this._klocki._worldRendererBaker._setupPointers(shaderWorld);
-                    // gl.uniform4fv(shaderWorld._uniformLocations._offset, off);
-                    shaderWorld._updateOffset(off);
-                    //gl.drawArrays(gl.TRIANGLES, 0, this._drawCount);
-                    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer);
-                    gl.drawElements(gl.TRIANGLES, this._drawCount*(6/4), gl.UNSIGNED_INT, 0);
-                    */
                     const toBake = this._bakeTask != null;
                     const toDraw = this._drawCount > 0;
                     if (toBake || toDraw) {
                         this._addToLastSectionsByDistanceSquared(pos, toBake, toDraw);
                     }
-                    // if(){
-                        // this._drawSelf(shaderWorld, off);
-                    // }
                 }
             }
 
             return;
         }
         
-        const off = this._origin._offsetarr!;
-        const pos = _OriginRenderOcTree._testPosVec3;
-        pos[0] = off[0] + this._fromoriginx * 16 + 8 * sizex;
-        pos[1] = off[1] + this._fromoriginy * 16 + 8 * sizex;
-        pos[2] = off[2] + this._fromoriginz * 16 + 8 * sizex;
-        const sphereDistance = this._klocki._frustum._testSphereFully(pos);
+        const visibility = this._calcVisibility();
 
-        let visibility = 0;
-        if (sphereDistance > 7 * sizex) {
-            // heuristic, it is profitable to draw if sphere is almost entirely in
-            visibility = 1; // all
-        } else if (sphereDistance < _OriginRenderOcTree._outsideHideRadius * sizex) {
-            // fully outside
-        } else {
-            visibility = 2; // partial visibility
-        }
         if (this._joined) {
             if (this._drawCount > 0) {
                 if (visibility == 1 || visibility == 2) { // draw all
-
+                    const pos = _OriginRenderOcTree._testPosVec3;
                     this._addToLastSectionsByDistanceSquared(pos, false, true);
                     
                     // this._drawSelf(shaderWorld, off);
@@ -385,6 +361,25 @@ export class _OriginRenderOcTree {
                     }
                 }
             }
+        }
+    }
+    private _calcVisibility(): number {
+        const sizex = this._sizex;
+        const off = this._origin._offsetarr!;
+        const pos = _OriginRenderOcTree._testPosVec3;
+        pos[0] = off[0] + this._fromoriginx * 16 + 8 * sizex;
+        pos[1] = off[1] + this._fromoriginy * 16 + 8 * sizex;
+        pos[2] = off[2] + this._fromoriginz * 16 + 8 * sizex;
+        const sphereDistance = this._klocki._frustum._testSphereFully(pos);
+
+        if (sphereDistance > 7 * sizex) {
+            // heuristic, it is profitable to draw if sphere is almost entirely in
+            return 1; // all
+        } else if (sphereDistance < _OriginRenderOcTree._outsideHideRadius * sizex) {
+            // fully outside
+            return 0;
+        } else {
+            return 2; // partial visibility
         }
     }
 
@@ -447,6 +442,9 @@ export class _OriginRenderOcTree {
 
         return sumLength;
     }
+    /**
+     * Valid only for WebGL2
+     */
     public _joinBuffers() {
         if (this._drawCount > 0) {
             this._clearBuffer();

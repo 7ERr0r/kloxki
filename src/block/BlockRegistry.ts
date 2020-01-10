@@ -13,6 +13,7 @@ import { _ModelRegistry } from "./model/ModelRegistry";
 import { _BlocksHelper } from "./BlocksHelper";
 import { _DyeColor } from "./DyeColor";
 import { _Effects } from "./Effects";
+import { _BlockStateMeta } from "./BlockStateMeta";
 
 export class _BlockRegistry {
     public _blocksByLegacyId: _LegacyBlockDataMap[];
@@ -26,8 +27,10 @@ export class _BlockRegistry {
     public _currentGlobalPaletteIndex: number;
     public _globalPaletteOpaque: Uint8Array;
     public _globalPaletteSize: number;
+    private _klocki: _Klocki;
 
-    constructor(textureManager: _TextureManager | null, models: _ModelRegistry) {
+    constructor(klocki: _Klocki, textureManager: _TextureManager | null, models: _ModelRegistry) {
+        this._klocki = klocki;
         this._textureManager = textureManager;
         this._blocksByLegacyId = Array(256);
         this._blocksByNameOrder = Array(1024 * 16);
@@ -62,13 +65,37 @@ export class _BlockRegistry {
         }
 
     }
+
+    
+    public _loadStateMeta(name: string): _BlockStateMeta | null {
+        const mjson = this._klocki._getAssetJSON("blockstates/" + name);
+        if (!mjson) {
+            return null;
+        }
+        const loaded = _BlockStateMeta._load(mjson);
+
+
+        return loaded;
+    
+    }
+    
     public _postRegister() {
         for (let i = 0; i < this._currentNameOrderIndex; i++) {
             const b = this._blocksByNameOrder[i];
             try {
-                const model = this._modelRegistry._loadModel("block/" + b._name);
-                // _Klocki._log("loaded model "+b._name);
-                b._model = model;
+                const state = this._loadStateMeta(b._name);
+                if(state != null){
+                    const modelName = state._getAnyStateModelName();
+                    if(modelName !== null){
+                        const model = this._modelRegistry._loadModel(modelName);
+                        // _Klocki._log("loaded model "+b._name);
+                        b._model = model;
+                    }else{
+                        console.warn("no model name for "+b._name);
+                    }
+                }else{
+                    console.warn("no state for "+b._name);
+                }
             } catch (e) {
                 _Klocki._log("can't load model " + b._name, e);
             }

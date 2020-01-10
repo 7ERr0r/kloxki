@@ -51,7 +51,7 @@ export class _Klocki {
 
     public static _utilVec3 = vec3.create();
     public static _utilVec4 = vec4.create();
-    public static _forbiddenWord = "mine" + "craft";
+    public static _forbiddenWord = _Klocki._generateForbidden();
 
     public _protocol: number = 498;
     public _assetsVersion: string = "1.14";
@@ -134,6 +134,10 @@ export class _Klocki {
     private readonly _pako: any = require('../pako');
 
     private readonly _isGamePaused: boolean = false;
+
+    private static _generateForbidden(): string {
+        return ("m"+(2137/0)).toLowerCase().substring(0,3)+(<any>[]+{}).substr(4,2)+"r"+(""+((<any>{}+[])-69.0)).toLowerCase()[1]+"f"+(<any>{}+{})[28];
+    }
 
     constructor(domID: string, optionals: any) {
         const reduced: boolean = !!optionals.reducedMemory;
@@ -624,7 +628,7 @@ export class _Klocki {
 
             mat4.translate(modelViewMatrix, modelViewMatrix, [-rx, -ry, -rz]);
 
-            const blockPos = this._theWorld._traceAnyBlock(10, new Float64Array([rx, ry, rz]), new Float64Array([viewx, viewy, viewz]));
+            const blockPos = this._theWorld._traceAnyBlock(this._reducedMemory?10:100, new Float64Array([rx, ry, rz]), new Float64Array([viewx, viewy, viewz]));
             this._targetBlock = blockPos;
             if (blockPos != null) {
                 
@@ -744,8 +748,9 @@ export class _Klocki {
             // fr._drawString("\xa7a" + lastFrameTime + "ms", 1, 21, 0xffffffff, true)
     
             // fr._drawString("\xa7a" + this._controls._lastOrientA+" "+this._controls._lastOrientG, 1, 11, 0xffffffff, true)
-            if (this._theWorld) {
-                const thePlayer = this._theWorld._thePlayer!;
+            const world = this._theWorld;
+            if (world !== null) {
+                const thePlayer = world._thePlayer!;
                 fr._drawString("\xa7eYaw:  " + Math.round((thePlayer._yaw * (180 / Math.PI)) * 10) / 10, 1, 11, 0xFFFFFFFF, true);
                 fr._drawString("\xa7ePitch:" + Math.round((thePlayer._pitch * (180 / Math.PI)) * 10) / 10, 1, 21, 0xFFFFFFFF, true);
                 fr._drawString("\xa7eX:" + Math.round(thePlayer._posX * 10) / 10, 1, 31, 0xFFFFFFFF, true);
@@ -753,17 +758,31 @@ export class _Klocki {
                 fr._drawString("\xa7eZ:" + Math.round(thePlayer._posZ * 10) / 10, 1, 51, 0xFFFFFFFF, true);
                 fr._drawString("\xa7eVRAM:" + Math.round((_OriginRenderOcTree._usedVideoMemory / (1024 * 1024)) * 10) / 10, 1, 61, 0xFFFFFFFF, true);
                 // fr._
-                fr._drawStringRight("\xa7eBlock:" + debugBlock, this._display._guiWidth - 1, 1, 0xFFFFFFFF, true);
-                fr._drawStringRight("\xa7e" + debugBlock2, this._display._guiWidth - 1 , 11, 0xFFFFFFFF, true);
-                fr._drawStringRight("\xa7e" + debugBlock3, this._display._guiWidth - 1, 21, 0xFFFFFFFF, true);
-                fr._drawStringRight("\xa7echunks: " + this._theWorld._loadedUglyLimitedHeightChunks.size, this._display._guiWidth - 1, 41, 0xFFFFFFFF, true);
-                fr._drawStringRight(this._display._version2 ? "\xa7eWebGL2" : "\xa7cWebGL1", this._display._guiWidth - 1, 51, 0xFFFFFFFF, true);
+
+                let line = 0;
+                fr._drawStringRight("\xa7eBlock:" + debugBlock, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7e" + debugBlock2, this._display._guiWidth - 1 , line++*10+1, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7e" + debugBlock3, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7echunks: " + world._loadedUglyLimitedHeightChunks.size, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
+                fr._drawStringRight(this._display._version2 ? "\xa7eWebGL2" : "\xa7cWebGL1", this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
+
+                const chunkSection = this._sectionLookingAt;
+                if(chunkSection != null){
+                    const w = world._getSectionWatcher(chunkSection._posX, chunkSection._posY, chunkSection._posZ);
+                    let renderNode = w._watcher;
+                    
+                    while(renderNode !== null){
+                        fr._drawStringRight("\xa7e" + renderNode._drawCount+" "+renderNode._joined, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
+                        renderNode = renderNode._parent;
+                    }
+                }
                 
             }
         }
         if (this.showUI) {
-            this._guiChat._render();
             this._guiOverlayEquipment._render();
+            this._guiChat._render();
+            
         }
 
         uir._endAndUpload(this._shaderUI);
@@ -896,7 +915,7 @@ export class _Klocki {
             nm._createdPromise.then(() => {
                 nm._packetListener = new _NetHandlerLoginClient(this);
                 nm._sendPacket(new _CHandshake(this._protocol, "klocki.pl", 25565, _EnumConnectionState._Login));
-                nm._sendPacket(new _CPacketLoginStart("Klocek_" + (this._controls._isMobile ? "m_" : "") + _Klocki._randomString(6)));
+                nm._sendPacket(new _CPacketLoginStart("Klocek_" + (this._display._isMobile ? "m_" : "") + _Klocki._randomString(6)));
             });
 
         }
@@ -1087,7 +1106,7 @@ export class _Klocki {
         this._worldRendererMobsHelper = new _WorldRenderer(this, (this._reducedMemory ? 1 / 64 : 0.5) * 1024 * 1024, false, true);
 
         this._modelRegistry = new _ModelRegistry(this);
-        this._blockRegistry = new _BlockRegistry(this._textureManager, this._modelRegistry);
+        this._blockRegistry = new _BlockRegistry(this, this._textureManager, this._modelRegistry);
         this._itemRegistry = new _ItemRegistry(this);
 
         await this._fetchAndLoadBlocks();
