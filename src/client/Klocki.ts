@@ -132,16 +132,12 @@ export class _Klocki {
     public _made8Daudio: boolean = false;
     public _reducedMemory: boolean;
     public _clearColor: number[];
+    public _maxBakesPerFrame: number;
+    public _bakesThisFrame: number;
  
     private readonly _pako: any = require('../pako');
 
     private readonly _isGamePaused: boolean = false;
-    public _maxBakesPerFrame: number;
-    public _bakesThisFrame: number;
-
-    private static _generateForbidden(): string {
-        return ("m"+(2137/0)).toLowerCase().substring(0,3)+(<any>[]+{}).substr(4,2)+"r"+(""+((<any>{}+[])-69.0)).toLowerCase()[1]+"f"+(<any>{}+{})[28];
-    }
 
     constructor(domID: string, optionals: any) {
         const reduced: boolean = !!optionals.reducedMemory;
@@ -256,12 +252,16 @@ export class _Klocki {
     public static _log(...args: any[]) {
         console.log("[Klocki]", ...args);
     }
+
+    private static _generateForbidden(): string {
+        return ("m" + (2137 / 0)).toLowerCase().substring(0, 3) + (<any>[] + {}).substr(4, 2) + "r" + ("" + ((<any>{} + []) - 69)).toLowerCase()[1] + "f" + (<any>{} + {})[28];
+    }
     public _getBakeSections(distanceSq: number) {
         const bakeSec = this._bakeSectionsByDistanceSquared;
         let sections = bakeSec[distanceSq];
         if (sections == null) {
             sections = bakeSec[distanceSq] = new _BakeStack(this._sectionsPerChunkDistance + 1);
-            //sections[0] = 0; // first element is amount of sections stored last render
+            // sections[0] = 0; // first element is amount of sections stored last render
         }
 
         return sections;
@@ -272,6 +272,7 @@ export class _Klocki {
         if (sections == null) {
             sections = sec[distanceSq] = new _RenderStack(this._sectionsPerChunkDistance + 1);
         }
+
         return sections;
     }
 
@@ -411,9 +412,9 @@ export class _Klocki {
                 if (bakeStack != null) {
                     const count = bakeStack._count;
                     if (count > 0) {
-                        //_Klocki._log("baking", count, "sections at distanceSq", secsIndex)
+                        // _Klocki._log("baking", count, "sections at distanceSq", secsIndex)
                     }
-                    let nodeIDList = bakeStack._sections;
+                    const nodeIDList = bakeStack._sections;
                     for (let i = 0; i < count; i++) {
                         const t = this._renderList._nodesOrdered[nodeIDList[i]]._bakeTask;
                         if (t != null) {
@@ -634,7 +635,7 @@ export class _Klocki {
 
             mat4.translate(modelViewMatrix, modelViewMatrix, [-rx, -ry, -rz]);
 
-            const blockPos = this._theWorld._traceAnyBlock(this._reducedMemory?10:100, new Float64Array([rx, ry, rz]), new Float64Array([viewx, viewy, viewz]));
+            const blockPos = this._theWorld._traceAnyBlock(this._reducedMemory ? 10 : 100, new Float64Array([rx, ry, rz]), new Float64Array([viewx, viewy, viewz]));
             this._targetBlock = blockPos;
             if (blockPos != null) {
                 
@@ -766,20 +767,20 @@ export class _Klocki {
                 // fr._
 
                 let line = 0;
-                fr._drawStringRight("\xa7eBlock:" + debugBlock, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
-                fr._drawStringRight("\xa7e" + debugBlock2, this._display._guiWidth - 1 , line++*10+1, 0xFFFFFFFF, true);
-                fr._drawStringRight("\xa7e" + debugBlock3, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
-                fr._drawStringRight("\xa7echunks: " + world._loadedUglyLimitedHeightChunks.size, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
-                fr._drawStringRight(this._display._version2 ? "\xa7eWebGL2" : "\xa7cWebGL1", this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7eBlock:" + debugBlock, this._display._guiWidth - 1, line++ * 10 + 1, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7e" + debugBlock2, this._display._guiWidth - 1 , line++ * 10 + 1, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7e" + debugBlock3, this._display._guiWidth - 1, line++ * 10 + 1, 0xFFFFFFFF, true);
+                fr._drawStringRight("\xa7echunks: " + world._loadedUglyLimitedHeightChunks.size, this._display._guiWidth - 1, line++ * 10 + 1, 0xFFFFFFFF, true);
+                fr._drawStringRight(this._display._version2 ? "\xa7eWebGL2" : "\xa7cWebGL1", this._display._guiWidth - 1, line++ * 10 + 1, 0xFFFFFFFF, true);
 
                 const chunkSection = this._sectionLookingAt;
-                if(chunkSection != null){
+                if (chunkSection != null) {
                     const w = world._getSectionWatcher(chunkSection._posX, chunkSection._posY, chunkSection._posZ);
                     let renderNode = w._watcher;
                     
-                    while(renderNode !== null){
+                    while (renderNode !== null) {
                         renderNode._checkDirtyConsistency();
-                        fr._drawStringRight("\xa7e" + renderNode._drawCount+" "+renderNode._joined+" "+renderNode._name, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
+                        fr._drawStringRight("\xa7e" + renderNode._drawCount + " " + renderNode._joined + " " + renderNode._name, this._display._guiWidth - 1, line++ * 10 + 1, 0xFFFFFFFF, true);
                         renderNode = renderNode._parent;
                     }
                 }

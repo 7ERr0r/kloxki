@@ -20,11 +20,11 @@ export class _Display {
     public readonly _outKeyword: string;
     public readonly _inVaryingKeyword: string;
     public readonly _mainSamplerKeyword: string;
-    private readonly _vertexArrayExt: OES_vertex_array_object | undefined;
-    private readonly _textureFloatExt: OES_texture_float | undefined | null;
     public _isMobile: boolean;
     public _maxIndice16: number;
-    _reducedMemory: boolean;
+    public _reducedMemory: boolean;
+    private readonly _vertexArrayExt: OES_vertex_array_object | undefined;
+    private readonly _textureFloatExt: OES_texture_float | undefined | null;
 
     constructor(domID: string, attributes: any) {
         this._pixelDensityMultiplier = 1;
@@ -35,7 +35,7 @@ export class _Display {
         if (attributes && attributes.resizeGetter instanceof Function) {
             this._resizeGetter = attributes.resizeGetter;
         } else {
-            this._resizeGetter = () => ({ width: window.innerWidth, height: window.innerHeight+(this._isMobile?0:0) });
+            this._resizeGetter = () => ({ width: window.innerWidth, height: window.innerHeight + (this._isMobile ? 0 : 0) });
         }
         const canvas: HTMLElement | null = document.getElementById(domID);
         if (!canvas) {
@@ -99,7 +99,7 @@ export class _Display {
         window.addEventListener("resize", (ev: Event) => this._resize());
 
         this._generateIndices16();
-        if(!this._reducedMemory){
+        if (!this._reducedMemory) {
             this._generateIndices32();
         }
     }
@@ -170,7 +170,7 @@ export class _Display {
             indices[j + 5] = k + 1;
             
         }
-        this._maxIndice16 = (numQuads-1)*4+3;
+        this._maxIndice16 = (numQuads - 1) * 4 + 3;
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer16);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 

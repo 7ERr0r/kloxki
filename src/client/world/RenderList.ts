@@ -70,7 +70,7 @@ export class _RenderList {
 
         const secs = this._klocki._sectionsByDistanceSquared;
         const gl = this._klocki._display._gl;
-        //const indexBuf = this._klocki._display._indexBuffer16;
+        // const indexBuf = this._klocki._display._indexBuffer16;
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer16);
         const baker = this._klocki._worldRendererBaker;
         const maxForIndices16 = this._klocki._display._maxIndice16;
@@ -93,10 +93,10 @@ export class _RenderList {
                         // gl.uniform4fv(shaderWorld._uniformLocations._offset, off);
                         shaderWorld._updateOffset(node._origin._offsetarr!);
 
-                        if(drawCount < maxForIndices16){
+                        if (drawCount < maxForIndices16) {
                             
                             gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_SHORT, 0);
-                        }else{
+                        } else {
                             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer32);
                             gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_INT, 0);
                             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer16);

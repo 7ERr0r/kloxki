@@ -116,7 +116,7 @@ export class _BakeTask {
     }
 
     public _bake(wr: _WorldRenderer): boolean {
-        if(this._done){
+        if (this._done) {
             return false;
         }
         this._done = true;
@@ -144,6 +144,7 @@ export class _BakeTask {
             this._renderLeaf._bakeTask = null;
 
             this._renderLeaf._unmarkDirty();
+
             return true;
         }
 
@@ -195,6 +196,7 @@ export class _BakeTask {
         if (this._stillDirty) {
             // this._renderLeaf._markDirty();
         }
+
         return true;
     }
     public _renderModel(x: number, y: number, z: number, ax: number, ay: number, az: number, wr: _WorldRenderer, block: _Block) {

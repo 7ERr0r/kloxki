@@ -47,8 +47,6 @@ export class _Controls {
         this._ongoingTouches = new Array<_SimpleTouch>();
         this._lastMovementTouchEnd = 0;
 
-
-
         document.addEventListener("mouseup",  (e) => {
             if (this._mouseLocked) {
                 e.preventDefault(); // disable mouse back and forward buttons
@@ -298,8 +296,8 @@ export class _Controls {
                     if (touch._jumper) {
                         thePlayer._isFlying = !thePlayer._isFlying;
                     }
-                    if(touch._isChat){
-                        this._klocki._guiChat._appendMessage({"text":"touch chat"});
+                    if (touch._isChat) {
+                        this._klocki._guiChat._appendMessage({ text: "touch chat" });
                         this._klocki._toggleChatInput();
                         
                     }
