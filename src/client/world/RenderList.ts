@@ -4,9 +4,9 @@ import { _WorldRenderer } from "../renderer/WorldRenderer";
 
 import { _OriginRenderOcTree } from "./OriginRenderOcTree";
 import { _ChunkSection } from "./ChunkSection";
+import { _RenderStackElement } from "./RenderStack";
 
 export class _RenderList {
-
     public _countChunksX: number;
     public _countChunksY: number;
     public _countChunksZ: number;
@@ -16,9 +16,13 @@ export class _RenderList {
     public _lastsy: number = 0;
     public _lastsz: number = 0;
     public _divisionSize: number;
+    public _nodesOrdered: _OriginRenderOcTree[];
+    public _renderElements: _RenderStackElement[];
 
     constructor(klocki: _Klocki, cx: number, cy: number, cz: number) {
         this._klocki = klocki;
+        this._nodesOrdered = [];
+        this._renderElements = [];
         this._countChunksX = cx;
         this._countChunksY = cy;
         this._countChunksZ = cz;
@@ -32,7 +36,7 @@ export class _RenderList {
                 for (let z = 0; z < cz; z++) {
                     const index = (z * cy + y) * cx + x;
                     // this.renderChunks[index] = new RenderChunk(n++, x * 16 - sx * 16, y * 16, z * 16 - sz * 16)
-                    this._renderRegions[index] = new _OriginRenderOcTree(klocki, null, null, 0, 0, 0, 16, 16, 16);
+                    this._renderRegions[index] = new _OriginRenderOcTree(klocki, this, null, null, `${x}_${y}_${z}`, 0, 0, 0, 16, 16, 16);
                 }
             }
         }
@@ -60,32 +64,43 @@ export class _RenderList {
     }
     public _renderAll(wr: _WorldRenderer, shaderWorld: _ShaderWorld) {
         for (let i = 0; i < this._renderRegions.length; i++) {
-            this._renderRegions[i]._preRender(shaderWorld);
+            
+            _OriginRenderOcTree._preRender(this._renderRegions[i], shaderWorld);
         }
 
         const secs = this._klocki._sectionsByDistanceSquared;
         const gl = this._klocki._display._gl;
-        const indexBuf = this._klocki._display._indexBuffer16;
+        //const indexBuf = this._klocki._display._indexBuffer16;
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer16);
         const baker = this._klocki._worldRendererBaker;
+        const maxForIndices16 = this._klocki._display._maxIndice16;
+        const ordered = this._nodesOrdered;
+        const renderElements = this._renderElements;
         for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
-            const sections = secs[secsIndex];
-            if (sections != null) {
-                const count = sections[0];
-                for (let i = 1; i <= count; i++) {
-                    const arr = <any[]>sections[i];
-                    const s = (<_OriginRenderOcTree>arr[0]);
-                    const drawCount = (<number>arr[1]);
-                    const glBuf = (<WebGLBuffer>arr[2]);
+            const stack = secs[secsIndex];
+            if (stack != null) {
+                const count = stack._count;
+                for (let i = 0; i < count; i++) {
+                    const element = renderElements[stack._sections[i]];
+                    
+                    const node = ordered[element._nodeID];
+                    const drawCount = element._drawCount;
+                    const glBuf = element._buf;
                     // s[0]._drawSelf(shaderWorld, s._origin._offsetarr!)
                     if (glBuf != null) {
                         gl.bindBuffer(gl.ARRAY_BUFFER, glBuf);
                         baker._setupPointers(shaderWorld);
                         // gl.uniform4fv(shaderWorld._uniformLocations._offset, off);
-                        shaderWorld._updateOffset(s._origin._offsetarr!);
-                        // gl.drawArrays(gl.TRIANGLES, 0, this._drawCount);
-                    
-                        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuf);
-                        gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_SHORT, 0);
+                        shaderWorld._updateOffset(node._origin._offsetarr!);
+
+                        if(drawCount < maxForIndices16){
+                            
+                            gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_SHORT, 0);
+                        }else{
+                            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer32);
+                            gl.drawElements(gl.TRIANGLES, (drawCount * 6) >>> 2, gl.UNSIGNED_INT, 0);
+                            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer16);
+                        }
                     }
                 }
             }

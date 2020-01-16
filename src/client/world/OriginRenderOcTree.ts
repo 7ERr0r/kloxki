@@ -7,6 +7,9 @@ import { _KlockiEntityLiving } from "../entity/KlockiEntityLiving";
 import { _ChunkSection } from "./ChunkSection";
 import { _BakeTask } from "./BakeTask";
 import { _SectionWatcher } from "./SectionWatcher";
+import { _WorldRenderer } from "../renderer/WorldRenderer";
+import { _RenderStackElement } from "./RenderStack";
+import { _RenderList } from "./RenderList";
 
 // don't look here, nothing to see
 export class _OriginRenderOcTree {
@@ -39,9 +42,15 @@ export class _OriginRenderOcTree {
     public _dirty: boolean;
     public _baking: boolean;
     public _bakeTask: _BakeTask | null;
+    public _name: string;
+    public _renderList: _RenderList;
+    public _orderIndex: number;
+    public _renderStackElement: _RenderStackElement;
 
-    constructor(klocki: _Klocki, origin: _OriginRenderOcTree | null, parent: _OriginRenderOcTree | null, ox: number, oy: number, oz: number, sx: number, sy: number, sz: number) {
+    constructor(klocki: _Klocki, renderList: _RenderList, origin: _OriginRenderOcTree | null, parent: _OriginRenderOcTree | null, name: string, ox: number, oy: number, oz: number, sx: number, sy: number, sz: number) {
         this._klocki = klocki;
+        this._renderList = renderList;
+        this._name = name;
         if (origin == null) {
             origin = this;
             this._offsetarr = new Float32Array(4);
@@ -77,24 +86,32 @@ export class _OriginRenderOcTree {
 
         this._glBuffer = null;
 
+
+        this._orderIndex = renderList._nodesOrdered.length;
+        renderList._nodesOrdered.push(this);
+
+        this._renderStackElement = new _RenderStackElement(this._orderIndex, 0, !null);
+        renderList._renderElements.push(this._renderStackElement);
+
         if (sx == 1 || sy == 1 || sz == 1) {
             this._children = null;
 
             return;
         }
+
         const children = this._children = new Array(8);
         const sx2 = sx >> 1;
         const sy2 = sy >> 1;
         const sz2 = sz >> 1;
-        children[0] = new _OriginRenderOcTree(klocki, origin, this, ox, oy, oz, sx2, sy2, sz2);
-        children[1] = new _OriginRenderOcTree(klocki, origin, this, ox + sx2, oy, oz, sx2, sy2, sz2);
-        children[2] = new _OriginRenderOcTree(klocki, origin, this, ox, oy, oz + sz2, sx2, sy2, sz2);
-        children[3] = new _OriginRenderOcTree(klocki, origin, this, ox + sx2, oy, oz + sz2, sx2, sy2, sz2);
+        children[0] = new _OriginRenderOcTree(klocki, renderList, origin, this, this._name+'a', ox, oy, oz, sx2, sy2, sz2);
+        children[1] = new _OriginRenderOcTree(klocki, renderList, origin, this, this._name+'b', ox + sx2, oy, oz, sx2, sy2, sz2);
+        children[2] = new _OriginRenderOcTree(klocki, renderList, origin, this, this._name+'c', ox, oy, oz + sz2, sx2, sy2, sz2);
+        children[3] = new _OriginRenderOcTree(klocki, renderList, origin, this, this._name+'d', ox + sx2, oy, oz + sz2, sx2, sy2, sz2);
 
-        children[4] = new _OriginRenderOcTree(klocki, origin, this, ox, oy + sy2, oz, sx2, sy2, sz2);
-        children[5] = new _OriginRenderOcTree(klocki, origin, this, ox + sx2, oy + sy2, oz, sx2, sy2, sz2);
-        children[6] = new _OriginRenderOcTree(klocki, origin, this, ox, oy + sy2, oz + sz2, sx2, sy2, sz2);
-        children[7] = new _OriginRenderOcTree(klocki, origin, this, ox + sx2, oy + sy2, oz + sz2, sx2, sy2, sz2);
+        children[4] = new _OriginRenderOcTree(klocki, renderList, origin, this, this._name+'e', ox, oy + sy2, oz, sx2, sy2, sz2);
+        children[5] = new _OriginRenderOcTree(klocki, renderList, origin, this, this._name+'f', ox + sx2, oy + sy2, oz, sx2, sy2, sz2);
+        children[6] = new _OriginRenderOcTree(klocki, renderList, origin, this, this._name+'g', ox, oy + sy2, oz + sz2, sx2, sy2, sz2);
+        children[7] = new _OriginRenderOcTree(klocki, renderList, origin, this, this._name+'h', ox + sx2, oy + sy2, oz + sz2, sx2, sy2, sz2);
     }
     public _getBuffer(): WebGLBuffer {
         let buf = this._glBuffer;
@@ -122,13 +139,14 @@ export class _OriginRenderOcTree {
             this._worldchunky = y / 16;
             this._worldchunkz = z / 16;
 
-            const children = this._children;
+            /*const children = this._children;
             if (children != null) {
                 for (let i = 0; i < children.length; i++) {
                     const child = children[i];
                     child._updatePos();
                 }
-            }
+            }*/
+            this._updatePos();
 
             return true;
         }
@@ -143,8 +161,24 @@ export class _OriginRenderOcTree {
         this._dirty = false;
         this._drawCount = 0;
         this._aliveChunks = 0;
-        if (this._sizex == 1) {
+        this._joinSizes = null;
+        this._baking = false;
 
+        const buf = this._glBuffer;
+        if(buf != null){
+            this._klocki._scheduleDeleteBuffer(buf);
+            this._glBuffer = null;
+        }
+
+
+
+        if (this._sizex == 1) {
+            const oldTask = this._bakeTask;
+            if(oldTask != null){
+                oldTask._done = true;
+                this._bakeTask = null;
+            }
+            
             // remove old watcher
             if (this._section != null) {
                 this._section._watcher = null;
@@ -189,52 +223,100 @@ export class _OriginRenderOcTree {
 
         return alive;
     }
-    public _markDirty() {
-        // let unload = false;
-        if (this._sizex != 1) {
-            this._aliveChunks = this._calcAliveChunks();
-            
+    public _checkDirtyConsistency(){
+        if(this._children != null){
             const children = this._children;
+            let dirty = false;
+            for (let i = 0; i < 8; i++) {
+                dirty = dirty || children[i]._dirty;
+            }
+            if(this._dirty != dirty){
+                throw new Error("dirty != this.dirty");
+            }
+        }
+    }
+    public _markDirty() {
+        //this._checkDirtyConsistency();
+
+        // propagate from root to leaf the meshes
+        if(this._sizex == 1){
+            let stack: _OriginRenderOcTree[] = new Array(16);
+
+            let xparent = this._parent;
+            let stackIndex = 0;
+            stack[0] = this;
+            while(xparent != null){
+                stack[++stackIndex] = xparent;
+                xparent = xparent._parent;
+            }
+            for(let i = stackIndex; i>0; i--){
+                const node = stack[i];
+                if(node._joined && node._drawCount > 0){
+                    node._splitBuffers();
+                }
+            }
+        }
+
+
+        //let unload = false;
+
+        if (this._sizex == 1) {
+            this._dirty = true;
+            const w = this._section;
+            if (w !== null) {
+                const chunkSection = w._section;
+                
+                if (chunkSection !== null) {
+                    if (!this._baking) {
+                        const lastTask = this._bakeTask;
+                        if(lastTask != null){
+                            lastTask._done = true;
+                        }
+                        this._bakeTask = new _BakeTask(this, chunkSection);
+                        this._klocki._scheduleBaking(this._bakeTask);
+                        this._baking = true;
+                        
+                        
+                    }
+                    this._aliveChunks = 1;
+                } else {
+                    if(this._drawCount > 0){
+                        //unload = true;
+                        // this._dirty = true;
+                    }
+                }
+            }
+
+        }
+        // propagate dirty flag to the root
+        let node = this._parent;
+        while(node != null){
+            node._aliveChunks = node._calcAliveChunks();
+            
+            const children = node._children;
             if (children != null) {
                 let newDirty = false;
                 for (let i = 0; i < 8; i++) {
                     const child = children[i];
                     newDirty = newDirty || child._dirty;
                 }
-                this._dirty = newDirty;
+                node._dirty = newDirty;
             }
-            if (this._joined) {
-                this._markDirtyDownSplit();
-            }
-        } else {
-            const w = this._section;
-            if (w !== null) {
-                const chunkSection = w._section;
-                if (chunkSection !== null) {
-                    if (!this._baking) {
-                        this._bakeTask = new _BakeTask(this, chunkSection);
-                        this._klocki._scheduleBaking(this._bakeTask);
-                        this._baking = true;
-                        
-                        this._dirty = true;
-                    }
-                    this._aliveChunks = 1;
-                } else {
-                    // if(this._drawCount > 0){
-                    //    unload = true;
-                        // this._dirty = true;
-                    // }
-                }
-            }
-
+            node = node._parent;
         }
-        this._joined = false;
+
+        //this._joined = false;
         // _Klocki._log("marking dirty", this._sizex, "at", this._fromoriginx, this._fromoriginy, this._fromoriginz);
 
+        /*
         const parent = this._parent;
         if (parent != null) {
             parent._markDirty();
-        }
+        }*/
+
+
+
+
         /*
         if(this._sizex == 1 && this._drawCount > 0){
             const w = this._section;
@@ -252,6 +334,7 @@ export class _OriginRenderOcTree {
                     //this._getBuffer();
                     //gl.bindBuffer(gl.ARRAY_BUFFER, this._getBuffer());
                     //gl.bufferData(gl.ARRAY_BUFFER, 0, gl.STATIC_DRAW);
+                    this._dirty = false;
 
                     if (parent != null) { // second time
                         parent._markDirty();
@@ -264,13 +347,13 @@ export class _OriginRenderOcTree {
         
         if (this._sizex != 1) {
             this._splitBuffers();
-            const children = this._children;
-            if (this._sizex > 2 && children != null) {
+            //const children = this._children;
+            /*if (this._sizex > 2 && children != null) {
                 
                 for (let i = 0; i < 8; i++) {
                     children[i]._splitBuffers();
                 }
-            }
+            }*/
         }
     }
 
@@ -300,25 +383,27 @@ export class _OriginRenderOcTree {
     public _notify() {
         this._markDirty();
     }
-    public _preRender(shaderWorld: _ShaderWorld) {
-        if (this._aliveChunks === 0) {
+
+    public static _preRender(node: _OriginRenderOcTree, shaderWorld: _ShaderWorld) {
+        const klocki = node._klocki;
+        if (node._aliveChunks === 0) {
             return;
         }
-        const sizex = this._sizex;
+        const sizex = node._sizex;
         if (sizex == 1) {
 
-            if (this._bakeTask != null || this._drawCount > 0) {
-                const off = this._origin._offsetarr!;
+            if (node._bakeTask != null || node._drawCount > 0) {
+                const off = node._origin._offsetarr!;
                 const pos = _OriginRenderOcTree._testPosVec3;
-                pos[0] = off[0] + this._fromoriginx * 16 + 8;
-                pos[1] = off[1] + this._fromoriginy * 16 + 8;
-                pos[2] = off[2] + this._fromoriginz * 16 + 8;
-                const visible = this._klocki._frustum._testSphereTouches(pos, -13.86);
+                pos[0] = off[0] + node._fromoriginx * 16 + 8;
+                pos[1] = off[1] + node._fromoriginy * 16 + 8;
+                pos[2] = off[2] + node._fromoriginz * 16 + 8;
+                const visible = klocki._frustum._testSphereTouches(pos, -13.86);
                 if (visible) {
-                    const toBake = this._bakeTask != null;
-                    const toDraw = this._drawCount > 0;
+                    const toBake = node._bakeTask != null;
+                    const toDraw = node._drawCount > 0;
                     if (toBake || toDraw) {
-                        this._addToLastSectionsByDistanceSquared(pos, toBake, toDraw);
+                        node._addToLastSectionsByDistanceSquared(pos, toBake, toDraw);
                     }
                 }
             }
@@ -326,38 +411,38 @@ export class _OriginRenderOcTree {
             return;
         }
         
-        const visibility = this._calcVisibility();
+        const visibility = node._calcVisibility();
 
-        if (this._joined) {
-            if (this._drawCount > 0) {
+        if (node._joined) {
+            if (node._drawCount > 0) {
                 if (visibility == 1 || visibility == 2) { // draw all
                     const pos = _OriginRenderOcTree._testPosVec3;
-                    this._addToLastSectionsByDistanceSquared(pos, false, true);
+                    node._addToLastSectionsByDistanceSquared(pos, false, true);
                     
                     // this._drawSelf(shaderWorld, off);
                 } else if (visibility == 2) { // draw partial
-                    this._splitBuffers();
-                    const children = this._children;
+                    node._splitBuffers();
+                    const children = node._children;
                     if (children != null) {
                         for (let i = 0; i < 8; i++) {
                             const child = children[i];
-                            child._preRender(shaderWorld);
+                            _OriginRenderOcTree._preRender(child, shaderWorld);
                         }
                     }
                 }
             }
         } else {
-            const children = this._children;
+            const children = node._children;
             if (children != null) {
                 for (let i = 0; i < 8; i++) {
                     const child = children[i];
-                    child._preRender(shaderWorld);
+                    _OriginRenderOcTree._preRender(child, shaderWorld);
                 }
             }
-            if (!this._klocki._display._version1 && visibility == 1) {
-                if (!this._dirty && sizex >= 2 && sizex <= 2) {
-                    if (this._calcJoinedSize() > 0 && this._klocki._canJoinNextRegion()) {
-                        this._joinBuffers();
+            if (!klocki._display._version1 && visibility == 1) {
+                if (!node._joined && !node._dirty && sizex >= 2 && sizex <= 8) {
+                    if (node._calcJoinedSize() > 0 && klocki._canJoinNextRegion()) {
+                        node._joinBuffers();
                     }
                 }
             }
@@ -390,19 +475,42 @@ export class _OriginRenderOcTree {
         const dz = (klocki._renderZ - pos[2]) | 0;
         const distanceSq = (dx * dx + dy * dy * 4 + dz * dz) | 0;
         const distanceChunk = (distanceSq >> 8) | 0;
-        const secLen = this._klocki._bakeSectionsByDistanceSquared.length;
+        const secLen = klocki._bakeSectionsByDistanceSquared.length;
         if (distanceChunk >= 0 && distanceChunk < secLen) {
-            const bakeSectionsArr = this._klocki._getBakeSections(distanceChunk);
-            const sectionsArr = this._klocki._getRenderSections(distanceChunk);
-            const indexLast = 1 + (<number>bakeSectionsArr[0]) | 0;
-            if (!!bake && indexLast < bakeSectionsArr.length) {
-                bakeSectionsArr[indexLast] = this;
-                (<number>bakeSectionsArr[0])++;
+            
+            
+            if(bake){
+                //if(klocki._bakesThisFrame < klocki._maxBakesPerFrame){
+                    //klocki._bakesThisFrame++;
+                    const bakeSectionsArr = klocki._getBakeSections(distanceChunk);
+                    const indexLast = bakeSectionsArr._count;
+                    const bakeNodeList = bakeSectionsArr._sections;
+                    //if (indexLast < bakeNodeList.length) 
+                    {
+                        bakeNodeList[indexLast] = this._orderIndex;
+                        bakeSectionsArr._count++;
+                    }
+                //}
             }
-                
-            const index = (++(<number>sectionsArr[0])) | 0;
-            if (index < sectionsArr.length) {
-                sectionsArr[index] = [this, this._drawCount, this._glBuffer];
+            const renderStack = this._klocki._getRenderSections(distanceChunk);
+            const index = renderStack._count;
+            const nodeList = renderStack._sections;
+            if (index < nodeList.length) {
+                /*const element = nodeList[index];
+                if(element !== null){
+                    element._nodeID = this._orderIndex;
+                    element._drawCount = this._drawCount;
+                    element._buf = this._glBuffer;
+                }else{*/
+                {
+                    //const e = new _RenderStackElement(this._orderIndex, this._drawCount, this._glBuffer);
+                    const element = this._renderStackElement;
+                    element._nodeID = this._orderIndex;
+                    element._drawCount = this._drawCount;
+                    element._buf = this._glBuffer;
+                    nodeList[index] = this._orderIndex;
+                }
+                renderStack._count++;
             }
         }
         
@@ -447,7 +555,11 @@ export class _OriginRenderOcTree {
      */
     public _joinBuffers() {
         if (this._drawCount > 0) {
+            throw new Error("join: expected empty node");
             this._clearBuffer();
+        }
+        if(this._joined){
+            throw new Error("join: expected unjoined");
         }
         this._drawCount = 0;
 
@@ -457,20 +569,21 @@ export class _OriginRenderOcTree {
 
         const gl = <WebGL2RenderingContext>this._klocki._display._gl;
         if (sumLength > 0) {
+            //_Klocki._log("joining", this._name);
             // _Klocki._log("sumlen: " + sumLength);
             const stride = this._klocki._worldRendererBaker._stride;
             //
-            gl.bindBuffer(gl.ARRAY_BUFFER, this._getBuffer());
+            gl.bindBuffer(gl.COPY_WRITE_BUFFER, this._getBuffer());
 
             _OriginRenderOcTree._usedVideoMemory += sumLength * stride;
-            gl.bufferData(gl.ARRAY_BUFFER, sumLength * stride, gl.STATIC_DRAW);
+            gl.bufferData(gl.COPY_WRITE_BUFFER, sumLength * stride, gl.STATIC_DRAW);
             // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(), gl.STATIC_DRAW)
-            this._joinSizes = new Uint32Array(8);
+            const joinSizes = this._joinSizes = new Uint32Array(8);
             for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 const dc = child._drawCount;
                 if (dc > 0) {
-                    child._joined = false;
+                    //child._joined = false;
                     // gl.bindBuffer(gl.ARRAY_BUFFER, child.renderChunk.glBuffer);
                     // gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
                     const buf = child._getBuffer();
@@ -480,10 +593,10 @@ export class _OriginRenderOcTree {
 
                     gl.bindBuffer(gl.COPY_READ_BUFFER, buf);
 
-                    gl.copyBufferSubData(gl.COPY_READ_BUFFER, gl.ARRAY_BUFFER, 0, this._drawCount * stride, dc * stride);
+                    gl.copyBufferSubData(gl.COPY_READ_BUFFER, gl.COPY_WRITE_BUFFER, 0, this._drawCount * stride, dc * stride);
                     
                     this._drawCount += dc;
-                    this._joinSizes[i] = dc;
+                    joinSizes[i] = dc;
                 }
                 
             }
@@ -505,11 +618,15 @@ export class _OriginRenderOcTree {
         }
         
     }
+    /**
+     * Valid only for WebGL2
+     */
     public _splitBuffers() {
         const gl = <WebGL2RenderingContext>this._klocki._display._gl;
 
         if (this._joined && this._drawCount > 0) {
             // _Klocki._log("sumlen: " + sumLength);
+            //_Klocki._log("splitting", this._name);
             const stride = this._klocki._worldRendererBaker._stride;
             //
             gl.bindBuffer(gl.COPY_READ_BUFFER, this._getBuffer());
@@ -526,11 +643,13 @@ export class _OriginRenderOcTree {
                         this._klocki._scheduleDeleteBuffer(buf);
                         child._glBuffer = null;
                     }
+
+                    child._joined = true;
                     buf = child._getBuffer();
 
-                    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-                    gl.bufferData(gl.ARRAY_BUFFER, dc * stride, gl.STATIC_DRAW);
-                    gl.copyBufferSubData(gl.COPY_READ_BUFFER, gl.ARRAY_BUFFER, joinedBufferPos * stride, 0, dc * stride);
+                    gl.bindBuffer(gl.COPY_WRITE_BUFFER, buf);
+                    gl.bufferData(gl.COPY_WRITE_BUFFER, dc * stride, gl.STATIC_DRAW);
+                    gl.copyBufferSubData(gl.COPY_READ_BUFFER, gl.COPY_WRITE_BUFFER, joinedBufferPos * stride, 0, dc * stride);
                     _OriginRenderOcTree._usedVideoMemory += dc * stride;
                     
                     child._drawCount = dc;
@@ -584,11 +703,38 @@ export class _OriginRenderOcTree {
         shaderWorld._updateOffset(off);
         // gl.drawArrays(gl.TRIANGLES, 0, this._drawCount);
         if (true) {
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer16);
-            gl.drawElements(gl.TRIANGLES, this._drawCount * (6 / 4), gl.UNSIGNED_SHORT, 0);
+            
+            if(this._drawCount < this._klocki._display._maxIndice16){
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer16);
+                gl.drawElements(gl.TRIANGLES, this._drawCount * (6 / 4), gl.UNSIGNED_SHORT, 0);
+            }else{
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._klocki._display._indexBuffer32);
+                gl.drawElements(gl.TRIANGLES, this._drawCount * (6 / 4), gl.UNSIGNED_INT, 0);
+            }
         } else {
             gl.drawArrays(gl.POINTS, 0, this._drawCount);
         }
+    }
+    public _upload(wr: _WorldRenderer){
+        //_Klocki._log("uploading", this._name);
+        const stride = wr._stride;
+        const gl = this._klocki._display._gl;
+
+        _OriginRenderOcTree._usedVideoMemory -= this._drawCount * stride;
+        if (this._glBuffer != null) {
+            this._klocki._scheduleDeleteBuffer(this._glBuffer);
+            this._glBuffer = null;
+        }
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._getBuffer());
+        
+        this._drawCount = wr._upload(this._klocki._shaderWorld, true);
+        
+        _OriginRenderOcTree._usedVideoMemory += this._drawCount * stride;
+        // this._renderLeaf._unmarkDirty();
+
+        this._baking = false;
+        this._bakeTask = null;
     }
 
 }

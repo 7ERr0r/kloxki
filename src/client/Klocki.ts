@@ -46,6 +46,8 @@ import { _KlockiEntityPlayer } from "./entity/KlockiEntityPlayer";
 import { _KlockiEntityPlayerMP } from "./entity/KlockiEntityPlayerMP";
 import { _GuiChatInput } from "./gui/GuiChatInput";
 import { _NetHandlerPlayClient } from "./network/NetHandlerPlayClient";
+import { _BakeStack } from "./world/BakeStack";
+import { _RenderStack } from "./world/RenderStack";
 
 export class _Klocki {
 
@@ -106,8 +108,8 @@ export class _Klocki {
     public _zoomed: boolean;
     public _entityRenders!: _EntityRenders;
     public _reuseGlBuffers: WebGLBuffer[][];
-    public _bakeSectionsByDistanceSquared: ((_OriginRenderOcTree | number)[] | null)[];
-    public _sectionsByDistanceSquared: ((any | number)[] | null)[];
+    public _bakeSectionsByDistanceSquared: (_BakeStack | null)[];
+    public _sectionsByDistanceSquared: (_RenderStack | null)[];
     public _glBuffersEntities!: WebGLBuffer[];
     public _glBuffersEntitiesIndex: number;
     public _glBuffersEntitiesCount: number;
@@ -134,6 +136,8 @@ export class _Klocki {
     private readonly _pako: any = require('../pako');
 
     private readonly _isGamePaused: boolean = false;
+    public _maxBakesPerFrame: number;
+    public _bakesThisFrame: number;
 
     private static _generateForbidden(): string {
         return ("m"+(2137/0)).toLowerCase().substring(0,3)+(<any>[]+{}).substr(4,2)+"r"+(""+((<any>{}+[])-69.0)).toLowerCase()[1]+"f"+(<any>{}+{})[28];
@@ -145,6 +149,8 @@ export class _Klocki {
         if (optionals.clearColor) {
             this._clearColor = optionals.clearColor;
         }
+        this._maxBakesPerFrame = 5;
+        this._bakesThisFrame = 0;
         this._reducedMemory = reduced;
         this._gameSettings = new _GameSettings();
         this._gameSettings._loadOptions();
@@ -174,7 +180,7 @@ export class _Klocki {
         }
         this._reuseGlBuffersIndexRemover = 1;
         this._reuseGlBuffersIndexAdder = 0;
-        const _sectionsLen = Math.pow(reduced ? 10 : 48, 2);
+        const _sectionsLen = Math.pow(reduced ? 10 : 100, 2);
         this._bakeSectionsByDistanceSquared = new Array(_sectionsLen);
         this._sectionsByDistanceSquared = new Array(_sectionsLen);
         this._sectionsPerChunkDistance = reduced ? 200 : 2000;
@@ -254,8 +260,8 @@ export class _Klocki {
         const bakeSec = this._bakeSectionsByDistanceSquared;
         let sections = bakeSec[distanceSq];
         if (sections == null) {
-            sections = bakeSec[distanceSq] = new Array(this._sectionsPerChunkDistance + 1);
-            sections[0] = 0; // first element is amount of sections stored last render
+            sections = bakeSec[distanceSq] = new _BakeStack(this._sectionsPerChunkDistance + 1);
+            //sections[0] = 0; // first element is amount of sections stored last render
         }
 
         return sections;
@@ -264,10 +270,8 @@ export class _Klocki {
         const sec = this._sectionsByDistanceSquared;
         let sections = sec[distanceSq];
         if (sections == null) {
-            sections = sec[distanceSq] = new Array(this._sectionsPerChunkDistance + 1);
-            sections[0] = 0;
+            sections = sec[distanceSq] = new _RenderStack(this._sectionsPerChunkDistance + 1);
         }
-
         return sections;
     }
 
@@ -397,20 +401,21 @@ export class _Klocki {
             this._networkManager._idleCallback();
         }
         let baked = 0;
-        const maxBakes = deadline.didTimeout ? 1 : 5;
+        const maxBakes = deadline.didTimeout ? 1 : this._maxBakesPerFrame;
         
         const secs = this._bakeSectionsByDistanceSquared;
         theBaking:
         if (1) {
             for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
-                const sections = secs[secsIndex];
-                if (sections != null) {
-                    const count = sections[0];
+                const bakeStack = secs[secsIndex];
+                if (bakeStack != null) {
+                    const count = bakeStack._count;
                     if (count > 0) {
-                        // _Klocki._log("baking", count, "sections at distanceSq", secsIndex)
+                        //_Klocki._log("baking", count, "sections at distanceSq", secsIndex)
                     }
-                    for (let i = 1; i <= count; i++) {
-                        const t = (<_OriginRenderOcTree>sections[i])._bakeTask;
+                    let nodeIDList = bakeStack._sections;
+                    for (let i = 0; i < count; i++) {
+                        const t = this._renderList._nodesOrdered[nodeIDList[i]]._bakeTask;
                         if (t != null) {
                             if (!t._done) {
                                 t._bake(this._worldRendererBaker);
@@ -499,13 +504,14 @@ export class _Klocki {
         for (let secsIndex = 0; secsIndex < secs.length; ++secsIndex) {
             const a = bakeSecs[secsIndex];
             if (a != null) {
-                a[0] = 0;
+                a._count = 0;
             }
             const b = secs[secsIndex];
             if (b != null) {
-                b[0] = 0;
+                b._count = 0;
             }
         }
+        this._bakesThisFrame = 0;
 
         if (this._smoothCam || this._zoomed) {
             const world = this._theWorld;
@@ -772,7 +778,8 @@ export class _Klocki {
                     let renderNode = w._watcher;
                     
                     while(renderNode !== null){
-                        fr._drawStringRight("\xa7e" + renderNode._drawCount+" "+renderNode._joined, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
+                        renderNode._checkDirtyConsistency();
+                        fr._drawStringRight("\xa7e" + renderNode._drawCount+" "+renderNode._joined+" "+renderNode._name, this._display._guiWidth - 1, line++*10+1, 0xFFFFFFFF, true);
                         renderNode = renderNode._parent;
                     }
                 }
@@ -838,7 +845,8 @@ export class _Klocki {
         this._audioManager = new _AudioManager(this);
 
         await _Klocki._yield();
-        this._renderList = new _RenderList(this, 4, 1, 4);
+        const viewDistanceRegions = this._reducedMemory ? 4 : 8;
+        this._renderList = new _RenderList(this, viewDistanceRegions, 1, viewDistanceRegions);
         await _Klocki._yield();
 
         // const track = this._audioManager._audioCtx.createMediaElementSource(audio);

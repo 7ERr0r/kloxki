@@ -23,10 +23,14 @@ export class _Display {
     private readonly _vertexArrayExt: OES_vertex_array_object | undefined;
     private readonly _textureFloatExt: OES_texture_float | undefined | null;
     public _isMobile: boolean;
+    public _maxIndice16: number;
+    _reducedMemory: boolean;
 
     constructor(domID: string, attributes: any) {
         this._pixelDensityMultiplier = 1;
         this._isMobile = this._calcIsMobile();
+        this._maxIndice16 = 0;
+        this._reducedMemory = !!attributes.reducedMemory;
 
         if (attributes && attributes.resizeGetter instanceof Function) {
             this._resizeGetter = attributes.resizeGetter;
@@ -95,7 +99,9 @@ export class _Display {
         window.addEventListener("resize", (ev: Event) => this._resize());
 
         this._generateIndices16();
-
+        if(!this._reducedMemory){
+            this._generateIndices32();
+        }
     }
 
     public _resize(): void {
@@ -124,7 +130,7 @@ export class _Display {
         const indexBuffer32 = gl.createBuffer();
         this._indexBuffer32 = indexBuffer32!;
 
-        const numQuads = 32 * 1024;
+        const numQuads = 256 * 1024;
         const indices = new Uint32Array(6 * numQuads);
         let j = 0, k = 0;
         for (let i = 0; i < numQuads; i++) {
@@ -164,6 +170,7 @@ export class _Display {
             indices[j + 5] = k + 1;
             
         }
+        this._maxIndice16 = (numQuads-1)*4+3;
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer16);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 

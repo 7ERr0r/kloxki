@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
-const obfuscate = true;
+const obfuscate = false;
 
 const minimizer = [];
 if (obfuscate) {

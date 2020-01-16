@@ -115,10 +115,12 @@ export class _BakeTask {
         }
     }
 
-    public _bake(wr: _WorldRenderer) {
-
+    public _bake(wr: _WorldRenderer): boolean {
+        if(this._done){
+            return false;
+        }
         this._done = true;
-        this._renderLeaf._unmarkDirty();
+        
         wr._reset();
 
         const sx = this._chunkSection._posX;
@@ -132,17 +134,17 @@ export class _BakeTask {
         const world = this._renderLeaf._klocki._theWorld;
         const registry = this._registry;
         if (!world) {
-            // this._renderLeaf._unmarkDirty();
+            this._renderLeaf._unmarkDirty();
             
-            return;
+            return true;
         }
         const section = world._getSection(sx, sy, sz);
         if (!section) {
             this._renderLeaf._baking = false;
             this._renderLeaf._bakeTask = null;
 
-            // this._renderLeaf._unmarkDirty();
-            return;
+            this._renderLeaf._unmarkDirty();
+            return true;
         }
 
         for (let x = 0; x < 3; x++) {
@@ -186,28 +188,14 @@ export class _BakeTask {
             }
         }
 
-        const stride = wr._stride;
-        const gl = this._renderLeaf._klocki._display._gl;
+        this._renderLeaf._unmarkDirty();
+        this._renderLeaf._upload(wr);
 
-        _OriginRenderOcTree._usedVideoMemory -= this._renderLeaf._drawCount * stride;
-        if (this._renderLeaf._glBuffer != null) {
-            this._renderLeaf._klocki._scheduleDeleteBuffer(this._renderLeaf._glBuffer);
-            this._renderLeaf._glBuffer = null;
-        }
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this._renderLeaf._getBuffer());
-        
-        this._renderLeaf._drawCount = wr._upload(this._renderLeaf._klocki._shaderWorld, true);
-        
-        _OriginRenderOcTree._usedVideoMemory += this._renderLeaf._drawCount * stride;
-        // this._renderLeaf._unmarkDirty();
-
-        this._renderLeaf._baking = false;
-        this._renderLeaf._bakeTask = null;
         // throw new Error("test")
         if (this._stillDirty) {
             // this._renderLeaf._markDirty();
         }
+        return true;
     }
     public _renderModel(x: number, y: number, z: number, ax: number, ay: number, az: number, wr: _WorldRenderer, block: _Block) {
         const model = block._model;
