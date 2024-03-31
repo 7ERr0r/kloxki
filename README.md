@@ -1,7 +1,13 @@
 # klocki-typescript
 
 Features:
-- compiles
+- basic TCP server communication
+- displaying chunk packets
+- displaying entities (creeper)
+- player movement
+- fast baking of chunks
+- 3D audio HRTF
+- player wings
 
 # Running
 
